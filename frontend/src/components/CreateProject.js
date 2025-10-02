@@ -77,21 +77,61 @@ const CreateProject = ({ onCancel, onSave }) => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        if (validateForm()) {
+
+        if (!validateForm()) {
+            return;
+        }
+
+        try {
+            // Get current user from localStorage
+            const currentUser = localStorage.getItem('user');
+            if (!currentUser) {
+                alert('Please log in to create a project');
+                return;
+            }
+
+            const user = JSON.parse(currentUser);
+
             // Process hashtags
-            const processedData = {
-                ...formData,
-                hashtags: formData.hashtags 
-                    ? formData.hashtags.split(',').map(tag => tag.trim())
-                    : []
+            const tags = formData.hashtags
+                ? formData.hashtags.split(',').map(tag => tag.trim())
+                : [];
+
+            // Prepare data for API
+            const projectData = {
+                name: formData.name,
+                description: formData.description,
+                type: formData.type,
+                ownerId: user._id,
+                tags: tags,
+                version: formData.version || '1.0.0'
             };
-            
-            console.log('Project created:', processedData);
-            alert('Project created successfully!');
-            onSave(processedData);
+
+            console.log('Creating project with data:', projectData);
+
+            // Make API call
+            const response = await fetch('http://localhost:3000/api/projects', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(projectData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Project created successfully:', data);
+                alert('Project created successfully!');
+                onSave(data.project);
+            } else {
+                alert(data.error || 'Failed to create project');
+            }
+        } catch (error) {
+            console.error('Error creating project:', error);
+            alert('Network error. Please try again.');
         }
     };
 
