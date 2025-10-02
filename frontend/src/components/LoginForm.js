@@ -1,123 +1,86 @@
+// frontend/src/components/LoginForm.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './LoginForm.css';
+import './LoginForm.css'; // Keep your existing CSS
 
-const LoginForm = ({ onToggleForm }) => {
+const LoginForm = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-    });
-    const [errors, setErrors] = useState({});
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-        
-        // Clear error when user starts typing
-        if (errors[name]) {
-            setErrors(prev => ({
-                ...prev,
-                [name]: ''
-            }));
-        }
-    };
-
-    const validateForm = () => {
-        const newErrors = {};
-        
-        if (!formData.email) {
-            newErrors.email = 'Email is required';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Please enter a valid email';
-        }
-        
-        if (!formData.password) {
-            newErrors.password = 'Password is required';
-        } else if (formData.password.length < 3) {
-            newErrors.password = 'Password must be at least 3 characters';
-        }
-        
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        if (!validateForm()) {
-            return;
-        }
+        setError('');
+        setLoading(true);
 
-        // Simple validation - just check if email and password are provided
-        // No backend call needed - always "login" successfully
-        console.log('Login attempt with:', formData);
-        
-        // Create a simple user object for localStorage (optional)
-        const userData = {
-            id: 1,
-            firstName: "Demo",
-            lastName: "User",
-            email: formData.email,
-            username: "demouser"
-        };
-        
-        // Store user data (optional - for other components that might need it)
-        localStorage.setItem('currentUser', JSON.stringify(userData));
-        
-        // Always navigate to home page
-        navigate('/home');
+        try {
+            // API call to your backend
+            const response = await fetch('http://localhost:3000/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Store user data
+                localStorage.setItem('user', JSON.stringify(data.user));
+                // Redirect to home
+                navigate('/home');
+            } else {
+                setError(data.error || 'Login failed');
+            }
+        } catch (err) {
+            setError('Network error. Please check your connection.');
+            console.error('Login error:', err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        <div className="auth-form">
-            <h3 className="form-title">Welcome Back</h3>
-            <p className="form-subtitle">Enter any valid email and password to continue</p>
-            
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="email">Email Address</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="Please enter any email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className={errors.email ? 'error' : ''}
-                    />
-                    {errors.email && <span className="error-message">{errors.email}</span>}
-                </div>
-                
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Please enter any password"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        className={errors.password ? 'error' : ''}
-                    />
-                    {errors.password && <span className="error-message">{errors.password}</span>}
-                </div>
-                
-                <button type="submit" className="submit-btn">
-                    Sign In
-                </button>
-            </form>
-            
-            <div className="form-footer">
-                <p>New to FrankCodeHub?</p>
-                <button type="button" className="toggle-btn" onClick={onToggleForm}>
-                    Create new account
-                </button>
+        <form className="login-form" onSubmit={handleSubmit}>
+            <h2>Log In</h2>
+
+            {error && <div className="error-message">{error}</div>}
+
+            <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    disabled={loading}
+                />
             </div>
-        </div>
+
+            <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    disabled={loading}
+                />
+            </div>
+
+            <button type="submit" disabled={loading}>
+                {loading ? 'Logging in...' : 'Log In'}
+            </button>
+
+            <p className="test-hint">
+                Test account: test@test.com / test1234
+            </p>
+        </form>
     );
 };
 

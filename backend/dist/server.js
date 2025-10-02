@@ -19,7 +19,7 @@ app.use(express.urlencoded({
 app.use(cors());
 
 // Serve static files from the frontend/public directory
-app.use(express["static"](path.join(__dirname, '../frontend/public')));
+app.use(express["static"](path.join(__dirname, '../../frontend/public')));
 
 // In-memory user storage (for demo purposes - replace with database in real app)
 var users = [{
@@ -173,7 +173,7 @@ app.get('/api/health', function (req, res) {
 
 // Catch all handler: send back React's index.html file for client-side routing
 app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../frontend/public/index.html'));
+  res.sendFile(path.join(__dirname, '../../frontend/public/index.html'));
 });
 
 // Error handling middleware
@@ -186,7 +186,7 @@ app.use(function (err, req, res, next) {
 });
 
 // Start server
-var PORT = process.env.PORT || 1334;
+var PORT = process.env.PORT || 1337;
 app.listen(PORT, function () {
   console.log("Server running on http://localhost:".concat(PORT));
   console.log('Available endpoints:');

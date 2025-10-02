@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Serve static files from the frontend/public directory
-app.use(express.static(path.join(__dirname, '../frontend/public')));
+app.use(express.static(path.join(__dirname, '../../frontend/public')));
 
 // In-memory user storage (for demo purposes - replace with database in real app)
 const users = [
@@ -159,7 +159,7 @@ app.get('/api/health', (req, res) => {
 
 // Catch all handler: send back React's index.html file for client-side routing
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/public/index.html'));
+    res.sendFile(path.join(__dirname, '../../frontend/public/index.html'));
 });
 
 // Error handling middleware
