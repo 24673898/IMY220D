@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './SearchInput.css';
 
 const SearchInput = () => {
     const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
 
     const handleSearch = (e) => {
         e.preventDefault();
-        // TODO: Implement actual search functionality in later deliverables
-        console.log('Search for:', searchTerm);
+        if (searchTerm.trim()) {
+            // Navigate to search results page with the search term
+            navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+            setSearchTerm(''); // Clear the input after search
+        }
     };
 
     return (
@@ -15,7 +20,7 @@ const SearchInput = () => {
             <input
                 type="text"
                 className="search-input"
-                placeholder="Search"
+                placeholder="Search users, projects, messages..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
             />

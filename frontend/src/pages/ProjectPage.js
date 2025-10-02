@@ -16,6 +16,24 @@ const ProjectPage = () => {
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    
+    // New states for checkout/checkin functionality
+    const [checkoutLoading, setCheckoutLoading] = useState(false);
+    const [checkinLoading, setCheckinLoading] = useState(false);
+    const [checkinMessage, setCheckinMessage] = useState('');
+    const [showCheckinForm, setShowCheckinForm] = useState(false);
+    const [newFiles, setNewFiles] = useState([]);
+
+    // Get current user from localStorage
+    const getCurrentUser = () => {
+        const user = localStorage.getItem('user');
+        return user ? JSON.parse(user) : null;
+    };
+
+    const currentUser = getCurrentUser();
+    const isProjectMember = currentUser && members.some(member => member._id === currentUser._id);
+    const isProjectCheckedOut = projectData?.status === 'checked-out';
+    const isCheckedOutByCurrentUser = isProjectCheckedOut && projectData?.checkedOutBy === currentUser?._id;
 
     useEffect(() => {
         if (id) {
@@ -42,6 +60,101 @@ const ProjectPage = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    // CHECKOUT FUNCTIONALITY
+    const handleCheckout = async () => {
+        if (!currentUser) {
+            alert('Please log in to check out projects');
+            return;
+        }
+
+        if (!isProjectMember) {
+            alert('You must be a project member to check out this project');
+            return;
+        }
+
+        setCheckoutLoading(true);
+        try {
+            const response = await fetch(`/api/projects/${id}/checkout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: currentUser._id })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Project checked out successfully! You can now make changes.');
+                fetchProject(); // Refresh project data
+            } else {
+                alert(data.error || 'Failed to check out project');
+            }
+        } catch (err) {
+            console.error('Checkout error:', err);
+            alert('Failed to check out project');
+        } finally {
+            setCheckoutLoading(false);
+        }
+    };
+
+    // CHECKIN FUNCTIONALITY
+    const handleCheckin = async () => {
+        if (!checkinMessage.trim()) {
+            alert('Please provide a check-in message');
+            return;
+        }
+
+        setCheckinLoading(true);
+        try {
+            const response = await fetch(`/api/projects/${id}/checkin`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: currentUser._id,
+                    message: checkinMessage,
+                    version: projectData?.version,
+                    files: newFiles.length > 0 ? newFiles : projectData?.files || []
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Project checked in successfully!');
+                setCheckinMessage('');
+                setNewFiles([]);
+                setShowCheckinForm(false);
+                fetchProject(); // Refresh project data
+            } else {
+                alert(data.error || 'Failed to check in project');
+            }
+        } catch (err) {
+            console.error('Checkin error:', err);
+            alert('Failed to check in project');
+        } finally {
+            setCheckinLoading(false);
+        }
+    };
+
+    // FILE UPLOAD FUNCTIONALITY (simulated)
+    const handleFileUpload = (event) => {
+        const files = Array.from(event.target.files);
+        const newFileList = files.map(file => ({
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            lastModified: file.lastModified
+        }));
+        setNewFiles(prev => [...prev, ...newFileList]);
+    };
+
+    const handleRemoveFile = (index) => {
+        setNewFiles(prev => prev.filter((_, i) => i !== index));
     };
 
     const handleEdit = () => {
@@ -123,6 +236,109 @@ const ProjectPage = () => {
                             onEdit={handleEdit}
                         />
                         
+                        {/* COLLABORATION CONTROLS */}
+                        <div className="collaboration-controls">
+                            <div className="project-status">
+                                <strong>Status: </strong>
+                                <span className={`status-badge ${projectData.status}`}>
+                                    {projectData.status === 'checked-in' ? 'Checked In' : 'Checked Out'}
+                                </span>
+                                {isProjectCheckedOut && (
+                                    <span className="checked-out-by">
+                                        by {projectData.checkedOutBy === currentUser?._id ? 'You' : 'Another user'}
+                                    </span>
+                                )}
+                            </div>
+
+                            <div className="collaboration-buttons">
+                                {!isProjectCheckedOut && isProjectMember && (
+                                    <button 
+                                        className="btn-checkout"
+                                        onClick={handleCheckout}
+                                        disabled={checkoutLoading}
+                                    >
+                                        {checkoutLoading ? 'Checking Out...' : 'Check Out Project'}
+                                    </button>
+                                )}
+
+                                {isCheckedOutByCurrentUser && !showCheckinForm && (
+                                    <button 
+                                        className="btn-checkin"
+                                        onClick={() => setShowCheckinForm(true)}
+                                    >
+                                        Check In Changes
+                                    </button>
+                                )}
+
+                                {isProjectCheckedOut && !isCheckedOutByCurrentUser && (
+                                    <div className="checkout-warning">
+                                        Project is currently checked out by another user
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* CHECKIN FORM */}
+                        {showCheckinForm && (
+                            <div className="checkin-form">
+                                <h3>Check In Changes</h3>
+                                <div className="form-group">
+                                    <label>Check-in Message:</label>
+                                    <textarea
+                                        value={checkinMessage}
+                                        onChange={(e) => setCheckinMessage(e.target.value)}
+                                        placeholder="Describe the changes you made..."
+                                        rows="3"
+                                    />
+                                </div>
+                                
+                                <div className="form-group">
+                                    <label>Upload Updated Files:</label>
+                                    <input
+                                        type="file"
+                                        multiple
+                                        onChange={handleFileUpload}
+                                    />
+                                    {newFiles.length > 0 && (
+                                        <div className="file-preview">
+                                            <h4>New Files:</h4>
+                                            {newFiles.map((file, index) => (
+                                                <div key={index} className="file-item">
+                                                    <span>{file.name}</span>
+                                                    <button 
+                                                        type="button"
+                                                        onClick={() => handleRemoveFile(index)}
+                                                    >
+                                                        Remove
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="form-actions">
+                                    <button 
+                                        className="btn-primary"
+                                        onClick={handleCheckin}
+                                        disabled={checkinLoading || !checkinMessage.trim()}
+                                    >
+                                        {checkinLoading ? 'Checking In...' : 'Check In'}
+                                    </button>
+                                    <button 
+                                        className="btn-secondary"
+                                        onClick={() => {
+                                            setShowCheckinForm(false);
+                                            setCheckinMessage('');
+                                            setNewFiles([]);
+                                        }}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                        
                         <div className="project-tabs">
                             <div className="tab-nav">
                                 <button 
@@ -197,7 +413,11 @@ const ProjectPage = () => {
                                 )}
 
                                 {activeTab === 'files' && (
-                                    <FilesList projectId={projectData._id} />
+                                    <FilesList 
+                                        projectId={projectData._id} 
+                                        canUpload={isCheckedOutByCurrentUser}
+                                        onFilesUpdate={setNewFiles}
+                                    />
                                 )}
 
                                 {activeTab === 'activity' && (

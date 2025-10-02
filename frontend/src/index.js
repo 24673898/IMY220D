@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import ProjectPage from "./pages/ProjectPage";
 import ProjectsPage from "./pages/ProjectsPage";
+import SearchPage from './pages/SearchPage';
 
 const App = () => {
     return (
@@ -32,6 +33,9 @@ const App = () => {
 
                 {/* Project Routes - individual project page */}
                 <Route path="/project/:id" element={<ProjectPage />} />
+
+                    {/* Search Route - Add this line */}
+                <Route path="/search" element={<SearchPage />} />
                 
                 {/* Catch-all route - redirects to home */}
                 <Route path="*" element={<HomePage />} />

@@ -3,7 +3,7 @@ import './ProjectPreview.css';
 
 const ProjectPreview = ({ project }) => {
     const handleTagClick = (tag) => {
-        // TODO: Implement hashtag search functionality
+       
         console.log('Search for tag:', tag);
     };
 

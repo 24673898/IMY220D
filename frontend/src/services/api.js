@@ -1,7 +1,8 @@
 // frontend/src/services/api.js
 // This file contains all API calls for the frontend
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
+// Remove process.env and use direct URL
+const API_BASE_URL = 'http://localhost:3000/api';
 
 // Helper function to handle fetch requests
 async function fetchAPI(endpoint, options = {}) {
@@ -14,13 +15,29 @@ async function fetchAPI(endpoint, options = {}) {
             },
         });
 
-        const data = await response.json();
-
+        // Check if response is OK before trying to parse JSON
         if (!response.ok) {
-            throw new Error(data.error || 'Something went wrong');
+            let errorMessage = `HTTP error! status: ${response.status}`;
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.error || errorMessage;
+            } catch (e) {
+                // If response is not JSON, use status text
+                errorMessage = response.statusText || errorMessage;
+            }
+            throw new Error(errorMessage);
         }
 
-        return data;
+        // Only try to parse JSON if there's content
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            return data;
+        } else {
+            // For non-JSON responses, return empty object or appropriate value
+            return {};
+        }
+
     } catch (error) {
         console.error('API Error:', error);
         throw error;
@@ -149,6 +166,3 @@ export const searchAPI = {
     searchCheckins: (query) =>
         fetchAPI(`/search/checkins?q=${encodeURIComponent(query)}`),
 };
-
-
-

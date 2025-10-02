@@ -3673,7 +3673,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _SearchInput_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SearchInput.css */ "./frontend/src/components/SearchInput.css");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var _SearchInput_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SearchInput.css */ "./frontend/src/components/SearchInput.css");
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -3682,15 +3683,20 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
+
 var SearchInput = function SearchInput() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState2 = _slicedToArray(_useState, 2),
     searchTerm = _useState2[0],
     setSearchTerm = _useState2[1];
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
   var handleSearch = function handleSearch(e) {
     e.preventDefault();
-    // TODO: Implement actual search functionality in later deliverables
-    console.log('Search for:', searchTerm);
+    if (searchTerm.trim()) {
+      // Navigate to search results page with the search term
+      navigate("/search?q=".concat(encodeURIComponent(searchTerm.trim())));
+      setSearchTerm(''); // Clear the input after search
+    }
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
     className: "search-form",
@@ -3698,7 +3704,7 @@ var SearchInput = function SearchInput() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
     type: "text",
     className: "search-input",
-    placeholder: "Search",
+    placeholder: "Search users, projects, messages...",
     value: searchTerm,
     onChange: function onChange(e) {
       return setSearchTerm(e.target.value);
@@ -4750,6 +4756,10 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -4800,6 +4810,40 @@ var ProjectPage = function ProjectPage() {
     _useState12 = _slicedToArray(_useState11, 2),
     error = _useState12[0],
     setError = _useState12[1];
+
+  // New states for checkout/checkin functionality
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState14 = _slicedToArray(_useState13, 2),
+    checkoutLoading = _useState14[0],
+    setCheckoutLoading = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState16 = _slicedToArray(_useState15, 2),
+    checkinLoading = _useState16[0],
+    setCheckinLoading = _useState16[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState18 = _slicedToArray(_useState17, 2),
+    checkinMessage = _useState18[0],
+    setCheckinMessage = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState20 = _slicedToArray(_useState19, 2),
+    showCheckinForm = _useState20[0],
+    setShowCheckinForm = _useState20[1];
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState22 = _slicedToArray(_useState21, 2),
+    newFiles = _useState22[0],
+    setNewFiles = _useState22[1];
+
+  // Get current user from localStorage
+  var getCurrentUser = function getCurrentUser() {
+    var user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  };
+  var currentUser = getCurrentUser();
+  var isProjectMember = currentUser && members.some(function (member) {
+    return member._id === currentUser._id;
+  });
+  var isProjectCheckedOut = (projectData === null || projectData === void 0 ? void 0 : projectData.status) === 'checked-out';
+  var isCheckedOutByCurrentUser = isProjectCheckedOut && (projectData === null || projectData === void 0 ? void 0 : projectData.checkedOutBy) === (currentUser === null || currentUser === void 0 ? void 0 : currentUser._id);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (id) {
       fetchProject();
@@ -4848,6 +4892,160 @@ var ProjectPage = function ProjectPage() {
       return _ref.apply(this, arguments);
     };
   }();
+
+  // CHECKOUT FUNCTIONALITY
+  var handleCheckout = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+      var response, data, _t2;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.p = _context2.n) {
+          case 0:
+            if (currentUser) {
+              _context2.n = 1;
+              break;
+            }
+            alert('Please log in to check out projects');
+            return _context2.a(2);
+          case 1:
+            if (isProjectMember) {
+              _context2.n = 2;
+              break;
+            }
+            alert('You must be a project member to check out this project');
+            return _context2.a(2);
+          case 2:
+            setCheckoutLoading(true);
+            _context2.p = 3;
+            _context2.n = 4;
+            return fetch("/api/projects/".concat(id, "/checkout"), {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                userId: currentUser._id
+              })
+            });
+          case 4:
+            response = _context2.v;
+            _context2.n = 5;
+            return response.json();
+          case 5:
+            data = _context2.v;
+            if (response.ok) {
+              alert('Project checked out successfully! You can now make changes.');
+              fetchProject(); // Refresh project data
+            } else {
+              alert(data.error || 'Failed to check out project');
+            }
+            _context2.n = 7;
+            break;
+          case 6:
+            _context2.p = 6;
+            _t2 = _context2.v;
+            console.error('Checkout error:', _t2);
+            alert('Failed to check out project');
+          case 7:
+            _context2.p = 7;
+            setCheckoutLoading(false);
+            return _context2.f(7);
+          case 8:
+            return _context2.a(2);
+        }
+      }, _callee2, null, [[3, 6, 7, 8]]);
+    }));
+    return function handleCheckout() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  // CHECKIN FUNCTIONALITY
+  var handleCheckin = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+      var response, data, _t3;
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.p = _context3.n) {
+          case 0:
+            if (checkinMessage.trim()) {
+              _context3.n = 1;
+              break;
+            }
+            alert('Please provide a check-in message');
+            return _context3.a(2);
+          case 1:
+            setCheckinLoading(true);
+            _context3.p = 2;
+            _context3.n = 3;
+            return fetch("/api/projects/".concat(id, "/checkin"), {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                userId: currentUser._id,
+                message: checkinMessage,
+                version: projectData === null || projectData === void 0 ? void 0 : projectData.version,
+                files: newFiles.length > 0 ? newFiles : (projectData === null || projectData === void 0 ? void 0 : projectData.files) || []
+              })
+            });
+          case 3:
+            response = _context3.v;
+            _context3.n = 4;
+            return response.json();
+          case 4:
+            data = _context3.v;
+            if (response.ok) {
+              alert('Project checked in successfully!');
+              setCheckinMessage('');
+              setNewFiles([]);
+              setShowCheckinForm(false);
+              fetchProject(); // Refresh project data
+            } else {
+              alert(data.error || 'Failed to check in project');
+            }
+            _context3.n = 6;
+            break;
+          case 5:
+            _context3.p = 5;
+            _t3 = _context3.v;
+            console.error('Checkin error:', _t3);
+            alert('Failed to check in project');
+          case 6:
+            _context3.p = 6;
+            setCheckinLoading(false);
+            return _context3.f(6);
+          case 7:
+            return _context3.a(2);
+        }
+      }, _callee3, null, [[2, 5, 6, 7]]);
+    }));
+    return function handleCheckin() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  // FILE UPLOAD FUNCTIONALITY (simulated)
+  var handleFileUpload = function handleFileUpload(event) {
+    var files = Array.from(event.target.files);
+    var newFileList = files.map(function (file) {
+      return {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        lastModified: file.lastModified
+      };
+    });
+    setNewFiles(function (prev) {
+      return [].concat(_toConsumableArray(prev), _toConsumableArray(newFileList));
+    });
+  };
+  var handleRemoveFile = function handleRemoveFile(index) {
+    setNewFiles(function (prev) {
+      return prev.filter(function (_, i) {
+        return i !== index;
+      });
+    });
+  };
   var handleEdit = function handleEdit() {
     setIsEditing(true);
   };
@@ -4911,6 +5109,69 @@ var ProjectPage = function ProjectPage() {
     project: formattedProject,
     onEdit: handleEdit
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "collaboration-controls"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "project-status"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "Status: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: "status-badge ".concat(projectData.status)
+  }, projectData.status === 'checked-in' ? 'Checked In' : 'Checked Out'), isProjectCheckedOut && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: "checked-out-by"
+  }, "by ", projectData.checkedOutBy === (currentUser === null || currentUser === void 0 ? void 0 : currentUser._id) ? 'You' : 'Another user')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "collaboration-buttons"
+  }, !isProjectCheckedOut && isProjectMember && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    className: "btn-checkout",
+    onClick: handleCheckout,
+    disabled: checkoutLoading
+  }, checkoutLoading ? 'Checking Out...' : 'Check Out Project'), isCheckedOutByCurrentUser && !showCheckinForm && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    className: "btn-checkin",
+    onClick: function onClick() {
+      return setShowCheckinForm(true);
+    }
+  }, "Check In Changes"), isProjectCheckedOut && !isCheckedOutByCurrentUser && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "checkout-warning"
+  }, "Project is currently checked out by another user"))), showCheckinForm && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "checkin-form"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "Check In Changes"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "form-group"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", null, "Check-in Message:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", {
+    value: checkinMessage,
+    onChange: function onChange(e) {
+      return setCheckinMessage(e.target.value);
+    },
+    placeholder: "Describe the changes you made...",
+    rows: "3"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "form-group"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", null, "Upload Updated Files:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+    type: "file",
+    multiple: true,
+    onChange: handleFileUpload
+  }), newFiles.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "file-preview"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "New Files:"), newFiles.map(function (file, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      key: index,
+      className: "file-item"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, file.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      type: "button",
+      onClick: function onClick() {
+        return handleRemoveFile(index);
+      }
+    }, "Remove"));
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "form-actions"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    className: "btn-primary",
+    onClick: handleCheckin,
+    disabled: checkinLoading || !checkinMessage.trim()
+  }, checkinLoading ? 'Checking In...' : 'Check In'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    className: "btn-secondary",
+    onClick: function onClick() {
+      setShowCheckinForm(false);
+      setCheckinMessage('');
+      setNewFiles([]);
+    }
+  }, "Cancel"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "project-tabs"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "tab-nav"
@@ -4980,7 +5241,9 @@ var ProjectPage = function ProjectPage() {
       className: "collaborator-role"
     }, "Member")));
   })))), activeTab === 'files' && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_FilesList__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    projectId: projectData._id
+    projectId: projectData._id,
+    canUpload: isCheckedOutByCurrentUser,
+    onFilesUpdate: setNewFiles
   }), activeTab === 'activity' && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Messages__WEBPACK_IMPORTED_MODULE_6__["default"], {
     projectId: projectData._id
   }))))));
@@ -5072,6 +5335,267 @@ var ProjectsPage = function ProjectsPage() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, "All Projects"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "Browse through all available projects on FrankCodeHub")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_ProjectList__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ProjectsPage);
+
+/***/ }),
+
+/***/ "./frontend/src/pages/SearchPage.css":
+/*!*******************************************!*\
+  !*** ./frontend/src/pages/SearchPage.css ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/styleDomAPI.js */ "./node_modules/style-loader/dist/runtime/styleDomAPI.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/insertBySelector.js */ "./node_modules/style-loader/dist/runtime/insertBySelector.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js */ "./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/insertStyleElement.js */ "./node_modules/style-loader/dist/runtime/insertStyleElement.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/styleTagTransform.js */ "./node_modules/style-loader/dist/runtime/styleTagTransform.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_SearchPage_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../../node_modules/css-loader/dist/cjs.js!./SearchPage.css */ "./node_modules/css-loader/dist/cjs.js!./frontend/src/pages/SearchPage.css");
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var options = {};
+
+options.styleTagTransform = (_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default());
+options.setAttributes = (_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default());
+
+      options.insert = _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default().bind(null, "head");
+    
+options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
+options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_SearchPage_css__WEBPACK_IMPORTED_MODULE_6__["default"], options);
+
+
+
+
+       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_SearchPage_css__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_SearchPage_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_SearchPage_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
+
+
+/***/ }),
+
+/***/ "./frontend/src/pages/SearchPage.js":
+/*!******************************************!*\
+  !*** ./frontend/src/pages/SearchPage.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
+/* harmony import */ var _components_Header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Header */ "./frontend/src/components/Header.js");
+/* harmony import */ var _services_api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/api */ "./frontend/src/services/api.js");
+/* harmony import */ var _SearchPage_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./SearchPage.css */ "./frontend/src/pages/SearchPage.css");
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
+ // Added Link import
+
+
+
+var SearchPage = function SearchPage() {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+      users: [],
+      projects: [],
+      checkins: []
+    }),
+    _useState2 = _slicedToArray(_useState, 2),
+    results = _useState2[0],
+    setResults = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState4 = _slicedToArray(_useState3, 2),
+    loading = _useState4[0],
+    setLoading = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState6 = _slicedToArray(_useState5, 2),
+    error = _useState6[0],
+    setError = _useState6[1];
+  var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useLocation)();
+
+  // Get search query from URL
+  var searchParams = new URLSearchParams(location.search);
+  var query = searchParams.get('q');
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (query) {
+      performSearch(query);
+    }
+  }, [query]);
+  var performSearch = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(searchQuery) {
+      var _yield$Promise$all, _yield$Promise$all2, usersResults, projectsResults, checkinsResults, _t;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.p = _context.n) {
+          case 0:
+            setLoading(true);
+            setError(null);
+            _context.p = 1;
+            _context.n = 2;
+            return Promise.all([_services_api__WEBPACK_IMPORTED_MODULE_4__.searchAPI.searchUsers(searchQuery), _services_api__WEBPACK_IMPORTED_MODULE_4__.searchAPI.searchProjects(searchQuery), _services_api__WEBPACK_IMPORTED_MODULE_4__.searchAPI.searchCheckins(searchQuery)]);
+          case 2:
+            _yield$Promise$all = _context.v;
+            _yield$Promise$all2 = _slicedToArray(_yield$Promise$all, 3);
+            usersResults = _yield$Promise$all2[0];
+            projectsResults = _yield$Promise$all2[1];
+            checkinsResults = _yield$Promise$all2[2];
+            setResults({
+              users: usersResults.users || [],
+              projects: projectsResults.projects || [],
+              checkins: checkinsResults.checkins || []
+            });
+            _context.n = 4;
+            break;
+          case 3:
+            _context.p = 3;
+            _t = _context.v;
+            setError(_t.message);
+            console.error('Search error:', _t);
+          case 4:
+            _context.p = 4;
+            setLoading(false);
+            return _context.f(4);
+          case 5:
+            return _context.a(2);
+        }
+      }, _callee, null, [[1, 3, 4, 5]]);
+    }));
+    return function performSearch(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "search-page"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Header__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "search-page-content"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "search-results-container"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", {
+    className: "search-title"
+  }, query ? "Search Results for \"".concat(query, "\"") : 'Search'), loading && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "loading-message"
+  }, "Searching..."), error && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "error-message"
+  }, "Error: ", error), results.users.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "results-section"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Users (", results.users.length, ")"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "users-grid"
+  }, results.users.map(function (user) {
+    var _user$username;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      key: user._id,
+      className: "user-card"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "user-avatar"
+    }, user.profileImage ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+      src: user.profileImage,
+      alt: user.username
+    }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "avatar-placeholder"
+    }, (_user$username = user.username) === null || _user$username === void 0 ? void 0 : _user$username.charAt(0).toUpperCase())), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "user-info"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, user.name || user.username), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+      className: "username"
+    }, "@", user.username), user.bio && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+      className: "user-bio"
+    }, user.bio)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Link, {
+      to: "/profile/".concat(user._id),
+      className: "view-profile-btn"
+    }, "View Profile"));
+  }))), results.projects.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "results-section"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Projects (", results.projects.length, ")"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "projects-grid"
+  }, results.projects.map(function (project) {
+    var _project$name;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      key: project._id,
+      className: "project-card"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "project-image"
+    }, project.image ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+      src: project.image,
+      alt: project.name
+    }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "project-image-placeholder"
+    }, (_project$name = project.name) === null || _project$name === void 0 ? void 0 : _project$name.charAt(0).toUpperCase())), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "project-info"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, project.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+      className: "project-description"
+    }, project.description), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "project-meta"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+      className: "project-type"
+    }, project.type), project.tags && project.tags.map(function (tag, index) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+        key: index,
+        className: "tag"
+      }, "#", tag);
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Link, {
+      to: "/project/".concat(project._id),
+      className: "view-project-btn"
+    }, "View Project"));
+  }))), results.checkins.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "results-section"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Check-in Messages (", results.checkins.length, ")"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "checkins-list"
+  }, results.checkins.map(function (checkin) {
+    var _checkin$user$usernam;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      key: checkin._id,
+      className: "checkin-card"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "checkin-header"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "checkin-user"
+    }, checkin.user && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "user-avatar-small"
+    }, checkin.user.profileImage ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+      src: checkin.user.profileImage,
+      alt: checkin.user.username
+    }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, (_checkin$user$usernam = checkin.user.username) === null || _checkin$user$usernam === void 0 ? void 0 : _checkin$user$usernam.charAt(0).toUpperCase())), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, checkin.user.name || checkin.user.username))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+      className: "checkin-date"
+    }, new Date(checkin.timestamp).toLocaleDateString())), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+      className: "checkin-message"
+    }, checkin.message), checkin.project && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "checkin-project"
+    }, "In project: ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Link, {
+      to: "/project/".concat(checkin.project._id)
+    }, checkin.project.name)));
+  }))), !loading && query && results.users.length === 0 && results.projects.length === 0 && results.checkins.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "no-results"
+  }, "No results found for \"", query, "\""))));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SearchPage);
 
 /***/ }),
 
@@ -5198,6 +5722,253 @@ var SplashPage = function SplashPage() {
   })))));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SplashPage);
+
+/***/ }),
+
+/***/ "./frontend/src/services/api.js":
+/*!**************************************!*\
+  !*** ./frontend/src/services/api.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   activityAPI: () => (/* binding */ activityAPI),
+/* harmony export */   authAPI: () => (/* binding */ authAPI),
+/* harmony export */   projectAPI: () => (/* binding */ projectAPI),
+/* harmony export */   searchAPI: () => (/* binding */ searchAPI),
+/* harmony export */   userAPI: () => (/* binding */ userAPI)
+/* harmony export */ });
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+// frontend/src/services/api.js
+// This file contains all API calls for the frontend
+
+// Remove process.env and use direct URL
+var API_BASE_URL = 'http://localhost:3000/api';
+
+// Helper function to handle fetch requests
+function fetchAPI(_x) {
+  return _fetchAPI.apply(this, arguments);
+} // Authentication API calls
+function _fetchAPI() {
+  _fetchAPI = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(endpoint) {
+    var options,
+      response,
+      errorMessage,
+      errorData,
+      contentType,
+      data,
+      _args = arguments,
+      _t,
+      _t2;
+    return _regenerator().w(function (_context) {
+      while (1) switch (_context.p = _context.n) {
+        case 0:
+          options = _args.length > 1 && _args[1] !== undefined ? _args[1] : {};
+          _context.p = 1;
+          _context.n = 2;
+          return fetch("".concat(API_BASE_URL).concat(endpoint), _objectSpread(_objectSpread({}, options), {}, {
+            headers: _objectSpread({
+              'Content-Type': 'application/json'
+            }, options.headers)
+          }));
+        case 2:
+          response = _context.v;
+          if (response.ok) {
+            _context.n = 7;
+            break;
+          }
+          errorMessage = "HTTP error! status: ".concat(response.status);
+          _context.p = 3;
+          _context.n = 4;
+          return response.json();
+        case 4:
+          errorData = _context.v;
+          errorMessage = errorData.error || errorMessage;
+          _context.n = 6;
+          break;
+        case 5:
+          _context.p = 5;
+          _t = _context.v;
+          // If response is not JSON, use status text
+          errorMessage = response.statusText || errorMessage;
+        case 6:
+          throw new Error(errorMessage);
+        case 7:
+          // Only try to parse JSON if there's content
+          contentType = response.headers.get('content-type');
+          if (!(contentType && contentType.includes('application/json'))) {
+            _context.n = 9;
+            break;
+          }
+          _context.n = 8;
+          return response.json();
+        case 8:
+          data = _context.v;
+          return _context.a(2, data);
+        case 9:
+          return _context.a(2, {});
+        case 10:
+          _context.n = 12;
+          break;
+        case 11:
+          _context.p = 11;
+          _t2 = _context.v;
+          console.error('API Error:', _t2);
+          throw _t2;
+        case 12:
+          return _context.a(2);
+      }
+    }, _callee, null, [[3, 5], [1, 11]]);
+  }));
+  return _fetchAPI.apply(this, arguments);
+}
+var authAPI = {
+  signup: function signup(userData) {
+    return fetchAPI('/auth/signup', {
+      method: 'POST',
+      body: JSON.stringify(userData)
+    });
+  },
+  login: function login(email, password) {
+    return fetchAPI('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
+  },
+  logout: function logout() {
+    return fetchAPI('/auth/logout', {
+      method: 'POST'
+    });
+  }
+};
+
+// User API calls
+var userAPI = {
+  getProfile: function getProfile(userId) {
+    return fetchAPI("/users/".concat(userId));
+  },
+  updateProfile: function updateProfile(userId, userData) {
+    return fetchAPI("/users/".concat(userId), {
+      method: 'PUT',
+      body: JSON.stringify(userData)
+    });
+  },
+  deleteProfile: function deleteProfile(userId) {
+    return fetchAPI("/users/".concat(userId), {
+      method: 'DELETE'
+    });
+  },
+  getFriends: function getFriends(userId) {
+    return fetchAPI("/users/".concat(userId, "/friends"));
+  },
+  sendFriendRequest: function sendFriendRequest(userId, friendId) {
+    return fetchAPI("/users/".concat(userId, "/friends"), {
+      method: 'POST',
+      body: JSON.stringify({
+        friendId: friendId
+      })
+    });
+  },
+  unfriend: function unfriend(userId, friendId) {
+    return fetchAPI("/users/".concat(userId, "/friends/").concat(friendId), {
+      method: 'DELETE'
+    });
+  }
+};
+
+// Project API calls
+var projectAPI = {
+  getAllProjects: function getAllProjects() {
+    var filters = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var params = new URLSearchParams(filters).toString();
+    return fetchAPI("/projects?".concat(params));
+  },
+  getProject: function getProject(projectId) {
+    return fetchAPI("/projects/".concat(projectId));
+  },
+  createProject: function createProject(projectData) {
+    return fetchAPI('/projects', {
+      method: 'POST',
+      body: JSON.stringify(projectData)
+    });
+  },
+  updateProject: function updateProject(projectId, projectData) {
+    return fetchAPI("/projects/".concat(projectId), {
+      method: 'PUT',
+      body: JSON.stringify(projectData)
+    });
+  },
+  deleteProject: function deleteProject(projectId) {
+    return fetchAPI("/projects/".concat(projectId), {
+      method: 'DELETE'
+    });
+  },
+  checkoutProject: function checkoutProject(projectId, userId) {
+    return fetchAPI("/projects/".concat(projectId, "/checkout"), {
+      method: 'POST',
+      body: JSON.stringify({
+        userId: userId
+      })
+    });
+  },
+  checkinProject: function checkinProject(projectId, checkinData) {
+    return fetchAPI("/projects/".concat(projectId, "/checkin"), {
+      method: 'POST',
+      body: JSON.stringify(checkinData)
+    });
+  },
+  addMember: function addMember(projectId, userId) {
+    return fetchAPI("/projects/".concat(projectId, "/members"), {
+      method: 'POST',
+      body: JSON.stringify({
+        userId: userId
+      })
+    });
+  },
+  getActivity: function getActivity(projectId) {
+    return fetchAPI("/projects/".concat(projectId, "/activity"));
+  }
+};
+
+// Activity Feed API calls
+var activityAPI = {
+  getLocalFeed: function getLocalFeed(userId) {
+    return fetchAPI("/checkins/local/".concat(userId));
+  },
+  getGlobalFeed: function getGlobalFeed() {
+    return fetchAPI('/checkins/global');
+  }
+};
+
+// Search API calls
+var searchAPI = {
+  searchUsers: function searchUsers(query) {
+    return fetchAPI("/search/users?q=".concat(encodeURIComponent(query)));
+  },
+  searchProjects: function searchProjects(query) {
+    var filters = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var params = new URLSearchParams(_objectSpread({
+      q: query
+    }, filters)).toString();
+    return fetchAPI("/search/projects?".concat(params));
+  },
+  searchCheckins: function searchCheckins(query) {
+    return fetchAPI("/search/checkins?q=".concat(encodeURIComponent(query)));
+  }
+};
 
 /***/ }),
 
@@ -14475,7 +15246,501 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.projects-page {
     font-size: 1.1rem;
     opacity: 0.9;
 }
-`, "",{"version":3,"sources":["webpack://./frontend/src/pages/ProjectsPage.css"],"names":[],"mappings":"AAAA;IACI,iBAAiB;IACjB,6DAA6D;AACjE;;AAEA;IACI,iBAAiB;IACjB,cAAc;IACd,aAAa;AACjB;;AAEA;IACI,kBAAkB;IAClB,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,iBAAiB;IACjB,qBAAqB;IACrB,gBAAgB;AACpB;;AAEA;IACI,iBAAiB;IACjB,YAAY;AAChB","sourcesContent":[".projects-page {\r\n    min-height: 100vh;\r\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\r\n}\r\n\r\n.projects-container {\r\n    max-width: 1400px;\r\n    margin: 0 auto;\r\n    padding: 2rem;\r\n}\r\n\r\n.projects-header {\r\n    text-align: center;\r\n    color: white;\r\n    margin-bottom: 2rem;\r\n}\r\n\r\n.projects-header h1 {\r\n    font-size: 2.5rem;\r\n    margin-bottom: 0.5rem;\r\n    font-weight: 700;\r\n}\r\n\r\n.projects-header p {\r\n    font-size: 1.1rem;\r\n    opacity: 0.9;\r\n}\r\n"],"sourceRoot":""}]);
+
+/* Collaboration Controls */
+.collaboration-controls {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #007bff;
+}
+
+.project-status {
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+.status-badge.checked-in {
+    background: #28a745;
+    color: white;
+}
+
+.status-badge.checked-out {
+    background: #dc3545;
+    color: white;
+}
+
+.checked-out-by {
+    color: #666;
+    font-style: italic;
+}
+
+.collaboration-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-checkout {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-checkout:hover:not(:disabled) {
+    background: #0056b3;
+}
+
+.btn-checkout:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.btn-checkin {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-checkin:hover {
+    background: #218838;
+}
+
+.checkout-warning {
+    color: #856404;
+    background: #fff3cd;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ffeaa7;
+}
+
+/* Checkin Form */
+.checkin-form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+}
+
+.checkin-form h3 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group textarea,
+.form-group input[type="text"],
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.file-preview {
+    margin-top: 10px;
+}
+
+.file-preview h4 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.file-item button {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #0056b3;
+}
+
+.btn-primary:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background: #545b62;
+}`, "",{"version":3,"sources":["webpack://./frontend/src/pages/ProjectsPage.css"],"names":[],"mappings":"AAAA;IACI,iBAAiB;IACjB,6DAA6D;AACjE;;AAEA;IACI,iBAAiB;IACjB,cAAc;IACd,aAAa;AACjB;;AAEA;IACI,kBAAkB;IAClB,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,iBAAiB;IACjB,qBAAqB;IACrB,gBAAgB;AACpB;;AAEA;IACI,iBAAiB;IACjB,YAAY;AAChB;;AAEA,2BAA2B;AAC3B;IACI,mBAAmB;IACnB,aAAa;IACb,kBAAkB;IAClB,mBAAmB;IACnB,8BAA8B;AAClC;;AAEA;IACI,mBAAmB;IACnB,eAAe;AACnB;;AAEA;IACI,iBAAiB;IACjB,mBAAmB;IACnB,eAAe;IACf,iBAAiB;IACjB,cAAc;AAClB;;AAEA;IACI,mBAAmB;IACnB,YAAY;AAChB;;AAEA;IACI,mBAAmB;IACnB,YAAY;AAChB;;AAEA;IACI,WAAW;IACX,kBAAkB;AACtB;;AAEA;IACI,aAAa;IACb,SAAS;IACT,mBAAmB;AACvB;;AAEA;IACI,mBAAmB;IACnB,YAAY;IACZ,YAAY;IACZ,kBAAkB;IAClB,kBAAkB;IAClB,eAAe;AACnB;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,mBAAmB;IACnB,mBAAmB;AACvB;;AAEA;IACI,mBAAmB;IACnB,YAAY;IACZ,YAAY;IACZ,kBAAkB;IAClB,kBAAkB;IAClB,eAAe;AACnB;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,cAAc;IACd,mBAAmB;IACnB,aAAa;IACb,kBAAkB;IAClB,yBAAyB;AAC7B;;AAEA,iBAAiB;AACjB;IACI,iBAAiB;IACjB,aAAa;IACb,kBAAkB;IAClB,mBAAmB;IACnB,yBAAyB;AAC7B;;AAEA;IACI,mBAAmB;IACnB,WAAW;AACf;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,cAAc;IACd,kBAAkB;IAClB,iBAAiB;IACjB,WAAW;AACf;;AAEA;;;IAGI,WAAW;IACX,aAAa;IACb,sBAAsB;IACtB,kBAAkB;IAClB,eAAe;AACnB;;AAEA;IACI,gBAAgB;IAChB,gBAAgB;AACpB;;AAEA;IACI,gBAAgB;AACpB;;AAEA;IACI,mBAAmB;IACnB,WAAW;AACf;;AAEA;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;IACnB,YAAY;IACZ,mBAAmB;IACnB,kBAAkB;IAClB,kBAAkB;AACtB;;AAEA;IACI,mBAAmB;IACnB,YAAY;IACZ,YAAY;IACZ,gBAAgB;IAChB,kBAAkB;IAClB,eAAe;IACf,eAAe;AACnB;;AAEA;IACI,aAAa;IACb,SAAS;AACb;;AAEA;IACI,mBAAmB;IACnB,YAAY;IACZ,YAAY;IACZ,kBAAkB;IAClB,kBAAkB;IAClB,eAAe;AACnB;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,mBAAmB;IACnB,mBAAmB;AACvB;;AAEA;IACI,mBAAmB;IACnB,YAAY;IACZ,YAAY;IACZ,kBAAkB;IAClB,kBAAkB;IAClB,eAAe;AACnB;;AAEA;IACI,mBAAmB;AACvB","sourcesContent":[".projects-page {\r\n    min-height: 100vh;\r\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\r\n}\r\n\r\n.projects-container {\r\n    max-width: 1400px;\r\n    margin: 0 auto;\r\n    padding: 2rem;\r\n}\r\n\r\n.projects-header {\r\n    text-align: center;\r\n    color: white;\r\n    margin-bottom: 2rem;\r\n}\r\n\r\n.projects-header h1 {\r\n    font-size: 2.5rem;\r\n    margin-bottom: 0.5rem;\r\n    font-weight: 700;\r\n}\r\n\r\n.projects-header p {\r\n    font-size: 1.1rem;\r\n    opacity: 0.9;\r\n}\r\n\r\n/* Collaboration Controls */\r\n.collaboration-controls {\r\n    background: #f8f9fa;\r\n    padding: 20px;\r\n    border-radius: 8px;\r\n    margin-bottom: 20px;\r\n    border-left: 4px solid #007bff;\r\n}\r\n\r\n.project-status {\r\n    margin-bottom: 15px;\r\n    font-size: 16px;\r\n}\r\n\r\n.status-badge {\r\n    padding: 4px 12px;\r\n    border-radius: 20px;\r\n    font-size: 14px;\r\n    font-weight: bold;\r\n    margin: 0 10px;\r\n}\r\n\r\n.status-badge.checked-in {\r\n    background: #28a745;\r\n    color: white;\r\n}\r\n\r\n.status-badge.checked-out {\r\n    background: #dc3545;\r\n    color: white;\r\n}\r\n\r\n.checked-out-by {\r\n    color: #666;\r\n    font-style: italic;\r\n}\r\n\r\n.collaboration-buttons {\r\n    display: flex;\r\n    gap: 10px;\r\n    align-items: center;\r\n}\r\n\r\n.btn-checkout {\r\n    background: #007bff;\r\n    color: white;\r\n    border: none;\r\n    padding: 10px 20px;\r\n    border-radius: 4px;\r\n    cursor: pointer;\r\n}\r\n\r\n.btn-checkout:hover:not(:disabled) {\r\n    background: #0056b3;\r\n}\r\n\r\n.btn-checkout:disabled {\r\n    background: #6c757d;\r\n    cursor: not-allowed;\r\n}\r\n\r\n.btn-checkin {\r\n    background: #28a745;\r\n    color: white;\r\n    border: none;\r\n    padding: 10px 20px;\r\n    border-radius: 4px;\r\n    cursor: pointer;\r\n}\r\n\r\n.btn-checkin:hover {\r\n    background: #218838;\r\n}\r\n\r\n.checkout-warning {\r\n    color: #856404;\r\n    background: #fff3cd;\r\n    padding: 10px;\r\n    border-radius: 4px;\r\n    border: 1px solid #ffeaa7;\r\n}\r\n\r\n/* Checkin Form */\r\n.checkin-form {\r\n    background: white;\r\n    padding: 20px;\r\n    border-radius: 8px;\r\n    margin-bottom: 20px;\r\n    border: 1px solid #dee2e6;\r\n}\r\n\r\n.checkin-form h3 {\r\n    margin-bottom: 20px;\r\n    color: #333;\r\n}\r\n\r\n.form-group {\r\n    margin-bottom: 20px;\r\n}\r\n\r\n.form-group label {\r\n    display: block;\r\n    margin-bottom: 5px;\r\n    font-weight: bold;\r\n    color: #333;\r\n}\r\n\r\n.form-group textarea,\r\n.form-group input[type=\"text\"],\r\n.form-group input[type=\"file\"] {\r\n    width: 100%;\r\n    padding: 10px;\r\n    border: 1px solid #ddd;\r\n    border-radius: 4px;\r\n    font-size: 14px;\r\n}\r\n\r\n.form-group textarea {\r\n    resize: vertical;\r\n    min-height: 80px;\r\n}\r\n\r\n.file-preview {\r\n    margin-top: 10px;\r\n}\r\n\r\n.file-preview h4 {\r\n    margin-bottom: 10px;\r\n    color: #333;\r\n}\r\n\r\n.file-item {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    padding: 8px;\r\n    background: #f8f9fa;\r\n    border-radius: 4px;\r\n    margin-bottom: 5px;\r\n}\r\n\r\n.file-item button {\r\n    background: #dc3545;\r\n    color: white;\r\n    border: none;\r\n    padding: 4px 8px;\r\n    border-radius: 3px;\r\n    cursor: pointer;\r\n    font-size: 12px;\r\n}\r\n\r\n.form-actions {\r\n    display: flex;\r\n    gap: 10px;\r\n}\r\n\r\n.btn-primary {\r\n    background: #007bff;\r\n    color: white;\r\n    border: none;\r\n    padding: 10px 20px;\r\n    border-radius: 4px;\r\n    cursor: pointer;\r\n}\r\n\r\n.btn-primary:hover:not(:disabled) {\r\n    background: #0056b3;\r\n}\r\n\r\n.btn-primary:disabled {\r\n    background: #6c757d;\r\n    cursor: not-allowed;\r\n}\r\n\r\n.btn-secondary {\r\n    background: #6c757d;\r\n    color: white;\r\n    border: none;\r\n    padding: 10px 20px;\r\n    border-radius: 4px;\r\n    cursor: pointer;\r\n}\r\n\r\n.btn-secondary:hover {\r\n    background: #545b62;\r\n}"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js!./frontend/src/pages/SearchPage.css":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./frontend/src/pages/SearchPage.css ***!
+  \*********************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/sourceMaps.js */ "./node_modules/css-loader/dist/runtime/sourceMaps.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, `/* frontend/src/pages/SearchPage.css */
+.search-page-content {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.search-results-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 30px;
+}
+
+.search-title {
+    margin-bottom: 30px;
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
+
+.loading-message {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 18px;
+}
+
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.results-section {
+    margin-bottom: 40px;
+}
+
+.results-section h2 {
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Users Grid */
+.users-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.user-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: #f8f9fa;
+    gap: 15px;
+}
+
+.user-avatar img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-info h3 {
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.username {
+    color: #666;
+    margin: 0 0 8px 0;
+    font-weight: bold;
+}
+
+.user-bio {
+    color: #666;
+    margin: 0;
+    font-size: 14px;
+}
+
+.view-profile-btn {
+    padding: 8px 16px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.view-profile-btn:hover {
+    background: #0056b3;
+}
+
+/* Projects Grid */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: #f8f9fa;
+    gap: 15px;
+}
+
+.project-image img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.project-image-placeholder {
+    width: 100%;
+    height: 120px;
+    background: #28a745;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 24px;
+    border-radius: 6px;
+}
+
+.project-info h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.project-description {
+    color: #666;
+    margin: 0 0 15px 0;
+    line-height: 1.4;
+}
+
+.project-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.project-type {
+    background: #6c757d;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.tag {
+    background: #e9ecef;
+    color: #495057;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.view-project-btn {
+    padding: 10px;
+    background: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;
+    margin-top: auto;
+}
+
+.view-project-btn:hover {
+    background: #218838;
+}
+
+/* Check-ins List */
+.checkins-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.checkin-card {
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
+
+.checkin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.checkin-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.user-avatar-small img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.checkin-date {
+    color: #666;
+    font-size: 14px;
+}
+
+.checkin-message {
+    margin: 0 0 15px 0;
+    color: #333;
+    line-height: 1.5;
+}
+
+.checkin-project {
+    color: #666;
+    font-size: 14px;
+}
+
+.checkin-project a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.checkin-project a:hover {
+    text-decoration: underline;
+}
+
+.no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    font-size: 18px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px dashed #dee2e6;
+}`, "",{"version":3,"sources":["webpack://./frontend/src/pages/SearchPage.css"],"names":[],"mappings":"AAAA,sCAAsC;AACtC;IACI,aAAa;IACb,iBAAiB;IACjB,cAAc;AAClB;;AAEA;IACI,iBAAiB;IACjB,kBAAkB;IAClB,sCAAsC;IACtC,aAAa;AACjB;;AAEA;IACI,mBAAmB;IACnB,WAAW;IACX,gCAAgC;IAChC,oBAAoB;AACxB;;AAEA;IACI,kBAAkB;IAClB,aAAa;IACb,WAAW;IACX,eAAe;AACnB;;AAEA;IACI,mBAAmB;IACnB,cAAc;IACd,aAAa;IACb,kBAAkB;IAClB,mBAAmB;AACvB;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,WAAW;IACX,mBAAmB;IACnB,oBAAoB;IACpB,6BAA6B;AACjC;;AAEA,eAAe;AACf;IACI,aAAa;IACb,4DAA4D;IAC5D,SAAS;AACb;;AAEA;IACI,aAAa;IACb,mBAAmB;IACnB,aAAa;IACb,yBAAyB;IACzB,kBAAkB;IAClB,mBAAmB;IACnB,SAAS;AACb;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,iBAAiB;AACrB;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,mBAAmB;IACnB,YAAY;IACZ,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,iBAAiB;IACjB,eAAe;AACnB;;AAEA;IACI,OAAO;AACX;;AAEA;IACI,iBAAiB;IACjB,WAAW;AACf;;AAEA;IACI,WAAW;IACX,iBAAiB;IACjB,iBAAiB;AACrB;;AAEA;IACI,WAAW;IACX,SAAS;IACT,eAAe;AACnB;;AAEA;IACI,iBAAiB;IACjB,mBAAmB;IACnB,YAAY;IACZ,qBAAqB;IACrB,kBAAkB;IAClB,eAAe;IACf,mBAAmB;AACvB;;AAEA;IACI,mBAAmB;AACvB;;AAEA,kBAAkB;AAClB;IACI,aAAa;IACb,4DAA4D;IAC5D,SAAS;AACb;;AAEA;IACI,aAAa;IACb,sBAAsB;IACtB,aAAa;IACb,yBAAyB;IACzB,kBAAkB;IAClB,mBAAmB;IACnB,SAAS;AACb;;AAEA;IACI,WAAW;IACX,aAAa;IACb,iBAAiB;IACjB,kBAAkB;AACtB;;AAEA;IACI,WAAW;IACX,aAAa;IACb,mBAAmB;IACnB,YAAY;IACZ,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,iBAAiB;IACjB,eAAe;IACf,kBAAkB;AACtB;;AAEA;IACI,kBAAkB;IAClB,WAAW;AACf;;AAEA;IACI,WAAW;IACX,kBAAkB;IAClB,gBAAgB;AACpB;;AAEA;IACI,aAAa;IACb,QAAQ;IACR,eAAe;AACnB;;AAEA;IACI,mBAAmB;IACnB,YAAY;IACZ,gBAAgB;IAChB,mBAAmB;IACnB,eAAe;AACnB;;AAEA;IACI,mBAAmB;IACnB,cAAc;IACd,gBAAgB;IAChB,mBAAmB;IACnB,eAAe;AACnB;;AAEA;IACI,aAAa;IACb,mBAAmB;IACnB,YAAY;IACZ,qBAAqB;IACrB,kBAAkB;IAClB,kBAAkB;IAClB,gBAAgB;AACpB;;AAEA;IACI,mBAAmB;AACvB;;AAEA,mBAAmB;AACnB;IACI,aAAa;IACb,sBAAsB;IACtB,SAAS;AACb;;AAEA;IACI,aAAa;IACb,yBAAyB;IACzB,kBAAkB;IAClB,mBAAmB;AACvB;;AAEA;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;IACnB,mBAAmB;AACvB;;AAEA;IACI,aAAa;IACb,mBAAmB;IACnB,SAAS;AACb;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,mBAAmB;IACnB,YAAY;IACZ,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,iBAAiB;AACrB;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,iBAAiB;AACrB;;AAEA;IACI,WAAW;IACX,eAAe;AACnB;;AAEA;IACI,kBAAkB;IAClB,WAAW;IACX,gBAAgB;AACpB;;AAEA;IACI,WAAW;IACX,eAAe;AACnB;;AAEA;IACI,cAAc;IACd,qBAAqB;AACzB;;AAEA;IACI,0BAA0B;AAC9B;;AAEA;IACI,kBAAkB;IAClB,kBAAkB;IAClB,WAAW;IACX,eAAe;IACf,mBAAmB;IACnB,kBAAkB;IAClB,0BAA0B;AAC9B","sourcesContent":["/* frontend/src/pages/SearchPage.css */\r\n.search-page-content {\r\n    padding: 20px;\r\n    max-width: 1200px;\r\n    margin: 0 auto;\r\n}\r\n\r\n.search-results-container {\r\n    background: white;\r\n    border-radius: 8px;\r\n    box-shadow: 0 2px 10px rgba(0,0,0,0.1);\r\n    padding: 30px;\r\n}\r\n\r\n.search-title {\r\n    margin-bottom: 30px;\r\n    color: #333;\r\n    border-bottom: 2px solid #007bff;\r\n    padding-bottom: 10px;\r\n}\r\n\r\n.loading-message {\r\n    text-align: center;\r\n    padding: 40px;\r\n    color: #666;\r\n    font-size: 18px;\r\n}\r\n\r\n.error-message {\r\n    background: #f8d7da;\r\n    color: #721c24;\r\n    padding: 15px;\r\n    border-radius: 4px;\r\n    margin-bottom: 20px;\r\n}\r\n\r\n.results-section {\r\n    margin-bottom: 40px;\r\n}\r\n\r\n.results-section h2 {\r\n    color: #333;\r\n    margin-bottom: 20px;\r\n    padding-bottom: 10px;\r\n    border-bottom: 1px solid #eee;\r\n}\r\n\r\n/* Users Grid */\r\n.users-grid {\r\n    display: grid;\r\n    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));\r\n    gap: 20px;\r\n}\r\n\r\n.user-card {\r\n    display: flex;\r\n    align-items: center;\r\n    padding: 20px;\r\n    border: 1px solid #e9ecef;\r\n    border-radius: 8px;\r\n    background: #f8f9fa;\r\n    gap: 15px;\r\n}\r\n\r\n.user-avatar img {\r\n    width: 60px;\r\n    height: 60px;\r\n    border-radius: 50%;\r\n    object-fit: cover;\r\n}\r\n\r\n.avatar-placeholder {\r\n    width: 60px;\r\n    height: 60px;\r\n    border-radius: 50%;\r\n    background: #007bff;\r\n    color: white;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    font-weight: bold;\r\n    font-size: 20px;\r\n}\r\n\r\n.user-info {\r\n    flex: 1;\r\n}\r\n\r\n.user-info h3 {\r\n    margin: 0 0 5px 0;\r\n    color: #333;\r\n}\r\n\r\n.username {\r\n    color: #666;\r\n    margin: 0 0 8px 0;\r\n    font-weight: bold;\r\n}\r\n\r\n.user-bio {\r\n    color: #666;\r\n    margin: 0;\r\n    font-size: 14px;\r\n}\r\n\r\n.view-profile-btn {\r\n    padding: 8px 16px;\r\n    background: #007bff;\r\n    color: white;\r\n    text-decoration: none;\r\n    border-radius: 4px;\r\n    font-size: 14px;\r\n    white-space: nowrap;\r\n}\r\n\r\n.view-profile-btn:hover {\r\n    background: #0056b3;\r\n}\r\n\r\n/* Projects Grid */\r\n.projects-grid {\r\n    display: grid;\r\n    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));\r\n    gap: 20px;\r\n}\r\n\r\n.project-card {\r\n    display: flex;\r\n    flex-direction: column;\r\n    padding: 20px;\r\n    border: 1px solid #e9ecef;\r\n    border-radius: 8px;\r\n    background: #f8f9fa;\r\n    gap: 15px;\r\n}\r\n\r\n.project-image img {\r\n    width: 100%;\r\n    height: 120px;\r\n    object-fit: cover;\r\n    border-radius: 6px;\r\n}\r\n\r\n.project-image-placeholder {\r\n    width: 100%;\r\n    height: 120px;\r\n    background: #28a745;\r\n    color: white;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    font-weight: bold;\r\n    font-size: 24px;\r\n    border-radius: 6px;\r\n}\r\n\r\n.project-info h3 {\r\n    margin: 0 0 10px 0;\r\n    color: #333;\r\n}\r\n\r\n.project-description {\r\n    color: #666;\r\n    margin: 0 0 15px 0;\r\n    line-height: 1.4;\r\n}\r\n\r\n.project-meta {\r\n    display: flex;\r\n    gap: 8px;\r\n    flex-wrap: wrap;\r\n}\r\n\r\n.project-type {\r\n    background: #6c757d;\r\n    color: white;\r\n    padding: 4px 8px;\r\n    border-radius: 12px;\r\n    font-size: 12px;\r\n}\r\n\r\n.tag {\r\n    background: #e9ecef;\r\n    color: #495057;\r\n    padding: 4px 8px;\r\n    border-radius: 10px;\r\n    font-size: 12px;\r\n}\r\n\r\n.view-project-btn {\r\n    padding: 10px;\r\n    background: #28a745;\r\n    color: white;\r\n    text-decoration: none;\r\n    border-radius: 4px;\r\n    text-align: center;\r\n    margin-top: auto;\r\n}\r\n\r\n.view-project-btn:hover {\r\n    background: #218838;\r\n}\r\n\r\n/* Check-ins List */\r\n.checkins-list {\r\n    display: flex;\r\n    flex-direction: column;\r\n    gap: 15px;\r\n}\r\n\r\n.checkin-card {\r\n    padding: 20px;\r\n    border: 1px solid #e9ecef;\r\n    border-radius: 8px;\r\n    background: #f8f9fa;\r\n}\r\n\r\n.checkin-header {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    margin-bottom: 15px;\r\n}\r\n\r\n.checkin-user {\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 10px;\r\n}\r\n\r\n.user-avatar-small {\r\n    width: 40px;\r\n    height: 40px;\r\n    border-radius: 50%;\r\n    background: #007bff;\r\n    color: white;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    font-weight: bold;\r\n}\r\n\r\n.user-avatar-small img {\r\n    width: 100%;\r\n    height: 100%;\r\n    border-radius: 50%;\r\n    object-fit: cover;\r\n}\r\n\r\n.checkin-date {\r\n    color: #666;\r\n    font-size: 14px;\r\n}\r\n\r\n.checkin-message {\r\n    margin: 0 0 15px 0;\r\n    color: #333;\r\n    line-height: 1.5;\r\n}\r\n\r\n.checkin-project {\r\n    color: #666;\r\n    font-size: 14px;\r\n}\r\n\r\n.checkin-project a {\r\n    color: #007bff;\r\n    text-decoration: none;\r\n}\r\n\r\n.checkin-project a:hover {\r\n    text-decoration: underline;\r\n}\r\n\r\n.no-results {\r\n    text-align: center;\r\n    padding: 60px 20px;\r\n    color: #666;\r\n    font-size: 18px;\r\n    background: #f8f9fa;\r\n    border-radius: 8px;\r\n    border: 2px dashed #dee2e6;\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -51887,6 +53152,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_ProfilePage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/ProfilePage */ "./frontend/src/pages/ProfilePage.js");
 /* harmony import */ var _pages_ProjectPage__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/ProjectPage */ "./frontend/src/pages/ProjectPage.js");
 /* harmony import */ var _pages_ProjectsPage__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pages/ProjectsPage */ "./frontend/src/pages/ProjectsPage.js");
+/* harmony import */ var _pages_SearchPage__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pages/SearchPage */ "./frontend/src/pages/SearchPage.js");
+
 
 
 
@@ -51920,6 +53187,9 @@ var App = function App() {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Route, {
     path: "/project/:id",
     element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_pages_ProjectPage__WEBPACK_IMPORTED_MODULE_7__["default"], null)
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Route, {
+    path: "/search",
+    element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_pages_SearchPage__WEBPACK_IMPORTED_MODULE_9__["default"], null)
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Route, {
     path: "*",
     element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_pages_HomePage__WEBPACK_IMPORTED_MODULE_5__["default"], null)
