@@ -78,12 +78,14 @@ const SignUpForm = ({ onToggleForm }) => {
         setIsLoading(true);
         
         try {
-            const response = await fetch('/api/auth/signup', {
+            const response = await fetch('http://localhost:3000/api/auth/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
                     name: `${formData.firstName} ${formData.lastName}`,
                     username: formData.username,
                     email: formData.email,
@@ -94,8 +96,8 @@ const SignUpForm = ({ onToggleForm }) => {
             const data = await response.json();
 
             if (response.ok) {
-                // Store user data in localStorage
-                localStorage.setItem('currentUser', JSON.stringify(data.user));
+                // Store user data in localStorage (use 'user' key to match ProfilePage)
+                localStorage.setItem('user', JSON.stringify(data.user));
 
                 // Redirect to home page
                 navigate('/home');

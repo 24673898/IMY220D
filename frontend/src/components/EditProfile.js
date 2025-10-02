@@ -3,13 +3,13 @@ import './EditProfile.css';
 
 const EditProfile = ({ user, onCancel, onSave }) => {
     const [formData, setFormData] = useState({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        username: user.username,
-        email: user.email,
-        bio: user.bio,
-        location: user.location,
-        website: user.website
+        firstName: user?.firstName || '',
+        lastName: user?.lastName || '',
+        username: user?.username || '',
+        email: user?.email || '',
+        bio: user?.bio || '',
+        location: user?.location || '',
+        website: user?.website || ''
     });
     const [errors, setErrors] = useState({});
 

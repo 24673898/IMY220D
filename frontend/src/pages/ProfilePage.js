@@ -41,12 +41,14 @@ const ProfilePage = () => {
         const fetchUserData = async () => {
             if (!userId) {
                 setLoading(false);
-                setError('No user ID found');
+                setError('Please log in to view profile');
+                console.error('No user ID found. User might not be logged in.');
                 return;
             }
 
             try {
                 setLoading(true);
+                console.log('Fetching user data for userId:', userId);
                 const response = await fetch(`http://localhost:3000/api/users/${userId}`);
 
                 if (!response.ok) {

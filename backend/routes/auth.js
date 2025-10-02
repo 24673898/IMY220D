@@ -27,9 +27,9 @@ router.post('/signup', async (req, res) => {
             });
         }
 
-        // Create new user
+        // Create new user with safe defaults for all fields
         const newUser = {
-            name: name || '',
+            name: name || `${firstName || ''} ${lastName || ''}`.trim() || username,
             firstName: firstName || '',
             lastName: lastName || '',
             username,
@@ -37,7 +37,7 @@ router.post('/signup', async (req, res) => {
             password, // Not hashing as per spec
             profileImage: '/assets/images/default-user.jpg',
             bio: bio || '',
-            birthday: birthday || null,
+            birthday: birthday || '',
             work: work || '',
             location: location || '',
             website: website || '',

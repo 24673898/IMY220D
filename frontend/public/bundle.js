@@ -422,13 +422,13 @@ var EditProfile = function EditProfile(_ref) {
     onCancel = _ref.onCancel,
     onSave = _ref.onSave;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      username: user.username,
-      email: user.email,
-      bio: user.bio,
-      location: user.location,
-      website: user.website
+      firstName: (user === null || user === void 0 ? void 0 : user.firstName) || '',
+      lastName: (user === null || user === void 0 ? void 0 : user.lastName) || '',
+      username: (user === null || user === void 0 ? void 0 : user.username) || '',
+      email: (user === null || user === void 0 ? void 0 : user.email) || '',
+      bio: (user === null || user === void 0 ? void 0 : user.bio) || '',
+      location: (user === null || user === void 0 ? void 0 : user.location) || '',
+      website: (user === null || user === void 0 ? void 0 : user.website) || ''
     }),
     _useState2 = _slicedToArray(_useState, 2),
     formData = _useState2[0],
@@ -3791,12 +3791,14 @@ var SignUpForm = function SignUpForm(_ref) {
             setIsLoading(true);
             _context.p = 2;
             _context.n = 3;
-            return fetch('/api/auth/signup', {
+            return fetch('http://localhost:3000/api/auth/signup', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({
+                firstName: formData.firstName,
+                lastName: formData.lastName,
                 name: "".concat(formData.firstName, " ").concat(formData.lastName),
                 username: formData.username,
                 email: formData.email,
@@ -3810,8 +3812,8 @@ var SignUpForm = function SignUpForm(_ref) {
           case 4:
             data = _context.v;
             if (response.ok) {
-              // Store user data in localStorage
-              localStorage.setItem('currentUser', JSON.stringify(data.user));
+              // Store user data in localStorage (use 'user' key to match ProfilePage)
+              localStorage.setItem('user', JSON.stringify(data.user));
 
               // Redirect to home page
               navigate('/home');
@@ -4293,11 +4295,13 @@ var ProfilePage = function ProfilePage() {
                 break;
               }
               setLoading(false);
-              setError('No user ID found');
+              setError('Please log in to view profile');
+              console.error('No user ID found. User might not be logged in.');
               return _context.a(2);
             case 1:
               _context.p = 1;
               setLoading(true);
+              console.log('Fetching user data for userId:', userId);
               _context.n = 2;
               return fetch("http://localhost:3000/api/users/".concat(userId));
             case 2:

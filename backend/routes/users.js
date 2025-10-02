@@ -8,21 +8,35 @@ router.get('/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
         const db = getDB();
-        
-        const user = await db.collection('users').findOne({ _id: userId });
-        
+
+        // Try to find user with the ID (handles both string IDs and ObjectIds)
+        let user;
+        try {
+            // First try as ObjectId
+            user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+        } catch (e) {
+            // If ObjectId conversion fails, try as string
+            user = await db.collection('users').findOne({ _id: userId });
+        }
+
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Get user's projects
-        const projects = await db.collection('projects').find({
-            members: userId
+        // Get user's projects (try both ObjectId and string formats)
+        let projects = await db.collection('projects').find({
+            $or: [
+                { members: userId },
+                { members: user._id }
+            ]
         }).toArray();
 
         // Get user's activity (check-ins)
-        const activity = await db.collection('checkins').find({
-            userId: userId
+        let activity = await db.collection('checkins').find({
+            $or: [
+                { userId: userId },
+                { userId: user._id }
+            ]
         }).sort({ timestamp: -1 }).limit(10).toArray();
 
         // Remove password from response
@@ -49,28 +63,40 @@ router.put('/:userId', async (req, res) => {
         const db = getDB();
 
         const updateData = {};
-        if (firstName) updateData.firstName = firstName;
-        if (lastName) updateData.lastName = lastName;
-        if (username) updateData.username = username;
-        if (email) updateData.email = email;
-        if (bio !== undefined) updateData.bio = bio;
-        if (location) updateData.location = location;
-        if (website) updateData.website = website;
-        if (name) updateData.name = name;
-        if (birthday) updateData.birthday = birthday;
-        if (work !== undefined) updateData.work = work;
-        if (profileImage) updateData.profileImage = profileImage;
+        if (firstName !== undefined) updateData.firstName = firstName || '';
+        if (lastName !== undefined) updateData.lastName = lastName || '';
+        if (username !== undefined) updateData.username = username;
+        if (email !== undefined) updateData.email = email;
+        if (bio !== undefined) updateData.bio = bio || '';
+        if (location !== undefined) updateData.location = location || '';
+        if (website !== undefined) updateData.website = website || '';
+        if (name !== undefined) updateData.name = name || '';
+        if (birthday !== undefined) updateData.birthday = birthday || '';
+        if (work !== undefined) updateData.work = work || '';
+        if (profileImage !== undefined) updateData.profileImage = profileImage;
 
-        const result = await db.collection('users').updateOne(
-            { _id: userId },
-            { $set: updateData }
-        );
+        // Try to update with ObjectId first, then string
+        let result;
+        let queryId;
+        try {
+            queryId = new ObjectId(userId);
+            result = await db.collection('users').updateOne(
+                { _id: queryId },
+                { $set: updateData }
+            );
+        } catch (e) {
+            queryId = userId;
+            result = await db.collection('users').updateOne(
+                { _id: queryId },
+                { $set: updateData }
+            );
+        }
 
         if (result.matchedCount === 0) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        const updatedUser = await db.collection('users').findOne({ _id: userId });
+        const updatedUser = await db.collection('users').findOne({ _id: queryId });
         const { password, ...userWithoutPassword } = updatedUser;
 
         res.json({
@@ -125,17 +151,29 @@ router.get('/:userId/friends', async (req, res) => {
         const { userId } = req.params;
         const db = getDB();
 
-        // Find accepted friendships
+        // Find accepted friendships (handle both ObjectId and string)
         const friendships = await db.collection('friends').find({
-            userId: userId,
+            $or: [
+                { userId: userId },
+                { userId: userId }
+            ],
             status: 'accepted'
         }).toArray();
 
         const friendIds = friendships.map(f => f.friendId);
 
-        // Get friend details
+        // Get friend details (handle both ObjectId and string formats)
         const friends = await db.collection('users').find({
-            _id: { $in: friendIds }
+            $or: [
+                { _id: { $in: friendIds } },
+                { _id: { $in: friendIds.map(id => {
+                    try {
+                        return new ObjectId(id);
+                    } catch (e) {
+                        return id;
+                    }
+                }) } }
+            ]
         }).project({ password: 0 }).toArray();
 
         res.json({ friends });
