@@ -1,7 +1,7 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ConnectionCreatedEvent } = require('mongodb');
 
 // connection string
-const uri = process.env.MONGODB_URI || "mongodb+srv://frankyliu1996_db_user:yXLc2y1ybFbKee7W@imy220projectcluster.w35t9gj.mongodb.net/?retryWrites=true&w=majority&appName=IMY220ProjectCluster" ;
+const uri = process.env.MONGODB_URI || "mongodb+srv://frankyliu1996_db_user:yXLc2y1ybFbKee7W@imy220projectcluster.w35t9gj.mongodb.net/?retryWrites=true&w=majority&appName=IMY220ProjectCluster"
 
 let db;
 let client;
@@ -33,5 +33,7 @@ async function closeDB() {
         console.log('MongoDB connection closed');
     }
 }
+
+
 
 module.exports = { connectDB, getDB, closeDB };

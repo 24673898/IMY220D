@@ -186,7 +186,7 @@ app.use(function (err, req, res, next) {
 });
 
 // Start server
-var PORT = process.env.PORT || 1337;
+var PORT = process.env.PORT || 1334;
 app.listen(PORT, function () {
   console.log("Server running on http://localhost:".concat(PORT));
   console.log('Available endpoints:');
