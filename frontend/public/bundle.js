@@ -2581,7 +2581,9 @@ var Profile = function Profile(_ref) {
       collaborationsCount: 0,
       friendsCount: 0
     } : _ref$stats,
-    onEdit = _ref.onEdit;
+    onEdit = _ref.onEdit,
+    onDelete = _ref.onDelete,
+    isOwnProfile = _ref.isOwnProfile;
   var getInitials = function getInitials() {
     if (user.firstName && user.lastName) {
       return "".concat(user.firstName.charAt(0)).concat(user.lastName.charAt(0));
@@ -2589,6 +2591,11 @@ var Profile = function Profile(_ref) {
       return user.username.charAt(0).toUpperCase();
     }
     return 'U';
+  };
+  var handleDeleteClick = function handleDeleteClick() {
+    if (window.confirm('Are you sure you want to delete your profile? This action cannot be undone and will delete all your projects and data.')) {
+      onDelete();
+    }
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "profile-card"
@@ -2606,7 +2613,9 @@ var Profile = function Profile(_ref) {
     className: "profile-username"
   }, "@", user.username), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     className: "profile-bio"
-  }, user.bio || 'No bio available')), onEdit && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+  }, user.bio || 'No bio available')), isOwnProfile && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "profile-actions"
+  }, onEdit && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     className: "edit-profile-btn",
     onClick: onEdit
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
@@ -2626,7 +2635,34 @@ var Profile = function Profile(_ref) {
     strokeWidth: "2",
     strokeLinecap: "round",
     strokeLinejoin: "round"
-  })), "Edit Profile")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  })), "Edit Profile"), onDelete && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    className: "delete-profile-btn",
+    onClick: handleDeleteClick
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    width: "16",
+    height: "16",
+    viewBox: "0 0 24 24",
+    fill: "none"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M3 6h18",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2",
+    stroke: "currentColor",
+    strokeWidth: "2"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M10 11v6",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M14 11v6",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round"
+  })), "Delete Profile"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "profile-details"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "profile-stats"
@@ -4293,7 +4329,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
-
+ // Added useNavigate
 
 
 
@@ -4304,6 +4340,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 var ProfilePage = function ProfilePage() {
   var _useParams = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useParams)(),
     id = _useParams.id;
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)(); // Added navigate for redirect after delete
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
     isEditing = _useState2[0],
@@ -4346,41 +4383,112 @@ var ProfilePage = function ProfilePage() {
     return null;
   };
   var userId = isOwnProfile ? getCurrentUserId() : id;
+  var handleDeleteProfile = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+      var confirmed, currentUser, userToDeleteId, response, errorData, result, _t;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.p = _context.n) {
+          case 0:
+            if (userId) {
+              _context.n = 1;
+              break;
+            }
+            alert('Cannot delete profile: User ID not found');
+            return _context.a(2);
+          case 1:
+            // Final confirmation
+            confirmed = window.confirm('WARNING: This will permanently delete your profile, all your projects, and all associated data. This action cannot be undone. Are you absolutely sure?');
+            if (confirmed) {
+              _context.n = 2;
+              break;
+            }
+            return _context.a(2);
+          case 2:
+            _context.p = 2;
+            // Get the current user data to ensure we have the correct ID format
+            currentUser = JSON.parse(localStorage.getItem('user'));
+            userToDeleteId = (currentUser === null || currentUser === void 0 ? void 0 : currentUser._id) || userId;
+            console.log('Attempting to delete user with ID:', userToDeleteId);
+            _context.n = 3;
+            return fetch("http://localhost:3000/api/users/".concat(userToDeleteId), {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+          case 3:
+            response = _context.v;
+            if (response.ok) {
+              _context.n = 5;
+              break;
+            }
+            _context.n = 4;
+            return response.json();
+          case 4:
+            errorData = _context.v;
+            throw new Error(errorData.error || 'Failed to delete profile');
+          case 5:
+            _context.n = 6;
+            return response.json();
+          case 6:
+            result = _context.v;
+            // Clear localStorage and redirect to home page
+            localStorage.removeItem('user');
+            localStorage.removeItem('token'); // if you have tokens
+
+            alert('Profile deleted successfully');
+            navigate('/'); // Redirect to home page
+            _context.n = 8;
+            break;
+          case 7:
+            _context.p = 7;
+            _t = _context.v;
+            console.error('Error deleting profile:', _t);
+            alert("Failed to delete profile: ".concat(_t.message));
+          case 8:
+            return _context.a(2);
+        }
+      }, _callee, null, [[2, 7]]);
+    }));
+    return function handleDeleteProfile() {
+      return _ref.apply(this, arguments);
+    };
+  }();
 
   // Fetch user data from backend
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var fetchUserData = /*#__PURE__*/function () {
-      var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-        var _data$projects, _data$projects2, _friendsData$friends, response, data, transformedUser, friendsResponse, friendsData, _t;
-        return _regenerator().w(function (_context) {
-          while (1) switch (_context.p = _context.n) {
+      var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+        var _data$projects, _data$projects2, _friendsData$friends, response, data, transformedUser, friendsResponse, friendsData, _t2;
+        return _regenerator().w(function (_context2) {
+          while (1) switch (_context2.p = _context2.n) {
             case 0:
               if (userId) {
-                _context.n = 1;
+                _context2.n = 1;
                 break;
               }
               setLoading(false);
               setError('Please log in to view profile');
               console.error('No user ID found. User might not be logged in.');
-              return _context.a(2);
+              return _context2.a(2);
             case 1:
-              _context.p = 1;
+              _context2.p = 1;
               setLoading(true);
               console.log('Fetching user data for userId:', userId);
-              _context.n = 2;
+              _context2.n = 2;
               return fetch("http://localhost:3000/api/users/".concat(userId));
             case 2:
-              response = _context.v;
+              response = _context2.v;
               if (response.ok) {
-                _context.n = 3;
+                _context2.n = 3;
                 break;
               }
               throw new Error('Failed to fetch user data');
             case 3:
-              _context.n = 4;
+              _context2.n = 4;
               return response.json();
             case 4:
-              data = _context.v;
+              data = _context2.v;
               // Transform data to match frontend format
               transformedUser = {
                 id: data.user._id,
@@ -4400,14 +4508,14 @@ var ProfilePage = function ProfilePage() {
               setUserData(transformedUser);
 
               // Fetch stats
-              _context.n = 5;
+              _context2.n = 5;
               return fetch("http://localhost:3000/api/users/".concat(userId, "/friends"));
             case 5:
-              friendsResponse = _context.v;
-              _context.n = 6;
+              friendsResponse = _context2.v;
+              _context2.n = 6;
               return friendsResponse.json();
             case 6:
-              friendsData = _context.v;
+              friendsData = _context2.v;
               setStats({
                 projectsCount: ((_data$projects = data.projects) === null || _data$projects === void 0 ? void 0 : _data$projects.length) || 0,
                 collaborationsCount: ((_data$projects2 = data.projects) === null || _data$projects2 === void 0 ? void 0 : _data$projects2.filter(function (p) {
@@ -4415,24 +4523,24 @@ var ProfilePage = function ProfilePage() {
                 }).length) || 0,
                 friendsCount: ((_friendsData$friends = friendsData.friends) === null || _friendsData$friends === void 0 ? void 0 : _friendsData$friends.length) || 0
               });
-              _context.n = 8;
+              _context2.n = 8;
               break;
             case 7:
-              _context.p = 7;
-              _t = _context.v;
-              console.error('Error fetching user data:', _t);
-              setError(_t.message);
+              _context2.p = 7;
+              _t2 = _context2.v;
+              console.error('Error fetching user data:', _t2);
+              setError(_t2.message);
             case 8:
-              _context.p = 8;
+              _context2.p = 8;
               setLoading(false);
-              return _context.f(8);
+              return _context2.f(8);
             case 9:
-              return _context.a(2);
+              return _context2.a(2);
           }
-        }, _callee, null, [[1, 7, 8, 9]]);
+        }, _callee2, null, [[1, 7, 8, 9]]);
       }));
       return function fetchUserData() {
-        return _ref.apply(this, arguments);
+        return _ref2.apply(this, arguments);
       };
     }();
     fetchUserData();
@@ -4440,13 +4548,13 @@ var ProfilePage = function ProfilePage() {
 
   // Handle profile save
   var handleProfileSave = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(formData) {
-      var response, data, transformedUser, _t2;
-      return _regenerator().w(function (_context2) {
-        while (1) switch (_context2.p = _context2.n) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(formData) {
+      var response, data, transformedUser, _t3;
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.p = _context3.n) {
           case 0:
-            _context2.p = 0;
-            _context2.n = 1;
+            _context3.p = 0;
+            _context3.n = 1;
             return fetch("http://localhost:3000/api/users/".concat(userId), {
               method: 'PUT',
               headers: {
@@ -4455,17 +4563,17 @@ var ProfilePage = function ProfilePage() {
               body: JSON.stringify(formData)
             });
           case 1:
-            response = _context2.v;
+            response = _context3.v;
             if (response.ok) {
-              _context2.n = 2;
+              _context3.n = 2;
               break;
             }
             throw new Error('Failed to update profile');
           case 2:
-            _context2.n = 3;
+            _context3.n = 3;
             return response.json();
           case 3:
-            data = _context2.v;
+            data = _context3.v;
             // Update local userData state
             transformedUser = {
               id: data.user._id,
@@ -4486,20 +4594,20 @@ var ProfilePage = function ProfilePage() {
               localStorage.setItem('user', JSON.stringify(data.user));
             }
             setIsEditing(false);
-            _context2.n = 5;
+            _context3.n = 5;
             break;
           case 4:
-            _context2.p = 4;
-            _t2 = _context2.v;
-            console.error('Error updating profile:', _t2);
+            _context3.p = 4;
+            _t3 = _context3.v;
+            console.error('Error updating profile:', _t3);
             alert('Failed to update profile. Please try again.');
           case 5:
-            return _context2.a(2);
+            return _context3.a(2);
         }
-      }, _callee2, null, [[0, 4]]);
+      }, _callee3, null, [[0, 4]]);
     }));
     return function handleProfileSave(_x) {
-      return _ref2.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
   if (loading) {
@@ -4538,6 +4646,7 @@ var ProfilePage = function ProfilePage() {
     onEdit: isOwnProfile ? function () {
       return setIsEditing(true);
     } : undefined,
+    onDelete: isOwnProfile ? handleDeleteProfile : undefined,
     isOwnProfile: isOwnProfile
   }), showCreateProject && isOwnProfile ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_CreateProject__WEBPACK_IMPORTED_MODULE_6__["default"], {
     onCancel: function onCancel() {
@@ -12710,7 +12819,78 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/* Profile.css */
         font-size: 1.5rem;
         margin-bottom: 0;
     }
-}`, "",{"version":3,"sources":["webpack://./frontend/src/components/Profile.css"],"names":[],"mappings":"AAAA,gBAAgB;AAChB;IACI,iBAAiB;IACjB,mBAAmB;IACnB,0CAA0C;IAC1C,aAAa;IACb,gCAAgC;AACpC;;AAEA;IACI,aAAa;IACb,uBAAuB;IACvB,SAAS;IACT,mBAAmB;IACnB,eAAe;AACnB;;AAEA;IACI,cAAc;AAClB;;AAEA;IACI,YAAY;IACZ,aAAa;IACb,kBAAkB;IAClB,6DAA6D;IAC7D,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,YAAY;IACZ,gBAAgB;IAChB,iBAAiB;IACjB,uBAAuB;IACvB,yCAAyC;AAC7C;;AAEA;IACI,OAAO;IACP,YAAY;AAChB;;AAEA;IACI,eAAe;IACf,gBAAgB;IAChB,cAAc;IACd,oBAAoB;AACxB;;AAEA;IACI,iBAAiB;IACjB,cAAc;IACd,kBAAkB;IAClB,gBAAgB;AACpB;;AAEA;IACI,eAAe;IACf,WAAW;IACX,gBAAgB;IAChB,SAAS;AACb;;AAEA;IACI,oCAAoC;IACpC,cAAc;IACd,0CAA0C;IAC1C,uBAAuB;IACvB,kBAAkB;IAClB,gCAAgC;IAChC,gBAAgB;IAChB,eAAe;IACf,yBAAyB;IACzB,aAAa;IACb,mBAAmB;IACnB,WAAW;IACX,mBAAmB;AACvB;;AAEA;IACI,qCAAqC;IACrC,sCAAsC;IACtC,2BAA2B;AAC/B;;AAEA;IACI,aAAa;IACb,SAAS;AACb;;AAEA;IACI,aAAa;IACb,SAAS;IACT,eAAe;IACf,qCAAqC;IACrC,kBAAkB;IAClB,0CAA0C;AAC9C;;AAEA;IACI,aAAa;IACb,sBAAsB;IACtB,mBAAmB;IACnB,kBAAkB;AACtB;;AAEA;IACI,iBAAiB;IACjB,gBAAgB;IAChB,cAAc;IACd,sBAAsB;AAC1B;;AAEA;IACI,iBAAiB;IACjB,WAAW;IACX,gBAAgB;IAChB,yBAAyB;IACzB,qBAAqB;AACzB;;AAEA;IACI,aAAa;IACb,2DAA2D;IAC3D,SAAS;AACb;;AAEA;IACI,aAAa;IACb,mBAAmB;IACnB,YAAY;IACZ,WAAW;IACX,kBAAkB;AACtB;;AAEA;IACI,cAAc;IACd,cAAc;AAClB;;AAEA;IACI,cAAc;IACd,qBAAqB;IACrB,2BAA2B;AAC/B;;AAEA;IACI,cAAc;IACd,0BAA0B;AAC9B;;AAEA,eAAe;AACf;IACI;QACI,eAAe;IACnB;;IAEA;QACI,sBAAsB;QACtB,kBAAkB;QAClB,WAAW;IACf;;IAEA;QACI,YAAY;QACZ,aAAa;QACb,eAAe;QACf,cAAc;IAClB;;IAEA;QACI,iBAAiB;IACrB;;IAEA;QACI,SAAS;QACT,uBAAuB;IAC3B;;IAEA;QACI,0BAA0B;QAC1B,YAAY;IAChB;AACJ;;AAEA;IACI;QACI,aAAa;IACjB;;IAEA;QACI,sBAAsB;QACtB,SAAS;QACT,kBAAkB;IACtB;;IAEA;QACI,mBAAmB;QACnB,8BAA8B;IAClC;;IAEA;QACI,iBAAiB;QACjB,gBAAgB;IACpB;AACJ","sourcesContent":["/* Profile.css */\r\n.profile-card {\r\n    background: white;\r\n    border-radius: 12px;\r\n    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);\r\n    padding: 2rem;\r\n    font-family: 'Inter', sans-serif;\r\n}\r\n\r\n.profile-header {\r\n    display: flex;\r\n    align-items: flex-start;\r\n    gap: 2rem;\r\n    margin-bottom: 2rem;\r\n    flex-wrap: wrap;\r\n}\r\n\r\n.profile-avatar {\r\n    flex-shrink: 0;\r\n}\r\n\r\n.avatar-placeholder {\r\n    width: 120px;\r\n    height: 120px;\r\n    border-radius: 50%;\r\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    color: white;\r\n    font-weight: 600;\r\n    font-size: 2.5rem;\r\n    border: 4px solid white;\r\n    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);\r\n}\r\n\r\n.profile-info {\r\n    flex: 1;\r\n    min-width: 0;\r\n}\r\n\r\n.profile-name {\r\n    font-size: 2rem;\r\n    font-weight: 700;\r\n    color: #1a1a1a;\r\n    margin: 0 0 0.5rem 0;\r\n}\r\n\r\n.profile-username {\r\n    font-size: 1.1rem;\r\n    color: #667eea;\r\n    margin: 0 0 1rem 0;\r\n    font-weight: 500;\r\n}\r\n\r\n.profile-bio {\r\n    font-size: 1rem;\r\n    color: #555;\r\n    line-height: 1.6;\r\n    margin: 0;\r\n}\r\n\r\n.edit-profile-btn {\r\n    background: rgba(102, 126, 234, 0.1);\r\n    color: #667eea;\r\n    border: 1px solid rgba(102, 126, 234, 0.2);\r\n    padding: 0.75rem 1.5rem;\r\n    border-radius: 8px;\r\n    font-family: 'Inter', sans-serif;\r\n    font-weight: 500;\r\n    cursor: pointer;\r\n    transition: all 0.2s ease;\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 0.5rem;\r\n    height: fit-content;\r\n}\r\n\r\n.edit-profile-btn:hover {\r\n    background: rgba(102, 126, 234, 0.15);\r\n    border-color: rgba(102, 126, 234, 0.3);\r\n    transform: translateY(-1px);\r\n}\r\n\r\n.profile-details {\r\n    display: grid;\r\n    gap: 2rem;\r\n}\r\n\r\n.profile-stats {\r\n    display: flex;\r\n    gap: 3rem;\r\n    padding: 1.5rem;\r\n    background: rgba(102, 126, 234, 0.05);\r\n    border-radius: 8px;\r\n    border: 1px solid rgba(102, 126, 234, 0.1);\r\n}\r\n\r\n.stat-item {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    text-align: center;\r\n}\r\n\r\n.stat-number {\r\n    font-size: 1.8rem;\r\n    font-weight: 700;\r\n    color: #667eea;\r\n    margin-bottom: 0.25rem;\r\n}\r\n\r\n.stat-label {\r\n    font-size: 0.9rem;\r\n    color: #666;\r\n    font-weight: 500;\r\n    text-transform: uppercase;\r\n    letter-spacing: 0.5px;\r\n}\r\n\r\n.profile-meta {\r\n    display: grid;\r\n    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\r\n    gap: 1rem;\r\n}\r\n\r\n.meta-item {\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 0.75rem;\r\n    color: #666;\r\n    font-size: 0.95rem;\r\n}\r\n\r\n.meta-item svg {\r\n    color: #667eea;\r\n    flex-shrink: 0;\r\n}\r\n\r\n.profile-link {\r\n    color: #667eea;\r\n    text-decoration: none;\r\n    transition: color 0.2s ease;\r\n}\r\n\r\n.profile-link:hover {\r\n    color: #764ba2;\r\n    text-decoration: underline;\r\n}\r\n\r\n/* Responsive */\r\n@media (max-width: 768px) {\r\n    .profile-card {\r\n        padding: 1.5rem;\r\n    }\r\n    \r\n    .profile-header {\r\n        flex-direction: column;\r\n        text-align: center;\r\n        gap: 1.5rem;\r\n    }\r\n    \r\n    .avatar-placeholder {\r\n        width: 100px;\r\n        height: 100px;\r\n        font-size: 2rem;\r\n        margin: 0 auto;\r\n    }\r\n    \r\n    .profile-name {\r\n        font-size: 1.5rem;\r\n    }\r\n    \r\n    .profile-stats {\r\n        gap: 2rem;\r\n        justify-content: center;\r\n    }\r\n    \r\n    .profile-meta {\r\n        grid-template-columns: 1fr;\r\n        gap: 0.75rem;\r\n    }\r\n}\r\n\r\n@media (max-width: 480px) {\r\n    .profile-card {\r\n        padding: 1rem;\r\n    }\r\n    \r\n    .profile-stats {\r\n        flex-direction: column;\r\n        gap: 1rem;\r\n        text-align: center;\r\n    }\r\n    \r\n    .stat-item {\r\n        flex-direction: row;\r\n        justify-content: space-between;\r\n    }\r\n    \r\n    .stat-number {\r\n        font-size: 1.5rem;\r\n        margin-bottom: 0;\r\n    }\r\n}"],"sourceRoot":""}]);
+}
+
+.profile-actions {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.edit-profile-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.edit-profile-btn:hover {
+    background-color: #0056b3;
+}
+
+.delete-profile-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    margin-top: 8px;
+}
+
+.delete-profile-btn:hover {
+    background-color: #c82333;
+}
+
+/* Ensure the profile header layout works well with the buttons */
+.profile-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    position: relative;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .profile-actions {
+        flex-direction: row;
+        margin-left: 0;
+        margin-top: 15px;
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .delete-profile-btn {
+        margin-top: 0;
+    }
+}`, "",{"version":3,"sources":["webpack://./frontend/src/components/Profile.css"],"names":[],"mappings":"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","sourcesContent":["/* Profile.css */\r\n.profile-card {\r\n    background: white;\r\n    border-radius: 12px;\r\n    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);\r\n    padding: 2rem;\r\n    font-family: 'Inter', sans-serif;\r\n}\r\n\r\n.profile-header {\r\n    display: flex;\r\n    align-items: flex-start;\r\n    gap: 2rem;\r\n    margin-bottom: 2rem;\r\n    flex-wrap: wrap;\r\n}\r\n\r\n.profile-avatar {\r\n    flex-shrink: 0;\r\n}\r\n\r\n.avatar-placeholder {\r\n    width: 120px;\r\n    height: 120px;\r\n    border-radius: 50%;\r\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    color: white;\r\n    font-weight: 600;\r\n    font-size: 2.5rem;\r\n    border: 4px solid white;\r\n    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);\r\n}\r\n\r\n.profile-info {\r\n    flex: 1;\r\n    min-width: 0;\r\n}\r\n\r\n.profile-name {\r\n    font-size: 2rem;\r\n    font-weight: 700;\r\n    color: #1a1a1a;\r\n    margin: 0 0 0.5rem 0;\r\n}\r\n\r\n.profile-username {\r\n    font-size: 1.1rem;\r\n    color: #667eea;\r\n    margin: 0 0 1rem 0;\r\n    font-weight: 500;\r\n}\r\n\r\n.profile-bio {\r\n    font-size: 1rem;\r\n    color: #555;\r\n    line-height: 1.6;\r\n    margin: 0;\r\n}\r\n\r\n.edit-profile-btn {\r\n    background: rgba(102, 126, 234, 0.1);\r\n    color: #667eea;\r\n    border: 1px solid rgba(102, 126, 234, 0.2);\r\n    padding: 0.75rem 1.5rem;\r\n    border-radius: 8px;\r\n    font-family: 'Inter', sans-serif;\r\n    font-weight: 500;\r\n    cursor: pointer;\r\n    transition: all 0.2s ease;\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 0.5rem;\r\n    height: fit-content;\r\n}\r\n\r\n.edit-profile-btn:hover {\r\n    background: rgba(102, 126, 234, 0.15);\r\n    border-color: rgba(102, 126, 234, 0.3);\r\n    transform: translateY(-1px);\r\n}\r\n\r\n.profile-details {\r\n    display: grid;\r\n    gap: 2rem;\r\n}\r\n\r\n.profile-stats {\r\n    display: flex;\r\n    gap: 3rem;\r\n    padding: 1.5rem;\r\n    background: rgba(102, 126, 234, 0.05);\r\n    border-radius: 8px;\r\n    border: 1px solid rgba(102, 126, 234, 0.1);\r\n}\r\n\r\n.stat-item {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    text-align: center;\r\n}\r\n\r\n.stat-number {\r\n    font-size: 1.8rem;\r\n    font-weight: 700;\r\n    color: #667eea;\r\n    margin-bottom: 0.25rem;\r\n}\r\n\r\n.stat-label {\r\n    font-size: 0.9rem;\r\n    color: #666;\r\n    font-weight: 500;\r\n    text-transform: uppercase;\r\n    letter-spacing: 0.5px;\r\n}\r\n\r\n.profile-meta {\r\n    display: grid;\r\n    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\r\n    gap: 1rem;\r\n}\r\n\r\n.meta-item {\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 0.75rem;\r\n    color: #666;\r\n    font-size: 0.95rem;\r\n}\r\n\r\n.meta-item svg {\r\n    color: #667eea;\r\n    flex-shrink: 0;\r\n}\r\n\r\n.profile-link {\r\n    color: #667eea;\r\n    text-decoration: none;\r\n    transition: color 0.2s ease;\r\n}\r\n\r\n.profile-link:hover {\r\n    color: #764ba2;\r\n    text-decoration: underline;\r\n}\r\n\r\n/* Responsive */\r\n@media (max-width: 768px) {\r\n    .profile-card {\r\n        padding: 1.5rem;\r\n    }\r\n    \r\n    .profile-header {\r\n        flex-direction: column;\r\n        text-align: center;\r\n        gap: 1.5rem;\r\n    }\r\n    \r\n    .avatar-placeholder {\r\n        width: 100px;\r\n        height: 100px;\r\n        font-size: 2rem;\r\n        margin: 0 auto;\r\n    }\r\n    \r\n    .profile-name {\r\n        font-size: 1.5rem;\r\n    }\r\n    \r\n    .profile-stats {\r\n        gap: 2rem;\r\n        justify-content: center;\r\n    }\r\n    \r\n    .profile-meta {\r\n        grid-template-columns: 1fr;\r\n        gap: 0.75rem;\r\n    }\r\n}\r\n\r\n@media (max-width: 480px) {\r\n    .profile-card {\r\n        padding: 1rem;\r\n    }\r\n    \r\n    .profile-stats {\r\n        flex-direction: column;\r\n        gap: 1rem;\r\n        text-align: center;\r\n    }\r\n    \r\n    .stat-item {\r\n        flex-direction: row;\r\n        justify-content: space-between;\r\n    }\r\n    \r\n    .stat-number {\r\n        font-size: 1.5rem;\r\n        margin-bottom: 0;\r\n    }\r\n}\r\n\r\n.profile-actions {\r\n    display: flex;\r\n    gap: 10px;\r\n    margin-left: auto;\r\n    flex-direction: column;\r\n    align-items: flex-end;\r\n}\r\n\r\n.edit-profile-btn {\r\n    background-color: #007bff;\r\n    color: white;\r\n    border: none;\r\n    padding: 8px 16px;\r\n    border-radius: 6px;\r\n    cursor: pointer;\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 6px;\r\n    font-size: 14px;\r\n    transition: background-color 0.2s;\r\n}\r\n\r\n.edit-profile-btn:hover {\r\n    background-color: #0056b3;\r\n}\r\n\r\n.delete-profile-btn {\r\n    background-color: #dc3545;\r\n    color: white;\r\n    border: none;\r\n    padding: 8px 16px;\r\n    border-radius: 6px;\r\n    cursor: pointer;\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 6px;\r\n    font-size: 14px;\r\n    transition: background-color 0.2s;\r\n    margin-top: 8px;\r\n}\r\n\r\n.delete-profile-btn:hover {\r\n    background-color: #c82333;\r\n}\r\n\r\n/* Ensure the profile header layout works well with the buttons */\r\n.profile-header {\r\n    display: flex;\r\n    align-items: flex-start;\r\n    gap: 20px;\r\n    position: relative;\r\n}\r\n\r\n.profile-info {\r\n    flex: 1;\r\n}\r\n\r\n@media (max-width: 768px) {\r\n    .profile-actions {\r\n        flex-direction: row;\r\n        margin-left: 0;\r\n        margin-top: 15px;\r\n        width: 100%;\r\n        justify-content: flex-start;\r\n    }\r\n    \r\n    .delete-profile-btn {\r\n        margin-top: 0;\r\n    }\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

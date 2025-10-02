@@ -1,7 +1,7 @@
 import React from 'react';
 import './Profile.css';
 
-const Profile = ({ user, stats = { projectsCount: 0, collaborationsCount: 0, friendsCount: 0 }, onEdit }) => {
+const Profile = ({ user, stats = { projectsCount: 0, collaborationsCount: 0, friendsCount: 0 }, onEdit, onDelete, isOwnProfile }) => {
     const getInitials = () => {
         if (user.firstName && user.lastName) {
             return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
@@ -9,6 +9,12 @@ const Profile = ({ user, stats = { projectsCount: 0, collaborationsCount: 0, fri
             return user.username.charAt(0).toUpperCase();
         }
         return 'U';
+    };
+
+    const handleDeleteClick = () => {
+        if (window.confirm('Are you sure you want to delete your profile? This action cannot be undone and will delete all your projects and data.')) {
+            onDelete();
+        }
     };
 
     return (
@@ -30,16 +36,32 @@ const Profile = ({ user, stats = { projectsCount: 0, collaborationsCount: 0, fri
                     <p className="profile-bio">{user.bio || 'No bio available'}</p>
                 </div>
 
-                {onEdit && (
-                    <button className="edit-profile-btn" onClick={onEdit}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5Z"
-                                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                        Edit Profile
-                    </button>
+                {isOwnProfile && (
+                    <div className="profile-actions">
+                        {onEdit && (
+                            <button className="edit-profile-btn" onClick={onEdit}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                                          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5Z"
+                                          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                                Edit Profile
+                            </button>
+                        )}
+                        {onDelete && (
+                            <button className="delete-profile-btn" onClick={handleDeleteClick}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path d="M3 6h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" 
+                                          stroke="currentColor" strokeWidth="2"/>
+                                    <path d="M10 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                    <path d="M14 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                </svg>
+                                Delete Profile
+                            </button>
+                        )}
+                    </div>
                 )}
             </div>
 

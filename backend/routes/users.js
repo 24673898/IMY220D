@@ -111,30 +111,73 @@ router.put('/:userId', async (req, res) => {
 });
 
 // DELETE /api/users/:userId - Delete user profile
+// DELETE /api/users/:userId - Delete user profile
 router.delete('/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
         const db = getDB();
 
-        // Delete user
-        const result = await db.collection('users').deleteOne({ _id: userId });
+        console.log('Attempting to delete user with ID:', userId);
+
+        // Try to delete with ObjectId first, then with string
+        let result;
+        try {
+            // First try as ObjectId
+            result = await db.collection('users').deleteOne({ _id: new ObjectId(userId) });
+        } catch (e) {
+            // If ObjectId conversion fails, try as string
+            console.log('ObjectId conversion failed, trying as string ID');
+            result = await db.collection('users').deleteOne({ _id: userId });
+        }
 
         if (result.deletedCount === 0) {
+            console.log('User not found with ID:', userId);
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Delete user's projects (where they are the owner)
-        await db.collection('projects').deleteMany({ ownerId: userId });
+        console.log('User deleted successfully, cleaning up related data...');
 
-        // Remove user from project members
+        // Delete user's projects (where they are the owner)
+        await db.collection('projects').deleteMany({ 
+            $or: [
+                { ownerId: new ObjectId(userId) },
+                { ownerId: userId }
+            ]
+        });
+
+        // Remove user from project members (handle both ObjectId and string)
         await db.collection('projects').updateMany(
-            { members: userId },
-            { $pull: { members: userId } }
+            { 
+                $or: [
+                    { members: userId },
+                    { members: new ObjectId(userId) }
+                ]
+            },
+            { 
+                $pull: { 
+                    members: { 
+                        $in: [userId, new ObjectId(userId)] 
+                    } 
+                } 
+            }
         );
 
-        // Delete user's friendships
+        // Delete user's friendships (handle both ObjectId and string)
         await db.collection('friends').deleteMany({
-            $or: [{ userId }, { friendId: userId }]
+            $or: [
+                { userId: userId },
+                { userId: new ObjectId(userId) },
+                { friendId: userId },
+                { friendId: new ObjectId(userId) }
+            ]
+        });
+
+        // Delete user's check-ins
+        await db.collection('checkins').deleteMany({
+            $or: [
+                { userId: userId },
+                { userId: new ObjectId(userId) }
+            ]
         });
 
         res.json({ message: 'User deleted successfully' });

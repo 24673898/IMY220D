@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Added useNavigate
 import Header from '../components/Header';
 import Profile from '../components/Profile';
 import EditProfile from '../components/EditProfile';
@@ -10,6 +10,7 @@ import './ProfilePage.css';
 
 const ProfilePage = () => {
     const { id } = useParams();
+    const navigate = useNavigate(); // Added navigate for redirect after delete
     const [isEditing, setIsEditing] = useState(false);
     const [showCreateProject, setShowCreateProject] = useState(false);
     const [userData, setUserData] = useState(null);
@@ -35,6 +36,55 @@ const ProfilePage = () => {
     };
 
     const userId = isOwnProfile ? getCurrentUserId() : id;
+
+   const handleDeleteProfile = async () => {
+    if (!userId) {
+        alert('Cannot delete profile: User ID not found');
+        return;
+    }
+
+    // Final confirmation
+    const confirmed = window.confirm(
+        'WARNING: This will permanently delete your profile, all your projects, and all associated data. This action cannot be undone. Are you absolutely sure?'
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        // Get the current user data to ensure we have the correct ID format
+        const currentUser = JSON.parse(localStorage.getItem('user'));
+        const userToDeleteId = currentUser?._id || userId;
+
+        console.log('Attempting to delete user with ID:', userToDeleteId);
+        
+        const response = await fetch(`http://localhost:3000/api/users/${userToDeleteId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to delete profile');
+        }
+
+        const result = await response.json();
+        
+        // Clear localStorage and redirect to home page
+        localStorage.removeItem('user');
+        localStorage.removeItem('token'); // if you have tokens
+        
+        alert('Profile deleted successfully');
+        navigate('/'); // Redirect to home page
+
+    } catch (err) {
+        console.error('Error deleting profile:', err);
+        alert(`Failed to delete profile: ${err.message}`);
+    }
+};
 
     // Fetch user data from backend
     useEffect(() => {
@@ -179,6 +229,7 @@ const ProfilePage = () => {
                             user={userData}
                             stats={stats}
                             onEdit={isOwnProfile ? () => setIsEditing(true) : undefined}
+                            onDelete={isOwnProfile ? handleDeleteProfile : undefined}
                             isOwnProfile={isOwnProfile}
                         />
                     )}
