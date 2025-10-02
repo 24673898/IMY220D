@@ -1,0 +1,18 @@
+[
+  {
+    "userId": "user1",
+    "friendId": "user2",
+    "status": "accepted",
+    "createdAt": {
+      "$date": "2025-08-06T00:00:00.000Z"
+    }
+  },
+  {
+    "userId": "user2",
+    "friendId": "user1",
+    "status": "accepted",
+    "createdAt": {
+      "$date": "2025-08-06T00:00:00.000Z"
+    }
+  }
+]

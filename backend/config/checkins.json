@@ -1,0 +1,56 @@
+[
+  {
+    "_id": "checkin1",
+    "projectId": "project1",
+    "userId": "user1",
+    "type": "checkin",
+    "message": "Initial commit: Set up React project structure and basic components. Added routing and state management.",
+    "version": "1.0.0",
+    "timestamp": {
+      "$date": "2025-08-10T10:00:00.000Z"
+    },
+    "files": [
+      {
+        "name": "App.js",
+        "action": "added"
+      },
+      {
+        "name": "index.html",
+        "action": "added"
+      }
+    ]
+  },
+  {
+    "_id": "checkin2",
+    "projectId": "project1",
+    "userId": "user2",
+    "type": "checkout",
+    "message": "Checking out to add TailwindCSS styling and improve UI components",
+    "version": "1.1.0",
+    "timestamp": {
+      "$date": "2025-08-12T14:30:00.000Z"
+    },
+    "files": []
+  },
+  {
+    "_id": "checkin3",
+    "projectId": "project1",
+    "userId": "user2",
+    "type": "checkin",
+    "message": "Added TailwindCSS configuration and updated component styles. Improved responsive design for mobile devices.",
+    "version": "1.2.0",
+    "timestamp": {
+      "$date": "2025-08-13T09:15:00.000Z"
+    },
+    "files": [
+      {
+        "name": "style.css",
+        "action": "added"
+      },
+      {
+        "name": "App.js",
+        "action": "modified"
+      }
+    ]
+  }
+]
