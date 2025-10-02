@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Profile from '../components/Profile';
@@ -12,40 +12,154 @@ const ProfilePage = () => {
     const { id } = useParams();
     const [isEditing, setIsEditing] = useState(false);
     const [showCreateProject, setShowCreateProject] = useState(false);
+    const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [stats, setStats] = useState({
+        projectsCount: 0,
+        collaborationsCount: 0,
+        friendsCount: 0
+    });
 
     // Determine if viewing own profile (no ID = own profile)
     const isOwnProfile = !id;
 
-    // Default user data for own profile
-    const defaultUserData = {
-        id: 1,
-        firstName: "Frank",
-        lastName: "Johnson",
-        email: "frank@frankcodehub.com",
-        username: "frankdev",
-        bio: "Full-stack developer passionate about creating amazing web applications",
-        location: "San Francisco, CA",
-        website: "https://frankdev.com",
-        joinDate: "January 2024",
-        profileImage: "/assets/images/frank-avatar.png"
+    // Get current user ID from localStorage
+    const getCurrentUserId = () => {
+        const user = localStorage.getItem('user');
+        if (user) {
+            const parsedUser = JSON.parse(user);
+            return parsedUser._id;
+        }
+        return null;
     };
 
-    // Dummy user data for other profiles
-    const otherUserData = {
-        id: parseInt(id) || 2,
-        firstName: "Jane",
-        lastName: "Smith",
-        email: "jane@example.com",
-        username: "janedev",
-        bio: "Frontend developer specializing in React and modern web technologies",
-        location: "New York, NY",
-        website: "https://janesmith.dev",
-        joinDate: "March 2024",
-        profileImage: "/assets/images/jane-avatar.png"
+    const userId = isOwnProfile ? getCurrentUserId() : id;
+
+    // Fetch user data from backend
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (!userId) {
+                setLoading(false);
+                setError('No user ID found');
+                return;
+            }
+
+            try {
+                setLoading(true);
+                const response = await fetch(`http://localhost:3000/api/users/${userId}`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+
+                const data = await response.json();
+
+                // Transform data to match frontend format
+                const transformedUser = {
+                    id: data.user._id,
+                    firstName: data.user.firstName || '',
+                    lastName: data.user.lastName || '',
+                    email: data.user.email,
+                    username: data.user.username,
+                    bio: data.user.bio || '',
+                    location: data.user.location || '',
+                    website: data.user.website || '',
+                    joinDate: data.user.createdAt ? new Date(data.user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '',
+                    profileImage: data.user.profileImage || '/assets/images/default-user.jpg'
+                };
+
+                setUserData(transformedUser);
+
+                // Fetch stats
+                const friendsResponse = await fetch(`http://localhost:3000/api/users/${userId}/friends`);
+                const friendsData = await friendsResponse.json();
+
+                setStats({
+                    projectsCount: data.projects?.length || 0,
+                    collaborationsCount: data.projects?.filter(p => p.ownerId !== userId).length || 0,
+                    friendsCount: friendsData.friends?.length || 0
+                });
+
+            } catch (err) {
+                console.error('Error fetching user data:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, [userId]);
+
+    // Handle profile save
+    const handleProfileSave = async (formData) => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update profile');
+            }
+
+            const data = await response.json();
+
+            // Update local userData state
+            const transformedUser = {
+                id: data.user._id,
+                firstName: data.user.firstName || '',
+                lastName: data.user.lastName || '',
+                email: data.user.email,
+                username: data.user.username,
+                bio: data.user.bio || '',
+                location: data.user.location || '',
+                website: data.user.website || '',
+                joinDate: userData.joinDate,
+                profileImage: data.user.profileImage || '/assets/images/default-user.jpg'
+            };
+
+            setUserData(transformedUser);
+
+            // Update localStorage if it's own profile
+            if (isOwnProfile) {
+                localStorage.setItem('user', JSON.stringify(data.user));
+            }
+
+            setIsEditing(false);
+        } catch (err) {
+            console.error('Error updating profile:', err);
+            alert('Failed to update profile. Please try again.');
+        }
     };
 
-    // Use appropriate user data
-    const userData = isOwnProfile ? defaultUserData : otherUserData;
+    if (loading) {
+        return (
+            <div className="profile-page">
+                <Header />
+                <div className="profile-container">
+                    <div className="loading-message">Loading profile...</div>
+                </div>
+            </div>
+        );
+    }
+
+    if (error || !userData) {
+        return (
+            <div className="profile-page">
+                <Header />
+                <div className="profile-container">
+                    <div className="error-message">
+                        {error || 'User not found'}
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="profile-page">
@@ -56,11 +170,12 @@ const ProfilePage = () => {
                         <EditProfile
                             user={userData}
                             onCancel={() => setIsEditing(false)}
-                            onSave={() => setIsEditing(false)}
+                            onSave={handleProfileSave}
                         />
                     ) : (
                         <Profile
                             user={userData}
+                            stats={stats}
                             onEdit={isOwnProfile ? () => setIsEditing(true) : undefined}
                             isOwnProfile={isOwnProfile}
                         />
@@ -81,7 +196,7 @@ const ProfilePage = () => {
                 </div>
 
                 <div className="profile-sidebar">
-                    <FriendsList />
+                    <FriendsList userId={userId} />
                 </div>
             </div>
         </div>

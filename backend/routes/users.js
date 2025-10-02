@@ -44,13 +44,19 @@ router.get('/:userId', async (req, res) => {
 router.put('/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
-        const { name, bio, birthday, work, profileImage } = req.body;
-        
+        const { firstName, lastName, username, email, bio, location, website, name, birthday, work, profileImage } = req.body;
+
         const db = getDB();
-        
+
         const updateData = {};
-        if (name) updateData.name = name;
+        if (firstName) updateData.firstName = firstName;
+        if (lastName) updateData.lastName = lastName;
+        if (username) updateData.username = username;
+        if (email) updateData.email = email;
         if (bio !== undefined) updateData.bio = bio;
+        if (location) updateData.location = location;
+        if (website) updateData.website = website;
+        if (name) updateData.name = name;
         if (birthday) updateData.birthday = birthday;
         if (work !== undefined) updateData.work = work;
         if (profileImage) updateData.profileImage = profileImage;
@@ -67,7 +73,7 @@ router.put('/:userId', async (req, res) => {
         const updatedUser = await db.collection('users').findOne({ _id: userId });
         const { password, ...userWithoutPassword } = updatedUser;
 
-        res.json({ 
+        res.json({
             message: 'Profile updated successfully',
             user: userWithoutPassword
         });

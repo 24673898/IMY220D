@@ -5,31 +5,33 @@ const { getDB } = require('../config/database');
 // POST /api/auth/signup - Register new user
 router.post('/signup', async (req, res) => {
     try {
-        const { name, username, email, password, birthday, work, bio } = req.body;
+        const { name, username, email, password, birthday, work, bio, firstName, lastName, location, website } = req.body;
 
         // Validation
-        if (!name || !username || !email || !password) {
-            return res.status(400).json({ 
-                error: 'Missing required fields' 
+        if (!username || !email || !password) {
+            return res.status(400).json({
+                error: 'Missing required fields'
             });
         }
 
         const db = getDB();
-        
+
         // Check if user already exists
-        const existingUser = await db.collection('users').findOne({ 
-            $or: [{ email }, { username }] 
+        const existingUser = await db.collection('users').findOne({
+            $or: [{ email }, { username }]
         });
 
         if (existingUser) {
-            return res.status(409).json({ 
-                error: 'User with this email or username already exists' 
+            return res.status(409).json({
+                error: 'User with this email or username already exists'
             });
         }
 
         // Create new user
         const newUser = {
-            name,
+            name: name || '',
+            firstName: firstName || '',
+            lastName: lastName || '',
             username,
             email,
             password, // Not hashing as per spec
@@ -37,15 +39,17 @@ router.post('/signup', async (req, res) => {
             bio: bio || '',
             birthday: birthday || null,
             work: work || '',
+            location: location || '',
+            website: website || '',
             createdAt: new Date()
         };
 
         const result = await db.collection('users').insertOne(newUser);
-        
+
         // Return user without password
         const { password: _, ...userWithoutPassword } = newUser;
-        
-        res.status(201).json({ 
+
+        res.status(201).json({
             message: 'User created successfully',
             user: { ...userWithoutPassword, _id: result.insertedId }
         });
