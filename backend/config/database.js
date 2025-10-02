@@ -10,7 +10,7 @@ async function connectDB() {
     try {
         client = new MongoClient(uri);
         await client.connect();
-        db = client.db('imy220_project');
+        db = client.db('IMY220Project');
         console.log('✅ Connected to MongoDB Atlas successfully');
         console.log('📊 Database: imy220_project');
         return db;
