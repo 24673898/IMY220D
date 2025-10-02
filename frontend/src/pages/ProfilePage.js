@@ -5,6 +5,7 @@ import Profile from '../components/Profile';
 import EditProfile from '../components/EditProfile';
 import ProjectList from '../components/ProjectList';
 import CreateProject from '../components/CreateProject';
+import FriendsList from '../components/FriendsList';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
@@ -52,31 +53,35 @@ const ProfilePage = () => {
             <div className="profile-container">
                 <div className="profile-main">
                     {isEditing && isOwnProfile ? (
-                        <EditProfile 
-                            user={userData} 
+                        <EditProfile
+                            user={userData}
                             onCancel={() => setIsEditing(false)}
                             onSave={() => setIsEditing(false)}
                         />
                     ) : (
-                        <Profile 
-                            user={userData} 
+                        <Profile
+                            user={userData}
                             onEdit={isOwnProfile ? () => setIsEditing(true) : undefined}
                             isOwnProfile={isOwnProfile}
                         />
                     )}
-                    
+
                     {showCreateProject && isOwnProfile ? (
-                        <CreateProject 
+                        <CreateProject
                             onCancel={() => setShowCreateProject(false)}
                             onSave={() => setShowCreateProject(false)}
                         />
                     ) : (
-                        <ProjectList 
+                        <ProjectList
                             userId={userData.id}
                             onCreateProject={isOwnProfile ? () => setShowCreateProject(true) : undefined}
                             isOwnProfile={isOwnProfile}
                         />
                     )}
+                </div>
+
+                <div className="profile-sidebar">
+                    <FriendsList />
                 </div>
             </div>
         </div>

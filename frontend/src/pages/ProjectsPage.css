@@ -1,0 +1,27 @@
+.projects-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.projects-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.projects-header {
+    text-align: center;
+    color: white;
+    margin-bottom: 2rem;
+}
+
+.projects-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.projects-header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}

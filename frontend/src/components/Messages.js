@@ -94,9 +94,9 @@ const Messages = ({ projectId }) => {
                 <h3 className="messages-title">Project Activity</h3>
                 <div className="messages-controls">
                     <label htmlFor="sort-messages">Sort by:</label>
-                    <select 
+                    <select
                         id="sort-messages"
-                        value={sortBy} 
+                        value={sortBy}
                         onChange={(e) => setSortBy(e.target.value)}
                         className="sort-select"
                     >
@@ -120,13 +120,13 @@ const Messages = ({ projectId }) => {
                                     </svg>
                                 ) : (
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" 
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"
                                               stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                     </svg>
                                 )}
                             </div>
                         </div>
-                        
+
                         <div className="message-content">
                             <div className="message-header">
                                 <div className="message-user-info">
@@ -140,17 +140,17 @@ const Messages = ({ projectId }) => {
                                     <span className="message-timestamp">{message.timestamp}</span>
                                 </div>
                             </div>
-                            
+
                             <div className="message-body">
                                 <p className="message-text">{formatMessage(message.message)}</p>
-                                
+
                                 {message.version && (
                                     <div className="message-version">
                                         <span className="version-label">Version:</span>
                                         <span className="version-number">{message.version}</span>
                                     </div>
                                 )}
-                                
+
                                 {message.files.length > 0 && (
                                     <div className="message-files">
                                         <span className="files-label">Files modified:</span>
@@ -158,7 +158,7 @@ const Messages = ({ projectId }) => {
                                             {message.files.map((file, index) => (
                                                 <span key={index} className="file-tag">
                                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" 
+                                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
                                                               stroke="currentColor" strokeWidth="2"/>
                                                         <polyline points="14,2 14,8 20,8" stroke="currentColor" strokeWidth="2"/>
                                                     </svg>
@@ -173,12 +173,12 @@ const Messages = ({ projectId }) => {
                     </div>
                 ))}
             </div>
-            
+
             {sortedMessages.length === 0 && (
                 <div className="empty-messages">
                     <div className="empty-icon">
                         <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" 
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
                                   stroke="currentColor" strokeWidth="2"/>
                         </svg>
                     </div>

@@ -5,6 +5,7 @@ import SplashPage from "./pages/SplashPage";
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import ProjectPage from "./pages/ProjectPage";
+import ProjectsPage from "./pages/ProjectsPage";
 
 const App = () => {
     return (
@@ -26,11 +27,11 @@ const App = () => {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/profile/:id" element={<ProfilePage />} />
                 
-                {/* Project Routes */}
+                {/* Projects listing - shows all projects */}
+                <Route path="/projects" element={<ProjectsPage />} />
+
+                {/* Project Routes - individual project page */}
                 <Route path="/project/:id" element={<ProjectPage />} />
-                
-                {/* Projects listing  */}
-                <Route path="/projects" element={<ProjectPage />} />
                 
                 {/* Catch-all route - redirects to home */}
                 <Route path="*" element={<HomePage />} />

@@ -48,13 +48,13 @@ const Feed = () => {
                 {/* Local/Global Toggle */}
                 <div className="feed-controls">
                     <div className="feed-tabs">
-                        <button 
+                        <button
                             className={`tab-btn ${activeTab === 'local' ? 'active' : ''}`}
                             onClick={() => setActiveTab('local')}
                         >
                             Local
                         </button>
-                        <button 
+                        <button
                             className={`tab-btn ${activeTab === 'global' ? 'active' : ''}`}
                             onClick={() => setActiveTab('global')}
                         >
@@ -82,9 +82,9 @@ const Feed = () => {
             {/* Project List */}
             <div className="feed-content">
                 {projects.map(project => (
-                    <ProjectPreview 
-                        key={project.id} 
-                        project={project} 
+                    <ProjectPreview
+                        key={project.id}
+                        project={project}
                     />
                 ))}
             </div>

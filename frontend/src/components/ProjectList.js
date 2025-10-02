@@ -1,44 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ProjectList.css';
 
 const ProjectList = ({ userId, onCreateProject }) => {
-    // Dummy project data
-    const userProjects = [
-        {
-            id: 1,
-            name: "React Dashboard",
-            description: "A modern admin dashboard built with React and Material-UI",
-            tags: ["#react", "#javascript", "#material-ui"],
-            status: "Checked In",
-            lastModified: "2 days ago",
-            collaborators: 3,
-            downloads: 45
-        },
-        {
-            id: 2,
-            name: "Node.js API Server",
-            description: "RESTful API with authentication and database integration",
-            tags: ["#nodejs", "#express", "#mongodb"],
-            status: "Checked Out",
-            lastModified: "5 days ago",
-            collaborators: 2,
-            downloads: 23
-        },
-        {
-            id: 3,
-            name: "CSS Animation Library",
-            description: "Collection of smooth CSS animations for web projects",
-            tags: ["#css", "#animations", "#scss"],
-            status: "Checked In",
-            lastModified: "1 week ago",
-            collaborators: 1,
-            downloads: 78
+    const navigate = useNavigate();
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        fetchProjects();
+    }, [userId]);
+
+    const fetchProjects = async () => {
+        try {
+            setLoading(true);
+            const url = userId
+                ? `/api/projects?userId=${userId}`
+                : '/api/projects';
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (response.ok) {
+                setProjects(data.projects || []);
+            } else {
+                setError(data.error || 'Failed to fetch projects');
+            }
+        } catch (err) {
+            setError('Failed to connect to server');
+            console.error('Fetch projects error:', err);
+        } finally {
+            setLoading(false);
         }
-    ];
+    };
 
     const handleProjectClick = (project) => {
-        // TODO: Navigate to individual project page
-        console.log('View project:', project.name);
+        navigate(`/project/${project._id}`);
     };
 
     const handleEditProject = (project, e) => {
@@ -47,27 +45,72 @@ const ProjectList = ({ userId, onCreateProject }) => {
         console.log('Edit project:', project.name);
     };
 
-    const handleDeleteProject = (project, e) => {
+    const handleDeleteProject = async (project, e) => {
         e.stopPropagation();
         if (window.confirm(`Are you sure you want to delete "${project.name}"?`)) {
-            console.log('Delete project:', project.name);
-            // TODO: Implement delete functionality
+            try {
+                const response = await fetch(`/api/projects/${project._id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    fetchProjects(); // Refresh the list
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Failed to delete project');
+                }
+            } catch (err) {
+                console.error('Delete project error:', err);
+                alert('Failed to delete project');
+            }
         }
     };
+
+    const formatDate = (date) => {
+        const now = new Date();
+        const projectDate = new Date(date);
+        const diffTime = Math.abs(now - projectDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays === 0) return 'Today';
+        if (diffDays === 1) return '1 day ago';
+        if (diffDays < 7) return `${diffDays} days ago`;
+        if (diffDays < 14) return '1 week ago';
+        if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+        return projectDate.toLocaleDateString();
+    };
+
+    if (loading) {
+        return (
+            <div className="project-list-card">
+                <div className="loading">Loading projects...</div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="project-list-card">
+                <div className="error">{error}</div>
+            </div>
+        );
+    }
 
     return (
         <div className="project-list-card">
             <div className="project-list-header">
-                <h3 className="project-list-title">My Projects</h3>
-                <button className="create-project-btn" onClick={onCreateProject}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                    New Project
-                </button>
+                <h3 className="project-list-title">{userId ? 'My Projects' : 'All Projects'}</h3>
+                {onCreateProject && (
+                    <button className="create-project-btn" onClick={onCreateProject}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                        New Project
+                    </button>
+                )}
             </div>
-            
-            {userProjects.length === 0 ? (
+
+            {projects.length === 0 ? (
                 <div className="empty-state">
                     <div className="empty-icon">
                         <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
@@ -86,49 +129,49 @@ const ProjectList = ({ userId, onCreateProject }) => {
                 </div>
             ) : (
                 <div className="projects-grid">
-                    {userProjects.map(project => (
-                        <div 
-                            key={project.id} 
+                    {projects.map(project => (
+                        <div
+                            key={project._id}
                             className="project-card"
                             onClick={() => handleProjectClick(project)}
                         >
                             <div className="project-card-header">
                                 <h4 className="project-name">{project.name}</h4>
                                 <div className="project-actions">
-                                    <button 
+                                    <button
                                         className="action-btn edit-btn"
                                         onClick={(e) => handleEditProject(project, e)}
                                         title="Edit Project"
                                     >
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" 
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
                                                   stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                            <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5Z" 
+                                            <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5Z"
                                                   stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                         </svg>
                                     </button>
-                                    <button 
+                                    <button
                                         className="action-btn delete-btn"
                                         onClick={(e) => handleDeleteProject(project, e)}
                                         title="Delete Project"
                                     >
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                                             <polyline points="3,6 5,6 21,6" stroke="currentColor" strokeWidth="2"/>
-                                            <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2" 
+                                            <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"
                                                   stroke="currentColor" strokeWidth="2"/>
                                         </svg>
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <p className="project-description">{project.description}</p>
-                            
+
                             <div className="project-tags">
-                                {project.tags.map((tag, index) => (
+                                {(project.tags || []).map((tag, index) => (
                                     <span key={index} className="project-tag">{tag}</span>
                                 ))}
                             </div>
-                            
+
                             <div className="project-meta">
                                 <div className="project-stats">
                                     <span className="stat">
@@ -137,24 +180,24 @@ const ProjectList = ({ userId, onCreateProject }) => {
                                             <circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="2"/>
                                             <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" strokeWidth="2"/>
                                         </svg>
-                                        {project.collaborators}
+                                        {project.members ? project.members.length : 0}
                                     </span>
                                     <span className="stat">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" 
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"
                                                   stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                         </svg>
-                                        {project.downloads}
+                                        {project.downloads || 0}
                                     </span>
                                 </div>
-                                
-                                <span className={`project-status ${project.status === 'Checked In' ? 'checked-in' : 'checked-out'}`}>
-                                    {project.status}
+
+                                <span className={`project-status ${project.status === 'checked-in' ? 'checked-in' : 'checked-out'}`}>
+                                    {project.status === 'checked-in' ? 'Checked In' : 'Checked Out'}
                                 </span>
                             </div>
-                            
+
                             <div className="project-footer">
-                                <span className="last-modified">Updated {project.lastModified}</span>
+                                <span className="last-modified">Updated {formatDate(project.createdAt)}</span>
                             </div>
                         </div>
                     ))}

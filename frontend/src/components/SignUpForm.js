@@ -7,6 +7,7 @@ const SignUpForm = ({ onToggleForm }) => {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
+        username: '',
         email: '',
         password: '',
         confirmPassword: ''
@@ -32,33 +33,37 @@ const SignUpForm = ({ onToggleForm }) => {
 
     const validateForm = () => {
         const newErrors = {};
-        
+
         if (!formData.firstName.trim()) {
             newErrors.firstName = 'First name is required';
         }
-        
+
         if (!formData.lastName.trim()) {
             newErrors.lastName = 'Last name is required';
         }
-        
+
+        if (!formData.username.trim()) {
+            newErrors.username = 'Username is required';
+        }
+
         if (!formData.email) {
             newErrors.email = 'Email is required';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
             newErrors.email = 'Email is invalid';
         }
-        
+
         if (!formData.password) {
             newErrors.password = 'Password is required';
         } else if (formData.password.length < 6) {
             newErrors.password = 'Password must be at least 6 characters';
         }
-        
+
         if (!formData.confirmPassword) {
             newErrors.confirmPassword = 'Please confirm your password';
         } else if (formData.password !== formData.confirmPassword) {
             newErrors.confirmPassword = 'Passwords do not match';
         }
-        
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -79,8 +84,8 @@ const SignUpForm = ({ onToggleForm }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    firstName: formData.firstName,
-                    lastName: formData.lastName,
+                    name: `${formData.firstName} ${formData.lastName}`,
+                    username: formData.username,
                     email: formData.email,
                     password: formData.password
                 })
@@ -88,15 +93,15 @@ const SignUpForm = ({ onToggleForm }) => {
 
             const data = await response.json();
 
-            if (data.success) {
+            if (response.ok) {
                 // Store user data in localStorage
                 localStorage.setItem('currentUser', JSON.stringify(data.user));
-                
+
                 // Redirect to home page
                 navigate('/home');
             } else {
                 setErrors({
-                    form: data.message || 'Signup failed'
+                    form: data.error || data.message || 'Signup failed'
                 });
             }
         } catch (error) {
@@ -152,7 +157,22 @@ const SignUpForm = ({ onToggleForm }) => {
                         {errors.lastName && <span className="error-message">{errors.lastName}</span>}
                     </div>
                 </div>
-                
+
+                <div className="form-group">
+                    <label htmlFor="username">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Choose a username"
+                        value={formData.username}
+                        onChange={handleInputChange}
+                        className={errors.username ? 'error' : ''}
+                        disabled={isLoading}
+                    />
+                    {errors.username && <span className="error-message">{errors.username}</span>}
+                </div>
+
                 <div className="form-group">
                     <label htmlFor="email">Email Address</label>
                     <input

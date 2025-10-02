@@ -5,7 +5,6 @@ import Feed from '../components/Feed';
 import './HomePage.css'; // Keep your existing CSS
 
 const HomePage = () => {
-    const [activeTab, setActiveTab] = useState('local');
     const [activity, setActivity] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -22,26 +21,19 @@ const HomePage = () => {
         }
     }, []);
 
-    // Load activity when user or tab changes
+    // Load activity when user changes
     useEffect(() => {
         if (user) {
             loadActivity();
         }
-    }, [activeTab, user]);
+    }, [user]);
 
     const loadActivity = async () => {
         try {
             setLoading(true);
             setError(null);
 
-            let url;
-            if (activeTab === 'local') {
-                url = `http://localhost:3000/api/checkins/local/${user._id}`;
-            } else {
-                url = 'http://localhost:3000/api/checkins/global';
-            }
-
-            const response = await fetch(url);
+            const response = await fetch('http://localhost:3000/api/checkins/global');
             const data = await response.json();
 
             if (response.ok) {
@@ -64,27 +56,8 @@ const HomePage = () => {
     return (
         <div className="home-page">
             <Header />
-            
+
             <div className="container">
-                <h1>Activity Feed</h1>
-
-                {/* Tab buttons */}
-                <div className="feed-tabs">
-                    <button 
-                        className={activeTab === 'local' ? 'active' : ''}
-                        onClick={() => setActiveTab('local')}
-                    >
-                        Local Feed (Friends)
-                    </button>
-                    <button 
-                        className={activeTab === 'global' ? 'active' : ''}
-                        onClick={() => setActiveTab('global')}
-                    >
-                        Global Feed (All Users)
-                    </button>
-                </div>
-
-                {/* Use your existing Feed component */}
                 {loading && <div className="loading">Loading activity...</div>}
                 {error && <div className="error">{error}</div>}
                 {!loading && !error && <Feed activity={activity} />}
