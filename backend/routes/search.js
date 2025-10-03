@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getDB } = require('../config/database');
+const { ObjectId } = require('mongodb');
 
 // GET /api/search/users?q=searchTerm - Search for users
 router.get('/users', async (req, res) => {
@@ -40,38 +41,70 @@ router.get('/projects', async (req, res) => {
         const { q, type, tag } = req.query;
 
         const db = getDB();
-        let query = {};
+        let projectIdsFromCheckins = [];
+        let projectsSet = new Set();
 
+        // 1. Search by check-in messages if query provided
         if (q) {
-            // Search by check-in messages
             const checkins = await db.collection('checkins')
-                .find({ 
+                .find({
                     message: { $regex: q, $options: 'i' }
                 })
                 .toArray();
-            
-            const projectIds = [...new Set(checkins.map(c => c.projectId))];
-            query._id = { $in: projectIds };
+
+            projectIdsFromCheckins = [...new Set(checkins.map(c => c.projectId))];
         }
 
+        // 2. Build query for projects collection search
+        let projectQuery = {};
+
+        if (q) {
+            // Search by name, description, or tags (hashtags)
+            projectQuery.$or = [
+                { name: { $regex: q, $options: 'i' } },
+                { description: { $regex: q, $options: 'i' } },
+                { tags: { $elemMatch: { $regex: q, $options: 'i' } } }
+            ];
+
+            // Also include projects found via checkin messages
+            if (projectIdsFromCheckins.length > 0) {
+                projectQuery.$or.push({ _id: { $in: projectIdsFromCheckins } });
+            }
+        }
+
+        // Apply additional filters
         if (type) {
-            query.type = type;
+            projectQuery.type = type;
         }
 
         if (tag) {
-            query.tags = { $regex: tag, $options: 'i' };
+            projectQuery.tags = { $elemMatch: { $regex: tag, $options: 'i' } };
         }
 
+        // Fetch matching projects
         const projects = await db.collection('projects')
-            .find(query)
+            .find(projectQuery)
             .limit(20)
             .toArray();
 
         // Populate owner info
         const projectsWithOwners = await Promise.all(
             projects.map(async (project) => {
-                const owner = await db.collection('users')
-                    .findOne({ _id: project.ownerId }, { projection: { password: 0 } });
+                // Handle both string and ObjectId formats for ownerId
+                let owner;
+                try {
+                    owner = await db.collection('users')
+                        .findOne({ _id: project.ownerId }, { projection: { password: 0 } });
+
+                    // If not found and ownerId is a string that looks like an ObjectId, try converting it
+                    if (!owner && typeof project.ownerId === 'string' && ObjectId.isValid(project.ownerId)) {
+                        owner = await db.collection('users')
+                            .findOne({ _id: new ObjectId(project.ownerId) }, { projection: { password: 0 } });
+                    }
+                } catch (e) {
+                    console.error('Error fetching owner for project:', e);
+                }
+
                 return { ...project, owner };
             })
         );
@@ -106,10 +139,34 @@ router.get('/checkins', async (req, res) => {
         // Populate user and project info
         const checkinsWithDetails = await Promise.all(
             checkins.map(async (item) => {
-                const user = await db.collection('users')
-                    .findOne({ _id: item.userId }, { projection: { password: 0 } });
-                const project = await db.collection('projects')
-                    .findOne({ _id: item.projectId });
+                // Handle both string and ObjectId formats for userId
+                let user;
+                try {
+                    user = await db.collection('users')
+                        .findOne({ _id: item.userId }, { projection: { password: 0 } });
+
+                    if (!user && typeof item.userId === 'string' && ObjectId.isValid(item.userId)) {
+                        user = await db.collection('users')
+                            .findOne({ _id: new ObjectId(item.userId) }, { projection: { password: 0 } });
+                    }
+                } catch (e) {
+                    console.error('Error fetching user for checkin:', e);
+                }
+
+                // Handle both string and ObjectId formats for projectId
+                let project;
+                try {
+                    project = await db.collection('projects')
+                        .findOne({ _id: item.projectId });
+
+                    if (!project && typeof item.projectId === 'string' && ObjectId.isValid(item.projectId)) {
+                        project = await db.collection('projects')
+                            .findOne({ _id: new ObjectId(item.projectId) });
+                    }
+                } catch (e) {
+                    console.error('Error fetching project for checkin:', e);
+                }
+
                 return { ...item, user, project };
             })
         );
