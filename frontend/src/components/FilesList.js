@@ -1,12 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './FilesList.css';
 
-const FilesList = ({ projectId, isOwner = false }) => {
+const FilesList = ({ projectId, canUpload = false, onFilesUpdate }) => {
     const [viewMode, setViewMode] = useState('list');
     const [sortBy, setSortBy] = useState('name');
-    
-    // Dummy files data
-    const filesData = [
+    const [files, setFiles] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchFiles = async () => {
+            if (!projectId) {
+                setLoading(false);
+                return;
+            }
+
+            try {
+                setLoading(true);
+                const response = await fetch(`/api/projects/${projectId}`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch project');
+                }
+
+                const data = await response.json();
+                setFiles(data.project.files || []);
+            } catch (err) {
+                console.error('Error fetching files:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchFiles();
+    }, [projectId]);
+
+    // Dummy files data for display format reference
+    const filesDataOld = [
         {
             id: 1,
             name: 'server.js',
@@ -164,32 +195,96 @@ const FilesList = ({ projectId, isOwner = false }) => {
         // TODO: Implement file download functionality
     };
 
-    const sortedFiles = [...filesData].sort((a, b) => {
-        // Always show folders first
-        if (a.isFolder && !b.isFolder) return -1;
-        if (!a.isFolder && b.isFolder) return 1;
-        
+    const sortedFiles = [...files].sort((a, b) => {
         switch (sortBy) {
             case 'name':
-                return a.name.localeCompare(b.name);
+                return (a.name || '').localeCompare(b.name || '');
             case 'size':
-                // Simple size comparison (would need proper parsing in real app)
-                return a.size.localeCompare(b.size);
+                return (a.size || 0) - (b.size || 0);
             case 'modified':
-                return a.lastModified.localeCompare(b.lastModified);
+                return new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0);
             default:
                 return 0;
         }
     });
 
+    const formatFileSize = (bytes) => {
+        if (!bytes || bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    };
+
+    const formatTimeAgo = (timestamp) => {
+        if (!timestamp) return 'Unknown';
+        const now = new Date();
+        const fileDate = new Date(timestamp);
+        const diffMs = now - fileDate;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+        if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+        if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+        return fileDate.toLocaleDateString();
+    };
+
+    const getFileType = (filename) => {
+        if (!filename) return 'file';
+        const ext = filename.split('.').pop().toLowerCase();
+        const typeMap = {
+            'js': 'javascript',
+            'jsx': 'react',
+            'ts': 'javascript',
+            'tsx': 'react',
+            'css': 'css',
+            'scss': 'css',
+            'json': 'json',
+            'md': 'markdown',
+            'html': 'html',
+            'py': 'python',
+            'java': 'java'
+        };
+        return typeMap[ext] || 'file';
+    };
+
+    if (loading) {
+        return (
+            <div className="files-list-container">
+                <div className="files-header">
+                    <h3 className="files-title">Project Files</h3>
+                </div>
+                <div className="loading" style={{ padding: '2rem', textAlign: 'center' }}>
+                    Loading files...
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="files-list-container">
+                <div className="files-header">
+                    <h3 className="files-title">Project Files</h3>
+                </div>
+                <div className="error" style={{ padding: '2rem', textAlign: 'center', color: '#dc2626' }}>
+                    Failed to load files: {error}
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="files-list-container">
             <div className="files-header">
                 <h3 className="files-title">Project Files</h3>
-                
+
                 <div className="files-controls">
                     <div className="view-toggle">
-                        <button 
+                        <button
                             className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
                             onClick={() => setViewMode('list')}
                         >
@@ -202,7 +297,7 @@ const FilesList = ({ projectId, isOwner = false }) => {
                                 <line x1="3" y1="18" x2="3.01" y2="18" stroke="currentColor" strokeWidth="2"/>
                             </svg>
                         </button>
-                        <button 
+                        <button
                             className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
                             onClick={() => setViewMode('grid')}
                         >
@@ -214,12 +309,12 @@ const FilesList = ({ projectId, isOwner = false }) => {
                             </svg>
                         </button>
                     </div>
-                    
+
                     <div className="sort-control">
                         <label htmlFor="sort-files">Sort by:</label>
-                        <select 
+                        <select
                             id="sort-files"
-                            value={sortBy} 
+                            value={sortBy}
                             onChange={(e) => setSortBy(e.target.value)}
                             className="sort-select"
                         >
@@ -232,64 +327,68 @@ const FilesList = ({ projectId, isOwner = false }) => {
             </div>
 
             <div className={`files-content ${viewMode}`}>
-                {sortedFiles.map(file => (
-                    <div 
-                        key={file.id} 
-                        className={`file-item ${file.isFolder ? 'folder' : 'file'}`}
-                        onClick={() => handleFileClick(file)}
-                    >
-                        <div className="file-icon-container">
-                            {getFileIcon(file)}
-                        </div>
-                        
-                        <div className="file-info">
-                            <div className="file-name-section">
-                                <span className="file-name">{file.name}</span>
-                                {file.language && (
-                                    <span className="file-language">{file.language}</span>
-                                )}
+                {sortedFiles.map((file, index) => {
+                    const fileType = getFileType(file.name);
+                    const fileObj = {
+                        ...file,
+                        type: fileType,
+                        isFolder: false
+                    };
+
+                    return (
+                        <div
+                            key={file._id || index}
+                            className="file-item file"
+                            onClick={() => handleFileClick(file)}
+                        >
+                            <div className="file-icon-container">
+                                {getFileIcon(fileObj)}
                             </div>
-                            
-                            <div className="file-details">
-                                <span className="file-path">{file.path}</span>
-                                <span className="file-size">{file.size}</span>
+
+                            <div className="file-info">
+                                <div className="file-name-section">
+                                    <span className="file-name">{file.name}</span>
+                                </div>
+
+                                <div className="file-details">
+                                    <span className="file-path">{file.path || '/'}</span>
+                                    <span className="file-size">{formatFileSize(file.size)}</span>
+                                </div>
+
+                                <div className="file-meta">
+                                    <span className="file-modified">
+                                        Uploaded {formatTimeAgo(file.uploadedAt)}
+                                    </span>
+                                </div>
                             </div>
-                            
-                            <div className="file-meta">
-                                <span className="file-modified">
-                                    Modified {file.lastModified} by {file.modifiedBy}
-                                </span>
-                            </div>
-                        </div>
-                        
-                        {!file.isFolder && (
+
                             <div className="file-actions">
-                                <button 
+                                <button
                                     className="file-action-btn"
                                     onClick={(e) => handleDownloadFile(file, e)}
                                     title="Download file"
                                 >
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" 
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"
                                               stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                     </svg>
                                 </button>
                             </div>
-                        )}
-                    </div>
-                ))}
+                        </div>
+                    );
+                })}
             </div>
-            
+
             {sortedFiles.length === 0 && (
                 <div className="empty-files">
                     <div className="empty-icon">
                         <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
-                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" 
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
                                   stroke="currentColor" strokeWidth="2"/>
                         </svg>
                     </div>
                     <h4>No Files Found</h4>
-                    <p>This project doesn't have any files yet.</p>
+                    <p>This project doesn't have any files yet. Check in some files to get started.</p>
                 </div>
             )}
         </div>

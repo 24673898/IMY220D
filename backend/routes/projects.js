@@ -482,16 +482,37 @@ router.get('/:projectId/activity', async (req, res) => {
         const { projectId } = req.params;
         const db = getDB();
 
+        // Convert string ID to ObjectId if valid
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId;
+        }
+
         const activity = await db.collection('checkins')
-            .find({ projectId })
+            .find({ projectId: projectIdQuery })
             .sort({ timestamp: -1 })
             .toArray();
 
         // Populate user info for each activity
         const activityWithUsers = await Promise.all(
             activity.map(async (item) => {
-                const user = await db.collection('users')
-                    .findOne({ _id: item.userId }, { projection: { password: 0 } });
+                // Handle both string and ObjectId formats for userId
+                let user;
+                try {
+                    user = await db.collection('users')
+                        .findOne({ _id: item.userId }, { projection: { password: 0 } });
+
+                    // If not found and userId is a string that looks like an ObjectId, try converting it
+                    if (!user && typeof item.userId === 'string' && ObjectId.isValid(item.userId)) {
+                        user = await db.collection('users')
+                            .findOne({ _id: new ObjectId(item.userId) }, { projection: { password: 0 } });
+                    }
+                } catch (e) {
+                    console.error('Error fetching user for activity:', e);
+                }
+
                 return { ...item, user };
             })
         );

@@ -1231,6 +1231,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _FilesList_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FilesList.css */ "./frontend/src/components/FilesList.css");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -1241,8 +1255,9 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 var FilesList = function FilesList(_ref) {
   var projectId = _ref.projectId,
-    _ref$isOwner = _ref.isOwner,
-    isOwner = _ref$isOwner === void 0 ? false : _ref$isOwner;
+    _ref$canUpload = _ref.canUpload,
+    canUpload = _ref$canUpload === void 0 ? false : _ref$canUpload,
+    onFilesUpdate = _ref.onFilesUpdate;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('list'),
     _useState2 = _slicedToArray(_useState, 2),
     viewMode = _useState2[0],
@@ -1251,9 +1266,74 @@ var FilesList = function FilesList(_ref) {
     _useState4 = _slicedToArray(_useState3, 2),
     sortBy = _useState4[0],
     setSortBy = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState6 = _slicedToArray(_useState5, 2),
+    files = _useState6[0],
+    setFiles = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
+    _useState8 = _slicedToArray(_useState7, 2),
+    loading = _useState8[0],
+    setLoading = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState0 = _slicedToArray(_useState9, 2),
+    error = _useState0[0],
+    setError = _useState0[1];
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var fetchFiles = /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+        var response, data, _t;
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.p = _context.n) {
+            case 0:
+              if (projectId) {
+                _context.n = 1;
+                break;
+              }
+              setLoading(false);
+              return _context.a(2);
+            case 1:
+              _context.p = 1;
+              setLoading(true);
+              _context.n = 2;
+              return fetch("/api/projects/".concat(projectId));
+            case 2:
+              response = _context.v;
+              if (response.ok) {
+                _context.n = 3;
+                break;
+              }
+              throw new Error('Failed to fetch project');
+            case 3:
+              _context.n = 4;
+              return response.json();
+            case 4:
+              data = _context.v;
+              setFiles(data.project.files || []);
+              _context.n = 6;
+              break;
+            case 5:
+              _context.p = 5;
+              _t = _context.v;
+              console.error('Error fetching files:', _t);
+              setError(_t.message);
+            case 6:
+              _context.p = 6;
+              setLoading(false);
+              return _context.f(6);
+            case 7:
+              return _context.a(2);
+          }
+        }, _callee, null, [[1, 5, 6, 7]]);
+      }));
+      return function fetchFiles() {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+    fetchFiles();
+  }, [projectId]);
 
-  // Dummy files data
-  var filesData = [{
+  // Dummy files data for display format reference
+  var filesDataOld = [{
     id: 1,
     name: 'server.js',
     type: 'javascript',
@@ -1454,22 +1534,88 @@ var FilesList = function FilesList(_ref) {
     console.log('Download file:', file.name);
     // TODO: Implement file download functionality
   };
-  var sortedFiles = [].concat(filesData).sort(function (a, b) {
-    // Always show folders first
-    if (a.isFolder && !b.isFolder) return -1;
-    if (!a.isFolder && b.isFolder) return 1;
+  var sortedFiles = _toConsumableArray(files).sort(function (a, b) {
     switch (sortBy) {
       case 'name':
-        return a.name.localeCompare(b.name);
+        return (a.name || '').localeCompare(b.name || '');
       case 'size':
-        // Simple size comparison (would need proper parsing in real app)
-        return a.size.localeCompare(b.size);
+        return (a.size || 0) - (b.size || 0);
       case 'modified':
-        return a.lastModified.localeCompare(b.lastModified);
+        return new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0);
       default:
         return 0;
     }
   });
+  var formatFileSize = function formatFileSize(bytes) {
+    if (!bytes || bytes === 0) return '0 B';
+    var k = 1024;
+    var sizes = ['B', 'KB', 'MB', 'GB'];
+    var i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  };
+  var formatTimeAgo = function formatTimeAgo(timestamp) {
+    if (!timestamp) return 'Unknown';
+    var now = new Date();
+    var fileDate = new Date(timestamp);
+    var diffMs = now - fileDate;
+    var diffMins = Math.floor(diffMs / 60000);
+    var diffHours = Math.floor(diffMs / 3600000);
+    var diffDays = Math.floor(diffMs / 86400000);
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return "".concat(diffMins, " minute").concat(diffMins > 1 ? 's' : '', " ago");
+    if (diffHours < 24) return "".concat(diffHours, " hour").concat(diffHours > 1 ? 's' : '', " ago");
+    if (diffDays < 7) return "".concat(diffDays, " day").concat(diffDays > 1 ? 's' : '', " ago");
+    return fileDate.toLocaleDateString();
+  };
+  var getFileType = function getFileType(filename) {
+    if (!filename) return 'file';
+    var ext = filename.split('.').pop().toLowerCase();
+    var typeMap = {
+      'js': 'javascript',
+      'jsx': 'react',
+      'ts': 'javascript',
+      'tsx': 'react',
+      'css': 'css',
+      'scss': 'css',
+      'json': 'json',
+      'md': 'markdown',
+      'html': 'html',
+      'py': 'python',
+      'java': 'java'
+    };
+    return typeMap[ext] || 'file';
+  };
+  if (loading) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "files-list-container"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "files-header"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", {
+      className: "files-title"
+    }, "Project Files")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "loading",
+      style: {
+        padding: '2rem',
+        textAlign: 'center'
+      }
+    }, "Loading files..."));
+  }
+  if (error) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "files-list-container"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "files-header"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", {
+      className: "files-title"
+    }, "Project Files")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "error",
+      style: {
+        padding: '2rem',
+        textAlign: 'center',
+        color: '#dc2626'
+      }
+    }, "Failed to load files: ", error));
+  }
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "files-list-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -1589,34 +1735,37 @@ var FilesList = function FilesList(_ref) {
     value: "modified"
   }, "Last Modified"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "files-content ".concat(viewMode)
-  }, sortedFiles.map(function (file) {
+  }, sortedFiles.map(function (file, index) {
+    var fileType = getFileType(file.name);
+    var fileObj = _objectSpread(_objectSpread({}, file), {}, {
+      type: fileType,
+      isFolder: false
+    });
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      key: file.id,
-      className: "file-item ".concat(file.isFolder ? 'folder' : 'file'),
+      key: file._id || index,
+      className: "file-item file",
       onClick: function onClick() {
         return handleFileClick(file);
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "file-icon-container"
-    }, getFileIcon(file)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    }, getFileIcon(fileObj)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "file-info"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "file-name-section"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
       className: "file-name"
-    }, file.name), file.language && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
-      className: "file-language"
-    }, file.language)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    }, file.name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "file-details"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
       className: "file-path"
-    }, file.path), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    }, file.path || '/'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
       className: "file-size"
-    }, file.size)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    }, formatFileSize(file.size))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "file-meta"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
       className: "file-modified"
-    }, "Modified ", file.lastModified, " by ", file.modifiedBy))), !file.isFolder && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    }, "Uploaded ", formatTimeAgo(file.uploadedAt)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "file-actions"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
       className: "file-action-btn",
@@ -1649,7 +1798,7 @@ var FilesList = function FilesList(_ref) {
     d: "M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z",
     stroke: "currentColor",
     strokeWidth: "2"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "No Files Found"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "This project doesn't have any files yet.")));
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "No Files Found"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "This project doesn't have any files yet. Check in some files to get started.")));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FilesList);
 
@@ -2385,6 +2534,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Messages_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Messages.css */ "./frontend/src/components/Messages.css");
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -2399,74 +2556,93 @@ var Messages = function Messages(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     sortBy = _useState2[0],
     setSortBy = _useState2[1];
-
-  // Dummy messages data
-  var messagesData = [{
-    id: 1,
-    type: 'checkin',
-    user: {
-      name: 'Frank Johnson',
-      username: 'frankdev',
-      avatar: 'FJ'
-    },
-    message: 'Fixed authentication bug and updated user dashboard components. Added responsive design improvements for mobile devices.',
-    version: '2.1.0',
-    timestamp: '2 hours ago',
-    files: ['auth.js', 'Dashboard.jsx', 'mobile.css']
-  }, {
-    id: 2,
-    type: 'checkout',
-    user: {
-      name: 'Sarah Wilson',
-      username: 'sarahdev',
-      avatar: 'SW'
-    },
-    message: 'Working on the new analytics module integration',
-    version: '2.0.8',
-    timestamp: '1 day ago',
-    files: []
-  }, {
-    id: 3,
-    type: 'checkin',
-    user: {
-      name: 'Mike Chen',
-      username: 'mikechen',
-      avatar: 'MC'
-    },
-    message: 'Added data validation and error handling for user forms. Improved API error responses.',
-    version: '2.0.8',
-    timestamp: '3 days ago',
-    files: ['validation.js', 'api-handler.js', 'error-utils.js']
-  }, {
-    id: 4,
-    type: 'checkout',
-    user: {
-      name: 'Lisa Brown',
-      username: 'lisab',
-      avatar: 'LB'
-    },
-    message: 'Checking out to work on database optimization',
-    version: '2.0.7',
-    timestamp: '5 days ago',
-    files: []
-  }, {
-    id: 5,
-    type: 'checkin',
-    user: {
-      name: 'Frank Johnson',
-      username: 'frankdev',
-      avatar: 'FJ'
-    },
-    message: 'Initial project setup with React, Express, and MongoDB. Added basic authentication flow.',
-    version: '1.0.0',
-    timestamp: '2 weeks ago',
-    files: ['server.js', 'app.js', 'auth.js', 'package.json']
-  }];
-  var sortedMessages = [].concat(messagesData).sort(function (a, b) {
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState4 = _slicedToArray(_useState3, 2),
+    activity = _useState4[0],
+    setActivity = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
+    _useState6 = _slicedToArray(_useState5, 2),
+    loading = _useState6[0],
+    setLoading = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState8 = _slicedToArray(_useState7, 2),
+    error = _useState8[0],
+    setError = _useState8[1];
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var fetchActivity = /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+        var response, data, _t;
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.p = _context.n) {
+            case 0:
+              if (projectId) {
+                _context.n = 1;
+                break;
+              }
+              setLoading(false);
+              return _context.a(2);
+            case 1:
+              _context.p = 1;
+              setLoading(true);
+              _context.n = 2;
+              return fetch("/api/projects/".concat(projectId, "/activity"));
+            case 2:
+              response = _context.v;
+              if (response.ok) {
+                _context.n = 3;
+                break;
+              }
+              throw new Error('Failed to fetch activity');
+            case 3:
+              _context.n = 4;
+              return response.json();
+            case 4:
+              data = _context.v;
+              setActivity(data.activity || []);
+              _context.n = 6;
+              break;
+            case 5:
+              _context.p = 5;
+              _t = _context.v;
+              console.error('Error fetching activity:', _t);
+              setError(_t.message);
+            case 6:
+              _context.p = 6;
+              setLoading(false);
+              return _context.f(6);
+            case 7:
+              return _context.a(2);
+          }
+        }, _callee, null, [[1, 5, 6, 7]]);
+      }));
+      return function fetchActivity() {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+    fetchActivity();
+  }, [projectId]);
+  var formatTimeAgo = function formatTimeAgo(timestamp) {
+    var now = new Date();
+    var activityDate = new Date(timestamp);
+    var diffMs = now - activityDate;
+    var diffMins = Math.floor(diffMs / 60000);
+    var diffHours = Math.floor(diffMs / 3600000);
+    var diffDays = Math.floor(diffMs / 86400000);
+    var diffWeeks = Math.floor(diffMs / 604800000);
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return "".concat(diffMins, " minute").concat(diffMins > 1 ? 's' : '', " ago");
+    if (diffHours < 24) return "".concat(diffHours, " hour").concat(diffHours > 1 ? 's' : '', " ago");
+    if (diffDays < 7) return "".concat(diffDays, " day").concat(diffDays > 1 ? 's' : '', " ago");
+    if (diffWeeks < 4) return "".concat(diffWeeks, " week").concat(diffWeeks > 1 ? 's' : '', " ago");
+    return activityDate.toLocaleDateString();
+  };
+  var sortedMessages = _toConsumableArray(activity).sort(function (a, b) {
+    var dateA = new Date(a.timestamp);
+    var dateB = new Date(b.timestamp);
     if (sortBy === 'newest') {
-      return a.id - b.id; // Higher ID = more recent (reversed for demo)
+      return dateB - dateA; // Newest first
     } else {
-      return b.id - a.id; // Lower ID = older
+      return dateA - dateB; // Oldest first
     }
   });
   var formatMessage = function formatMessage(message) {
@@ -2475,6 +2651,37 @@ var Messages = function Messages(_ref) {
     }
     return message;
   };
+  if (loading) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "messages-container"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "messages-header"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", {
+      className: "messages-title"
+    }, "Project Activity")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "loading",
+      style: {
+        padding: '2rem',
+        textAlign: 'center'
+      }
+    }, "Loading activity..."));
+  }
+  if (error) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "messages-container"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "messages-header"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", {
+      className: "messages-title"
+    }, "Project Activity")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "error",
+      style: {
+        padding: '2rem',
+        textAlign: 'center',
+        color: '#dc2626'
+      }
+    }, "Failed to load activity: ", error));
+  }
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "messages-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -2499,14 +2706,18 @@ var Messages = function Messages(_ref) {
   }, "Oldest First")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "messages-list"
   }, sortedMessages.map(function (message) {
+    var _message$user$firstNa, _message$user$lastNam, _message$user;
+    var userInitials = message.user ? "".concat(((_message$user$firstNa = message.user.firstName) === null || _message$user$firstNa === void 0 ? void 0 : _message$user$firstNa.charAt(0)) || '').concat(((_message$user$lastNam = message.user.lastName) === null || _message$user$lastNam === void 0 ? void 0 : _message$user$lastNam.charAt(0)) || '').toUpperCase() || '?' : '?';
+    var userName = message.user ? "".concat(message.user.firstName || '', " ").concat(message.user.lastName || '').trim() || message.user.username || 'Unknown' : 'Unknown';
+    var username = ((_message$user = message.user) === null || _message$user === void 0 ? void 0 : _message$user.username) || 'unknown';
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      key: message.id,
+      key: message._id,
       className: "message-item ".concat(message.type)
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "message-avatar"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "avatar-placeholder"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, message.user.avatar)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, userInitials)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "activity-indicator ".concat(message.type)
     }, message.type === 'checkin' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
       width: "14",
@@ -2538,15 +2749,15 @@ var Messages = function Messages(_ref) {
       className: "message-user-info"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
       className: "message-user-name"
-    }, message.user.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    }, userName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
       className: "message-username"
-    }, "@", message.user.username)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    }, "@", username)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "message-meta"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
       className: "message-type ".concat(message.type)
     }, message.type === 'checkin' ? 'Checked In' : 'Checked Out'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
       className: "message-timestamp"
-    }, message.timestamp))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    }, formatTimeAgo(message.timestamp)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "message-body"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
       className: "message-text"
@@ -2556,7 +2767,7 @@ var Messages = function Messages(_ref) {
       className: "version-label"
     }, "Version:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
       className: "version-number"
-    }, message.version)), message.files.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    }, message.version)), message.files && message.files.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "message-files"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
       className: "files-label"
@@ -2579,7 +2790,7 @@ var Messages = function Messages(_ref) {
         points: "14,2 14,8 20,8",
         stroke: "currentColor",
         strokeWidth: "2"
-      })), file);
+      })), file.name || file);
     }))))));
   })), sortedMessages.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "empty-messages"
