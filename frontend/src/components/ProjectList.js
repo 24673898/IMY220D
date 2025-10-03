@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import EditProject from './EditProject';
 import './ProjectList.css';
 
-const ProjectList = ({ userId, onCreateProject }) => {
+const ProjectList = ({ userId, onCreateProject, isOwnProfile }) => {
     const navigate = useNavigate();
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [editingProject, setEditingProject] = useState(null);
 
     useEffect(() => {
         fetchProjects();
@@ -41,8 +43,50 @@ const ProjectList = ({ userId, onCreateProject }) => {
 
     const handleEditProject = (project, e) => {
         e.stopPropagation();
-        // TODO: Open edit project modal/page
-        console.log('Edit project:', project.name);
+        // Format project data for EditProject component
+        const formattedProject = {
+            id: project._id,
+            _id: project._id,
+            name: project.name,
+            description: project.description,
+            type: project.type,
+            version: project.version || '1.0.0',
+            tags: project.tags || []
+        };
+        setEditingProject(formattedProject);
+    };
+
+    const handleSaveEdit = async (updatedData) => {
+        try {
+            const response = await fetch(`/api/projects/${updatedData.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: updatedData.name,
+                    description: updatedData.description,
+                    type: updatedData.type,
+                    tags: updatedData.hashtags
+                })
+            });
+
+            if (response.ok) {
+                setEditingProject(null);
+                fetchProjects(); // Refresh the list
+                alert('Project updated successfully!');
+            } else {
+                const data = await response.json();
+                alert(data.error || 'Failed to update project');
+            }
+        } catch (err) {
+            console.error('Update project error:', err);
+            alert('Failed to update project');
+        }
+    };
+
+    const handleCancelEdit = () => {
+        setEditingProject(null);
     };
 
     const handleDeleteProject = async (project, e) => {
@@ -96,6 +140,17 @@ const ProjectList = ({ userId, onCreateProject }) => {
         );
     }
 
+    // If editing a project, show the EditProject component
+    if (editingProject) {
+        return (
+            <EditProject
+                project={editingProject}
+                onSave={handleSaveEdit}
+                onCancel={handleCancelEdit}
+            />
+        );
+    }
+
     return (
         <div className="project-list-card">
             <div className="project-list-header">
@@ -137,31 +192,33 @@ const ProjectList = ({ userId, onCreateProject }) => {
                         >
                             <div className="project-card-header">
                                 <h4 className="project-name">{project.name}</h4>
-                                <div className="project-actions">
-                                    <button
-                                        className="action-btn edit-btn"
-                                        onClick={(e) => handleEditProject(project, e)}
-                                        title="Edit Project"
-                                    >
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                                                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                            <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5Z"
-                                                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                        </svg>
-                                    </button>
-                                    <button
-                                        className="action-btn delete-btn"
-                                        onClick={(e) => handleDeleteProject(project, e)}
-                                        title="Delete Project"
-                                    >
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                            <polyline points="3,6 5,6 21,6" stroke="currentColor" strokeWidth="2"/>
-                                            <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"
-                                                  stroke="currentColor" strokeWidth="2"/>
-                                        </svg>
-                                    </button>
-                                </div>
+                                {isOwnProfile && (
+                                    <div className="project-actions">
+                                        <button
+                                            className="action-btn edit-btn"
+                                            onClick={(e) => handleEditProject(project, e)}
+                                            title="Edit Project"
+                                        >
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                                                      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5Z"
+                                                      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                            </svg>
+                                        </button>
+                                        <button
+                                            className="action-btn delete-btn"
+                                            onClick={(e) => handleDeleteProject(project, e)}
+                                            title="Delete Project"
+                                        >
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                                <polyline points="3,6 5,6 21,6" stroke="currentColor" strokeWidth="2"/>
+                                                <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"
+                                                      stroke="currentColor" strokeWidth="2"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                )}
                             </div>
 
                             <p className="project-description">{project.description}</p>

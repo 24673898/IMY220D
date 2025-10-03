@@ -206,7 +206,7 @@ const ProjectPage = () => {
         );
     }
 
-    if (error || !projectData) {
+    if (error || !projectData || !owner) {
         return (
             <div className="project-page">
                 <Header />
@@ -218,6 +218,18 @@ const ProjectPage = () => {
     }
 
     const formattedProject = formatProjectData();
+
+    // Additional safety check
+    if (!formattedProject) {
+        return (
+            <div className="project-page">
+                <Header />
+                <div className="project-container">
+                    <div className="loading">Loading project data...</div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="project-page">

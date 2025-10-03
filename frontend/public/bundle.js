@@ -1722,7 +1722,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
-/* harmony import */ var _FriendsList_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FriendsList.css */ "./frontend/src/components/FriendsList.css");
+/* harmony import */ var _services_api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/api */ "./frontend/src/services/api.js");
+/* harmony import */ var _FriendsList_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FriendsList.css */ "./frontend/src/components/FriendsList.css");
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -1733,6 +1734,7 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
 
 
 
@@ -1750,6 +1752,10 @@ var FriendsList = function FriendsList(_ref) {
     _useState6 = _slicedToArray(_useState5, 2),
     error = _useState6[0],
     setError = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState8 = _slicedToArray(_useState7, 2),
+    unfriendingId = _useState8[0],
+    setUnfriendingId = _useState8[1];
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var fetchFriends = /*#__PURE__*/function () {
@@ -1817,6 +1823,48 @@ var FriendsList = function FriendsList(_ref) {
   var handleFriendClick = function handleFriendClick(friend) {
     navigate("/profile/".concat(friend.id));
   };
+  var handleUnfriend = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(friendId, friendName, e) {
+      var _t2;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.p = _context2.n) {
+          case 0:
+            e.stopPropagation(); // Prevent navigation when clicking unfriend
+            if (window.confirm("Are you sure you want to unfriend ".concat(friendName, "?"))) {
+              _context2.n = 1;
+              break;
+            }
+            return _context2.a(2);
+          case 1:
+            _context2.p = 1;
+            setUnfriendingId(friendId);
+            _context2.n = 2;
+            return _services_api__WEBPACK_IMPORTED_MODULE_2__.userAPI.unfriend(userId, friendId);
+          case 2:
+            // Remove friend from local state
+            setFriends(friends.filter(function (friend) {
+              return friend.id !== friendId;
+            }));
+            _context2.n = 4;
+            break;
+          case 3:
+            _context2.p = 3;
+            _t2 = _context2.v;
+            console.error('Error unfriending user:', _t2);
+            alert('Failed to unfriend user. Please try again.');
+          case 4:
+            _context2.p = 4;
+            setUnfriendingId(null);
+            return _context2.f(4);
+          case 5:
+            return _context2.a(2);
+        }
+      }, _callee2, null, [[1, 3, 4, 5]]);
+    }));
+    return function handleUnfriend(_x, _x2, _x3) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
   if (loading) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "friends-list"
@@ -1887,10 +1935,58 @@ var FriendsList = function FriendsList(_ref) {
     }, friend.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
       className: "friend-username"
     }, "@", friend.username)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      className: "friend-status"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
-      className: "status-dot ".concat(friend.isOnline ? 'online' : 'offline')
-    })));
+      className: "friend-actions"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      className: "unfriend-btn",
+      onClick: function onClick(e) {
+        return handleUnfriend(friend.id, friend.name, e);
+      },
+      disabled: unfriendingId === friend.id,
+      title: "Unfriend"
+    }, unfriendingId === friend.id ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+      width: "16",
+      height: "16",
+      viewBox: "0 0 24 24",
+      fill: "none"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("circle", {
+      cx: "12",
+      cy: "12",
+      r: "10",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      opacity: "0.3"
+    })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+      width: "16",
+      height: "16",
+      viewBox: "0 0 24 24",
+      fill: "none"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+      d: "M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2",
+      stroke: "currentColor",
+      strokeWidth: "2"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("circle", {
+      cx: "8.5",
+      cy: "7",
+      r: "4",
+      stroke: "currentColor",
+      strokeWidth: "2"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("line", {
+      x1: "18",
+      y1: "8",
+      x2: "23",
+      y2: "13",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("line", {
+      x1: "23",
+      y1: "8",
+      x2: "18",
+      y2: "13",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round"
+    })))));
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     className: "add-friend-btn"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
@@ -2583,7 +2679,11 @@ var Profile = function Profile(_ref) {
     } : _ref$stats,
     onEdit = _ref.onEdit,
     onDelete = _ref.onDelete,
-    isOwnProfile = _ref.isOwnProfile;
+    isOwnProfile = _ref.isOwnProfile,
+    isFriend = _ref.isFriend,
+    onSendFriendRequest = _ref.onSendFriendRequest,
+    onUnfriend = _ref.onUnfriend,
+    friendActionLoading = _ref.friendActionLoading;
   var getInitials = function getInitials() {
     if (user.firstName && user.lastName) {
       return "".concat(user.firstName.charAt(0)).concat(user.lastName.charAt(0));
@@ -2613,7 +2713,7 @@ var Profile = function Profile(_ref) {
     className: "profile-username"
   }, "@", user.username), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     className: "profile-bio"
-  }, user.bio || 'No bio available')), isOwnProfile && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, user.bio || 'No bio available')), isOwnProfile ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "profile-actions"
   }, onEdit && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     className: "edit-profile-btn",
@@ -2662,7 +2762,79 @@ var Profile = function Profile(_ref) {
     stroke: "currentColor",
     strokeWidth: "2",
     strokeLinecap: "round"
-  })), "Delete Profile"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  })), "Delete Profile")) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "profile-actions"
+  }, isFriend ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    className: "unfriend-profile-btn",
+    onClick: onUnfriend,
+    disabled: friendActionLoading
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    width: "16",
+    height: "16",
+    viewBox: "0 0 24 24",
+    fill: "none"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2",
+    stroke: "currentColor",
+    strokeWidth: "2"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("circle", {
+    cx: "8.5",
+    cy: "7",
+    r: "4",
+    stroke: "currentColor",
+    strokeWidth: "2"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("line", {
+    x1: "18",
+    y1: "8",
+    x2: "23",
+    y2: "13",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("line", {
+    x1: "23",
+    y1: "8",
+    x2: "18",
+    y2: "13",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round"
+  })), friendActionLoading ? 'Removing...' : 'Unfriend') : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    className: "add-friend-profile-btn",
+    onClick: onSendFriendRequest,
+    disabled: friendActionLoading
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    width: "16",
+    height: "16",
+    viewBox: "0 0 24 24",
+    fill: "none"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2",
+    stroke: "currentColor",
+    strokeWidth: "2"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("circle", {
+    cx: "8.5",
+    cy: "7",
+    r: "4",
+    stroke: "currentColor",
+    strokeWidth: "2"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("line", {
+    x1: "20",
+    y1: "8",
+    x2: "20",
+    y2: "14",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("line", {
+    x1: "17",
+    y1: "11",
+    x2: "23",
+    y2: "11",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round"
+  })), friendActionLoading ? 'Sending...' : 'Add Friend'))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "profile-details"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "profile-stats"
@@ -2862,12 +3034,6 @@ var Project = function Project(_ref) {
   var isOwner = project.owner.id === currentUserId;
   var canEdit = isOwner; // Could also check if user is collaborator
 
-  var handleCheckOut = function handleCheckOut() {
-    if (project.status === 'Checked In') {
-      console.log('Check out project:', project.name);
-      // TODO: Implement check out functionality
-    }
-  };
   var handleCheckIn = function handleCheckIn() {
     if (project.status === 'Checked Out') {
       console.log('Check in project:', project.name);
@@ -2926,10 +3092,6 @@ var Project = function Project(_ref) {
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "project-actions"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-    className: "action-btn checkout-btn ".concat(project.status === 'Checked In' ? 'available' : 'disabled'),
-    onClick: handleCheckOut,
-    disabled: project.status !== 'Checked In'
-  }, project.status === 'Checked In' ? 'Check Out' : 'Checked Out'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     className: "action-btn download-btn",
     onClick: handleDownload
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
@@ -3161,7 +3323,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
-/* harmony import */ var _ProjectList_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ProjectList.css */ "./frontend/src/components/ProjectList.css");
+/* harmony import */ var _EditProject__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./EditProject */ "./frontend/src/components/EditProject.js");
+/* harmony import */ var _ProjectList_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ProjectList.css */ "./frontend/src/components/ProjectList.css");
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -3175,9 +3338,11 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
+
 var ProjectList = function ProjectList(_ref) {
   var userId = _ref.userId,
-    onCreateProject = _ref.onCreateProject;
+    onCreateProject = _ref.onCreateProject,
+    isOwnProfile = _ref.isOwnProfile;
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
@@ -3191,6 +3356,10 @@ var ProjectList = function ProjectList(_ref) {
     _useState6 = _slicedToArray(_useState5, 2),
     error = _useState6[0],
     setError = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState8 = _slicedToArray(_useState7, 2),
+    editingProject = _useState8[0],
+    setEditingProject = _useState8[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     fetchProjects();
   }, [userId]);
@@ -3241,55 +3410,121 @@ var ProjectList = function ProjectList(_ref) {
   };
   var handleEditProject = function handleEditProject(project, e) {
     e.stopPropagation();
-    // TODO: Open edit project modal/page
-    console.log('Edit project:', project.name);
+    // Format project data for EditProject component
+    var formattedProject = {
+      id: project._id,
+      _id: project._id,
+      name: project.name,
+      description: project.description,
+      type: project.type,
+      version: project.version || '1.0.0',
+      tags: project.tags || []
+    };
+    setEditingProject(formattedProject);
   };
-  var handleDeleteProject = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(project, e) {
+  var handleSaveEdit = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(updatedData) {
       var response, data, _t2;
       return _regenerator().w(function (_context2) {
         while (1) switch (_context2.p = _context2.n) {
           case 0:
-            e.stopPropagation();
-            if (!window.confirm("Are you sure you want to delete \"".concat(project.name, "\"?"))) {
-              _context2.n = 7;
+            _context2.p = 0;
+            _context2.n = 1;
+            return fetch("/api/projects/".concat(updatedData.id), {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                name: updatedData.name,
+                description: updatedData.description,
+                type: updatedData.type,
+                tags: updatedData.hashtags
+              })
+            });
+          case 1:
+            response = _context2.v;
+            if (!response.ok) {
+              _context2.n = 2;
               break;
             }
-            _context2.p = 1;
-            _context2.n = 2;
+            setEditingProject(null);
+            fetchProjects(); // Refresh the list
+            alert('Project updated successfully!');
+            _context2.n = 4;
+            break;
+          case 2:
+            _context2.n = 3;
+            return response.json();
+          case 3:
+            data = _context2.v;
+            alert(data.error || 'Failed to update project');
+          case 4:
+            _context2.n = 6;
+            break;
+          case 5:
+            _context2.p = 5;
+            _t2 = _context2.v;
+            console.error('Update project error:', _t2);
+            alert('Failed to update project');
+          case 6:
+            return _context2.a(2);
+        }
+      }, _callee2, null, [[0, 5]]);
+    }));
+    return function handleSaveEdit(_x) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+  var handleCancelEdit = function handleCancelEdit() {
+    setEditingProject(null);
+  };
+  var handleDeleteProject = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(project, e) {
+      var response, data, _t3;
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.p = _context3.n) {
+          case 0:
+            e.stopPropagation();
+            if (!window.confirm("Are you sure you want to delete \"".concat(project.name, "\"?"))) {
+              _context3.n = 7;
+              break;
+            }
+            _context3.p = 1;
+            _context3.n = 2;
             return fetch("/api/projects/".concat(project._id), {
               method: 'DELETE'
             });
           case 2:
-            response = _context2.v;
+            response = _context3.v;
             if (!response.ok) {
-              _context2.n = 3;
+              _context3.n = 3;
               break;
             }
             fetchProjects(); // Refresh the list
-            _context2.n = 5;
+            _context3.n = 5;
             break;
           case 3:
-            _context2.n = 4;
+            _context3.n = 4;
             return response.json();
           case 4:
-            data = _context2.v;
+            data = _context3.v;
             alert(data.error || 'Failed to delete project');
           case 5:
-            _context2.n = 7;
+            _context3.n = 7;
             break;
           case 6:
-            _context2.p = 6;
-            _t2 = _context2.v;
-            console.error('Delete project error:', _t2);
+            _context3.p = 6;
+            _t3 = _context3.v;
+            console.error('Delete project error:', _t3);
             alert('Failed to delete project');
           case 7:
-            return _context2.a(2);
+            return _context3.a(2);
         }
-      }, _callee2, null, [[1, 6]]);
+      }, _callee3, null, [[1, 6]]);
     }));
-    return function handleDeleteProject(_x, _x2) {
-      return _ref3.apply(this, arguments);
+    return function handleDeleteProject(_x2, _x3) {
+      return _ref4.apply(this, arguments);
     };
   }();
   var formatDate = function formatDate(date) {
@@ -3317,6 +3552,15 @@ var ProjectList = function ProjectList(_ref) {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "error"
     }, error));
+  }
+
+  // If editing a project, show the EditProject component
+  if (editingProject) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_EditProject__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      project: editingProject,
+      onSave: handleSaveEdit,
+      onCancel: handleCancelEdit
+    });
   }
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "project-list-card"
@@ -3384,7 +3628,7 @@ var ProjectList = function ProjectList(_ref) {
       className: "project-card-header"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", {
       className: "project-name"
-    }, project.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    }, project.name), isOwnProfile && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "project-actions"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
       className: "action-btn edit-btn",
@@ -3560,7 +3804,6 @@ __webpack_require__.r(__webpack_exports__);
 var ProjectPreview = function ProjectPreview(_ref) {
   var project = _ref.project;
   var handleTagClick = function handleTagClick(tag) {
-    // TODO: Implement hashtag search functionality
     console.log('Search for tag:', tag);
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -4324,6 +4567,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_CreateProject__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/CreateProject */ "./frontend/src/components/CreateProject.js");
 /* harmony import */ var _components_FriendsList__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/FriendsList */ "./frontend/src/components/FriendsList.js");
 /* harmony import */ var _ProfilePage_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ProfilePage.css */ "./frontend/src/pages/ProfilePage.css");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -4375,20 +4624,32 @@ var ProfilePage = function ProfilePage() {
     _useState10 = _slicedToArray(_useState1, 2),
     stats = _useState10[0],
     setStats = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState12 = _slicedToArray(_useState11, 2),
+    isFriend = _useState12[0],
+    setIsFriend = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState14 = _slicedToArray(_useState13, 2),
+    friendActionLoading = _useState14[0],
+    setFriendActionLoading = _useState14[1];
 
   // Determine if viewing own profile (no ID = own profile)
   var isOwnProfile = !id;
 
-  // Get current user ID from localStorage
-  var getCurrentUserId = function getCurrentUserId() {
+  // Get current user ID from localStorage - memoized to prevent unnecessary recalculations
+  var getCurrentUserId = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function () {
     var user = localStorage.getItem('user');
     if (user) {
       var parsedUser = JSON.parse(user);
       return parsedUser._id;
     }
     return null;
-  };
-  var userId = isOwnProfile ? getCurrentUserId() : id;
+  }, []);
+
+  // Memoize userId to prevent unnecessary re-renders
+  var userId = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(function () {
+    return isOwnProfile ? getCurrentUserId() : id;
+  }, [isOwnProfile, id, getCurrentUserId]);
   var handleDeleteProfile = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
       var confirmed, currentUser, userToDeleteId, response, errorData, result, _t;
@@ -4463,9 +4724,11 @@ var ProfilePage = function ProfilePage() {
 
   // Fetch user data from backend
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var isMounted = true; // Track if component is still mounted
+
     var fetchUserData = /*#__PURE__*/function () {
       var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-        var _data$projects, _data$projects2, _friendsData$friends, response, data, transformedUser, friendsResponse, friendsData, _t2;
+        var _data$projects, _data$projects2, _friendsData$friends, response, data, transformedUser, friendsResponse, friendsData, currentUserId, _myFriendsData$friend, myFriendsResponse, myFriendsData, isFriendStatus, _t2;
         return _regenerator().w(function (_context2) {
           while (1) switch (_context2.p = _context2.n) {
             case 0:
@@ -4473,13 +4736,17 @@ var ProfilePage = function ProfilePage() {
                 _context2.n = 1;
                 break;
               }
-              setLoading(false);
-              setError('Please log in to view profile');
-              console.error('No user ID found. User might not be logged in.');
+              if (isMounted) {
+                setLoading(false);
+                setError('Please log in to view profile');
+                console.error('No user ID found. User might not be logged in.');
+              }
               return _context2.a(2);
             case 1:
               _context2.p = 1;
-              setLoading(true);
+              if (isMounted) {
+                setLoading(true);
+              }
               console.log('Fetching user data for userId:', userId);
               _context2.n = 2;
               return fetch("http://localhost:3000/api/users/".concat(userId));
@@ -4495,6 +4762,13 @@ var ProfilePage = function ProfilePage() {
               return response.json();
             case 4:
               data = _context2.v;
+              if (isMounted) {
+                _context2.n = 5;
+                break;
+              }
+              return _context2.a(2);
+            case 5:
+              // Don't update state if unmounted
               // Transform data to match frontend format
               transformedUser = {
                 id: data.user._id,
@@ -4514,14 +4788,22 @@ var ProfilePage = function ProfilePage() {
               setUserData(transformedUser);
 
               // Fetch stats
-              _context2.n = 5;
-              return fetch("http://localhost:3000/api/users/".concat(userId, "/friends"));
-            case 5:
-              friendsResponse = _context2.v;
               _context2.n = 6;
-              return friendsResponse.json();
+              return fetch("http://localhost:3000/api/users/".concat(userId, "/friends"));
             case 6:
+              friendsResponse = _context2.v;
+              _context2.n = 7;
+              return friendsResponse.json();
+            case 7:
               friendsData = _context2.v;
+              if (isMounted) {
+                _context2.n = 8;
+                break;
+              }
+              return _context2.a(2);
+            case 8:
+              // Don't update state if unmounted
+
               setStats({
                 projectsCount: ((_data$projects = data.projects) === null || _data$projects === void 0 ? void 0 : _data$projects.length) || 0,
                 collaborationsCount: ((_data$projects2 = data.projects) === null || _data$projects2 === void 0 ? void 0 : _data$projects2.filter(function (p) {
@@ -4529,28 +4811,68 @@ var ProfilePage = function ProfilePage() {
                 }).length) || 0,
                 friendsCount: ((_friendsData$friends = friendsData.friends) === null || _friendsData$friends === void 0 ? void 0 : _friendsData$friends.length) || 0
               });
-              _context2.n = 8;
+
+              // Check if this user is a friend (only if viewing another user's profile)
+              if (isOwnProfile) {
+                _context2.n = 12;
+                break;
+              }
+              currentUserId = getCurrentUserId();
+              if (!currentUserId) {
+                _context2.n = 12;
+                break;
+              }
+              _context2.n = 9;
+              return fetch("http://localhost:3000/api/users/".concat(currentUserId, "/friends"));
+            case 9:
+              myFriendsResponse = _context2.v;
+              _context2.n = 10;
+              return myFriendsResponse.json();
+            case 10:
+              myFriendsData = _context2.v;
+              if (isMounted) {
+                _context2.n = 11;
+                break;
+              }
+              return _context2.a(2);
+            case 11:
+              // Don't update state if unmounted
+              isFriendStatus = (_myFriendsData$friend = myFriendsData.friends) === null || _myFriendsData$friend === void 0 ? void 0 : _myFriendsData$friend.some(function (friend) {
+                return friend._id === userId;
+              });
+              setIsFriend(isFriendStatus);
+            case 12:
+              _context2.n = 14;
               break;
-            case 7:
-              _context2.p = 7;
+            case 13:
+              _context2.p = 13;
               _t2 = _context2.v;
               console.error('Error fetching user data:', _t2);
-              setError(_t2.message);
-            case 8:
-              _context2.p = 8;
-              setLoading(false);
-              return _context2.f(8);
-            case 9:
+              if (isMounted) {
+                setError(_t2.message);
+              }
+            case 14:
+              _context2.p = 14;
+              if (isMounted) {
+                setLoading(false);
+              }
+              return _context2.f(14);
+            case 15:
               return _context2.a(2);
           }
-        }, _callee2, null, [[1, 7, 8, 9]]);
+        }, _callee2, null, [[1, 13, 14, 15]]);
       }));
       return function fetchUserData() {
         return _ref2.apply(this, arguments);
       };
     }();
     fetchUserData();
-  }, [userId]);
+
+    // Cleanup function
+    return function () {
+      isMounted = false;
+    };
+  }, [userId, isOwnProfile, getCurrentUserId]);
 
   // Handle profile save
   var handleProfileSave = /*#__PURE__*/function () {
@@ -4616,6 +4938,137 @@ var ProfilePage = function ProfilePage() {
       return _ref3.apply(this, arguments);
     };
   }();
+
+  // Handle send friend request
+  var handleSendFriendRequest = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+      var currentUserId, response, errorData, _t4;
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.p = _context4.n) {
+          case 0:
+            currentUserId = getCurrentUserId();
+            if (!(!currentUserId || !userId)) {
+              _context4.n = 1;
+              break;
+            }
+            return _context4.a(2);
+          case 1:
+            _context4.p = 1;
+            setFriendActionLoading(true);
+            _context4.n = 2;
+            return fetch("http://localhost:3000/api/users/".concat(currentUserId, "/friends"), {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                friendId: userId
+              })
+            });
+          case 2:
+            response = _context4.v;
+            if (response.ok) {
+              _context4.n = 4;
+              break;
+            }
+            _context4.n = 3;
+            return response.json();
+          case 3:
+            errorData = _context4.v;
+            throw new Error(errorData.error || 'Failed to send friend request');
+          case 4:
+            setIsFriend(true);
+            setStats(function (prev) {
+              return _objectSpread(_objectSpread({}, prev), {}, {
+                friendsCount: prev.friendsCount + 1
+              });
+            });
+            alert('Friend request sent successfully!');
+            _context4.n = 6;
+            break;
+          case 5:
+            _context4.p = 5;
+            _t4 = _context4.v;
+            console.error('Error sending friend request:', _t4);
+            alert(_t4.message || 'Failed to send friend request. Please try again.');
+          case 6:
+            _context4.p = 6;
+            setFriendActionLoading(false);
+            return _context4.f(6);
+          case 7:
+            return _context4.a(2);
+        }
+      }, _callee4, null, [[1, 5, 6, 7]]);
+    }));
+    return function handleSendFriendRequest() {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
+  // Handle unfriend
+  var handleUnfriend = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
+      var currentUserId, response, _t5;
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.p = _context5.n) {
+          case 0:
+            currentUserId = getCurrentUserId();
+            if (!(!currentUserId || !userId)) {
+              _context5.n = 1;
+              break;
+            }
+            return _context5.a(2);
+          case 1:
+            if (window.confirm("Are you sure you want to unfriend ".concat(userData.username, "?"))) {
+              _context5.n = 2;
+              break;
+            }
+            return _context5.a(2);
+          case 2:
+            _context5.p = 2;
+            setFriendActionLoading(true);
+            _context5.n = 3;
+            return fetch("http://localhost:3000/api/users/".concat(currentUserId, "/friends/").concat(userId), {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+          case 3:
+            response = _context5.v;
+            if (response.ok) {
+              _context5.n = 4;
+              break;
+            }
+            throw new Error('Failed to unfriend user');
+          case 4:
+            setIsFriend(false);
+            setStats(function (prev) {
+              return _objectSpread(_objectSpread({}, prev), {}, {
+                friendsCount: Math.max(0, prev.friendsCount - 1)
+              });
+            });
+            alert('Friend removed successfully');
+            _context5.n = 6;
+            break;
+          case 5:
+            _context5.p = 5;
+            _t5 = _context5.v;
+            console.error('Error unfriending user:', _t5);
+            alert('Failed to unfriend user. Please try again.');
+          case 6:
+            _context5.p = 6;
+            setFriendActionLoading(false);
+            return _context5.f(6);
+          case 7:
+            return _context5.a(2);
+        }
+      }, _callee5, null, [[2, 5, 6, 7]]);
+    }));
+    return function handleUnfriend() {
+      return _ref5.apply(this, arguments);
+    };
+  }();
   if (loading) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "profile-page"
@@ -4653,7 +5106,11 @@ var ProfilePage = function ProfilePage() {
       return setIsEditing(true);
     } : undefined,
     onDelete: isOwnProfile ? handleDeleteProfile : undefined,
-    isOwnProfile: isOwnProfile
+    isOwnProfile: isOwnProfile,
+    isFriend: isFriend,
+    onSendFriendRequest: handleSendFriendRequest,
+    onUnfriend: handleUnfriend,
+    friendActionLoading: friendActionLoading
   }), showCreateProject && isOwnProfile ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_CreateProject__WEBPACK_IMPORTED_MODULE_6__["default"], {
     onCancel: function onCancel() {
       return setShowCreateProject(false);
@@ -5087,7 +5544,7 @@ var ProjectPage = function ProjectPage() {
       className: "loading"
     }, "Loading project...")));
   }
-  if (error || !projectData) {
+  if (error || !projectData || !owner) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "project-page"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Header__WEBPACK_IMPORTED_MODULE_2__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -5097,6 +5554,17 @@ var ProjectPage = function ProjectPage() {
     }, error || 'Project not found')));
   }
   var formattedProject = formatProjectData();
+
+  // Additional safety check
+  if (!formattedProject) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "project-page"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Header__WEBPACK_IMPORTED_MODULE_2__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "project-container"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "loading"
+    }, "Loading project data...")));
+  }
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "project-page"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Header__WEBPACK_IMPORTED_MODULE_2__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -12573,6 +13041,44 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/* FriendsList.css */
     background: #d1d5db;
 }
 
+.friend-actions {
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.friend-item:hover .friend-actions {
+    opacity: 1;
+}
+
+.unfriend-btn {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.unfriend-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+    transform: scale(1.05);
+}
+
+.unfriend-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.unfriend-btn:disabled:hover {
+    transform: none;
+}
+
 .add-friend-btn {
     width: 100%;
     background: rgba(102, 126, 234, 0.1);
@@ -12612,17 +13118,26 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/* FriendsList.css */
     .friends-list {
         padding: 1rem;
     }
-    
+
     .friend-item {
         padding: 0.5rem;
     }
-    
+
     .avatar-placeholder {
         width: 36px;
         height: 36px;
         font-size: 0.9rem;
     }
-}`, "",{"version":3,"sources":["webpack://./frontend/src/components/FriendsList.css"],"names":[],"mappings":"AAAA,oBAAoB;AACpB;IACI,iBAAiB;IACjB,mBAAmB;IACnB,0CAA0C;IAC1C,eAAe;IACf,gCAAgC;AACpC;;AAEA;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;IACnB,qBAAqB;AACzB;;AAEA;IACI,iBAAiB;IACjB,gBAAgB;IAChB,cAAc;IACd,SAAS;AACb;;AAEA;IACI,oCAAoC;IACpC,cAAc;IACd,uBAAuB;IACvB,mBAAmB;IACnB,iBAAiB;IACjB,gBAAgB;AACpB;;AAEA;IACI,aAAa;IACb,sBAAsB;IACtB,SAAS;IACT,qBAAqB;AACzB;;AAEA;IACI,aAAa;IACb,mBAAmB;IACnB,SAAS;IACT,gBAAgB;IAChB,kBAAkB;IAClB,eAAe;IACf,yBAAyB;IACzB,6BAA6B;AACjC;;AAEA;IACI,qCAAqC;IACrC,sCAAsC;AAC1C;;AAEA;IACI,kBAAkB;IAClB,cAAc;AAClB;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,6DAA6D;IAC7D,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,YAAY;IACZ,gBAAgB;IAChB,eAAe;AACnB;;AAEA;IACI,kBAAkB;IAClB,SAAS;IACT,QAAQ;IACR,WAAW;IACX,YAAY;IACZ,mBAAmB;IACnB,kBAAkB;IAClB,uBAAuB;AAC3B;;AAEA;IACI,OAAO;IACP,YAAY;AAChB;;AAEA;IACI,kBAAkB;IAClB,gBAAgB;IAChB,cAAc;IACd,qBAAqB;AACzB;;AAEA;IACI,iBAAiB;IACjB,WAAW;IACX,SAAS;AACb;;AAEA;IACI,cAAc;AAClB;;AAEA;IACI,UAAU;IACV,WAAW;IACX,kBAAkB;AACtB;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,WAAW;IACX,oCAAoC;IACpC,cAAc;IACd,0CAA0C;IAC1C,qBAAqB;IACrB,kBAAkB;IAClB,gCAAgC;IAChC,gBAAgB;IAChB,eAAe;IACf,yBAAyB;IACzB,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,WAAW;AACf;;AAEA;IACI,qCAAqC;IACrC,sCAAsC;IACtC,2BAA2B;AAC/B;;AAEA;IACI,iBAAiB;IACjB,gBAAgB;AACpB;;AAEA,eAAe;AACf;IACI;QACI,mBAAmB;IACvB;AACJ;;AAEA;IACI;QACI,aAAa;IACjB;;IAEA;QACI,eAAe;IACnB;;IAEA;QACI,WAAW;QACX,YAAY;QACZ,iBAAiB;IACrB;AACJ","sourcesContent":["/* FriendsList.css */\r\n.friends-list {\r\n    background: white;\r\n    border-radius: 12px;\r\n    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);\r\n    padding: 1.5rem;\r\n    font-family: 'Inter', sans-serif;\r\n}\r\n\r\n.friends-header {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    margin-bottom: 1.5rem;\r\n}\r\n\r\n.friends-title {\r\n    font-size: 1.2rem;\r\n    font-weight: 600;\r\n    color: #1a1a1a;\r\n    margin: 0;\r\n}\r\n\r\n.friends-count {\r\n    background: rgba(102, 126, 234, 0.1);\r\n    color: #667eea;\r\n    padding: 0.25rem 0.6rem;\r\n    border-radius: 12px;\r\n    font-size: 0.8rem;\r\n    font-weight: 500;\r\n}\r\n\r\n.friends-content {\r\n    display: flex;\r\n    flex-direction: column;\r\n    gap: 1rem;\r\n    margin-bottom: 1.5rem;\r\n}\r\n\r\n.friend-item {\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 1rem;\r\n    padding: 0.75rem;\r\n    border-radius: 8px;\r\n    cursor: pointer;\r\n    transition: all 0.2s ease;\r\n    border: 1px solid transparent;\r\n}\r\n\r\n.friend-item:hover {\r\n    background: rgba(102, 126, 234, 0.05);\r\n    border-color: rgba(102, 126, 234, 0.1);\r\n}\r\n\r\n.friend-avatar {\r\n    position: relative;\r\n    flex-shrink: 0;\r\n}\r\n\r\n.avatar-placeholder {\r\n    width: 40px;\r\n    height: 40px;\r\n    border-radius: 50%;\r\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    color: white;\r\n    font-weight: 600;\r\n    font-size: 1rem;\r\n}\r\n\r\n.online-indicator {\r\n    position: absolute;\r\n    bottom: 0;\r\n    right: 0;\r\n    width: 12px;\r\n    height: 12px;\r\n    background: #16a34a;\r\n    border-radius: 50%;\r\n    border: 2px solid white;\r\n}\r\n\r\n.friend-info {\r\n    flex: 1;\r\n    min-width: 0;\r\n}\r\n\r\n.friend-name {\r\n    font-size: 0.95rem;\r\n    font-weight: 600;\r\n    color: #1a1a1a;\r\n    margin: 0 0 0.25rem 0;\r\n}\r\n\r\n.friend-username {\r\n    font-size: 0.8rem;\r\n    color: #666;\r\n    margin: 0;\r\n}\r\n\r\n.friend-status {\r\n    flex-shrink: 0;\r\n}\r\n\r\n.status-dot {\r\n    width: 8px;\r\n    height: 8px;\r\n    border-radius: 50%;\r\n}\r\n\r\n.status-dot.online {\r\n    background: #16a34a;\r\n}\r\n\r\n.status-dot.offline {\r\n    background: #d1d5db;\r\n}\r\n\r\n.add-friend-btn {\r\n    width: 100%;\r\n    background: rgba(102, 126, 234, 0.1);\r\n    color: #667eea;\r\n    border: 1px solid rgba(102, 126, 234, 0.2);\r\n    padding: 0.75rem 1rem;\r\n    border-radius: 8px;\r\n    font-family: 'Inter', sans-serif;\r\n    font-weight: 500;\r\n    cursor: pointer;\r\n    transition: all 0.2s ease;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    gap: 0.5rem;\r\n}\r\n\r\n.add-friend-btn:hover {\r\n    background: rgba(102, 126, 234, 0.15);\r\n    border-color: rgba(102, 126, 234, 0.3);\r\n    transform: translateY(-1px);\r\n}\r\n\r\n.plus-icon {\r\n    font-size: 1.2rem;\r\n    font-weight: 600;\r\n}\r\n\r\n/* Responsive */\r\n@media (max-width: 968px) {\r\n    .friends-list {\r\n        margin-bottom: 2rem;\r\n    }\r\n}\r\n\r\n@media (max-width: 640px) {\r\n    .friends-list {\r\n        padding: 1rem;\r\n    }\r\n    \r\n    .friend-item {\r\n        padding: 0.5rem;\r\n    }\r\n    \r\n    .avatar-placeholder {\r\n        width: 36px;\r\n        height: 36px;\r\n        font-size: 0.9rem;\r\n    }\r\n}"],"sourceRoot":""}]);
+
+    /* Always show unfriend button on mobile */
+    .friend-actions {
+        opacity: 1;
+    }
+
+    .unfriend-btn {
+        padding: 0.4rem;
+    }
+}`, "",{"version":3,"sources":["webpack://./frontend/src/components/FriendsList.css"],"names":[],"mappings":"AAAA,oBAAoB;AACpB;IACI,iBAAiB;IACjB,mBAAmB;IACnB,0CAA0C;IAC1C,eAAe;IACf,gCAAgC;AACpC;;AAEA;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;IACnB,qBAAqB;AACzB;;AAEA;IACI,iBAAiB;IACjB,gBAAgB;IAChB,cAAc;IACd,SAAS;AACb;;AAEA;IACI,oCAAoC;IACpC,cAAc;IACd,uBAAuB;IACvB,mBAAmB;IACnB,iBAAiB;IACjB,gBAAgB;AACpB;;AAEA;IACI,aAAa;IACb,sBAAsB;IACtB,SAAS;IACT,qBAAqB;AACzB;;AAEA;IACI,aAAa;IACb,mBAAmB;IACnB,SAAS;IACT,gBAAgB;IAChB,kBAAkB;IAClB,eAAe;IACf,yBAAyB;IACzB,6BAA6B;AACjC;;AAEA;IACI,qCAAqC;IACrC,sCAAsC;AAC1C;;AAEA;IACI,kBAAkB;IAClB,cAAc;AAClB;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,6DAA6D;IAC7D,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,YAAY;IACZ,gBAAgB;IAChB,eAAe;AACnB;;AAEA;IACI,kBAAkB;IAClB,SAAS;IACT,QAAQ;IACR,WAAW;IACX,YAAY;IACZ,mBAAmB;IACnB,kBAAkB;IAClB,uBAAuB;AAC3B;;AAEA;IACI,OAAO;IACP,YAAY;AAChB;;AAEA;IACI,kBAAkB;IAClB,gBAAgB;IAChB,cAAc;IACd,qBAAqB;AACzB;;AAEA;IACI,iBAAiB;IACjB,WAAW;IACX,SAAS;AACb;;AAEA;IACI,cAAc;AAClB;;AAEA;IACI,UAAU;IACV,WAAW;IACX,kBAAkB;AACtB;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,cAAc;IACd,UAAU;IACV,6BAA6B;AACjC;;AAEA;IACI,UAAU;AACd;;AAEA;IACI,kCAAkC;IAClC,cAAc;IACd,wCAAwC;IACxC,eAAe;IACf,kBAAkB;IAClB,eAAe;IACf,yBAAyB;IACzB,aAAa;IACb,mBAAmB;IACnB,uBAAuB;AAC3B;;AAEA;IACI,mCAAmC;IACnC,oCAAoC;IACpC,sBAAsB;AAC1B;;AAEA;IACI,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,eAAe;AACnB;;AAEA;IACI,WAAW;IACX,oCAAoC;IACpC,cAAc;IACd,0CAA0C;IAC1C,qBAAqB;IACrB,kBAAkB;IAClB,gCAAgC;IAChC,gBAAgB;IAChB,eAAe;IACf,yBAAyB;IACzB,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,WAAW;AACf;;AAEA;IACI,qCAAqC;IACrC,sCAAsC;IACtC,2BAA2B;AAC/B;;AAEA;IACI,iBAAiB;IACjB,gBAAgB;AACpB;;AAEA,eAAe;AACf;IACI;QACI,mBAAmB;IACvB;AACJ;;AAEA;IACI;QACI,aAAa;IACjB;;IAEA;QACI,eAAe;IACnB;;IAEA;QACI,WAAW;QACX,YAAY;QACZ,iBAAiB;IACrB;;IAEA,0CAA0C;IAC1C;QACI,UAAU;IACd;;IAEA;QACI,eAAe;IACnB;AACJ","sourcesContent":["/* FriendsList.css */\r\n.friends-list {\r\n    background: white;\r\n    border-radius: 12px;\r\n    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);\r\n    padding: 1.5rem;\r\n    font-family: 'Inter', sans-serif;\r\n}\r\n\r\n.friends-header {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    margin-bottom: 1.5rem;\r\n}\r\n\r\n.friends-title {\r\n    font-size: 1.2rem;\r\n    font-weight: 600;\r\n    color: #1a1a1a;\r\n    margin: 0;\r\n}\r\n\r\n.friends-count {\r\n    background: rgba(102, 126, 234, 0.1);\r\n    color: #667eea;\r\n    padding: 0.25rem 0.6rem;\r\n    border-radius: 12px;\r\n    font-size: 0.8rem;\r\n    font-weight: 500;\r\n}\r\n\r\n.friends-content {\r\n    display: flex;\r\n    flex-direction: column;\r\n    gap: 1rem;\r\n    margin-bottom: 1.5rem;\r\n}\r\n\r\n.friend-item {\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 1rem;\r\n    padding: 0.75rem;\r\n    border-radius: 8px;\r\n    cursor: pointer;\r\n    transition: all 0.2s ease;\r\n    border: 1px solid transparent;\r\n}\r\n\r\n.friend-item:hover {\r\n    background: rgba(102, 126, 234, 0.05);\r\n    border-color: rgba(102, 126, 234, 0.1);\r\n}\r\n\r\n.friend-avatar {\r\n    position: relative;\r\n    flex-shrink: 0;\r\n}\r\n\r\n.avatar-placeholder {\r\n    width: 40px;\r\n    height: 40px;\r\n    border-radius: 50%;\r\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    color: white;\r\n    font-weight: 600;\r\n    font-size: 1rem;\r\n}\r\n\r\n.online-indicator {\r\n    position: absolute;\r\n    bottom: 0;\r\n    right: 0;\r\n    width: 12px;\r\n    height: 12px;\r\n    background: #16a34a;\r\n    border-radius: 50%;\r\n    border: 2px solid white;\r\n}\r\n\r\n.friend-info {\r\n    flex: 1;\r\n    min-width: 0;\r\n}\r\n\r\n.friend-name {\r\n    font-size: 0.95rem;\r\n    font-weight: 600;\r\n    color: #1a1a1a;\r\n    margin: 0 0 0.25rem 0;\r\n}\r\n\r\n.friend-username {\r\n    font-size: 0.8rem;\r\n    color: #666;\r\n    margin: 0;\r\n}\r\n\r\n.friend-status {\r\n    flex-shrink: 0;\r\n}\r\n\r\n.status-dot {\r\n    width: 8px;\r\n    height: 8px;\r\n    border-radius: 50%;\r\n}\r\n\r\n.status-dot.online {\r\n    background: #16a34a;\r\n}\r\n\r\n.status-dot.offline {\r\n    background: #d1d5db;\r\n}\r\n\r\n.friend-actions {\r\n    flex-shrink: 0;\r\n    opacity: 0;\r\n    transition: opacity 0.2s ease;\r\n}\r\n\r\n.friend-item:hover .friend-actions {\r\n    opacity: 1;\r\n}\r\n\r\n.unfriend-btn {\r\n    background: rgba(239, 68, 68, 0.1);\r\n    color: #ef4444;\r\n    border: 1px solid rgba(239, 68, 68, 0.2);\r\n    padding: 0.5rem;\r\n    border-radius: 6px;\r\n    cursor: pointer;\r\n    transition: all 0.2s ease;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n}\r\n\r\n.unfriend-btn:hover {\r\n    background: rgba(239, 68, 68, 0.15);\r\n    border-color: rgba(239, 68, 68, 0.3);\r\n    transform: scale(1.05);\r\n}\r\n\r\n.unfriend-btn:disabled {\r\n    opacity: 0.5;\r\n    cursor: not-allowed;\r\n}\r\n\r\n.unfriend-btn:disabled:hover {\r\n    transform: none;\r\n}\r\n\r\n.add-friend-btn {\r\n    width: 100%;\r\n    background: rgba(102, 126, 234, 0.1);\r\n    color: #667eea;\r\n    border: 1px solid rgba(102, 126, 234, 0.2);\r\n    padding: 0.75rem 1rem;\r\n    border-radius: 8px;\r\n    font-family: 'Inter', sans-serif;\r\n    font-weight: 500;\r\n    cursor: pointer;\r\n    transition: all 0.2s ease;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    gap: 0.5rem;\r\n}\r\n\r\n.add-friend-btn:hover {\r\n    background: rgba(102, 126, 234, 0.15);\r\n    border-color: rgba(102, 126, 234, 0.3);\r\n    transform: translateY(-1px);\r\n}\r\n\r\n.plus-icon {\r\n    font-size: 1.2rem;\r\n    font-weight: 600;\r\n}\r\n\r\n/* Responsive */\r\n@media (max-width: 968px) {\r\n    .friends-list {\r\n        margin-bottom: 2rem;\r\n    }\r\n}\r\n\r\n@media (max-width: 640px) {\r\n    .friends-list {\r\n        padding: 1rem;\r\n    }\r\n\r\n    .friend-item {\r\n        padding: 0.5rem;\r\n    }\r\n\r\n    .avatar-placeholder {\r\n        width: 36px;\r\n        height: 36px;\r\n        font-size: 0.9rem;\r\n    }\r\n\r\n    /* Always show unfriend button on mobile */\r\n    .friend-actions {\r\n        opacity: 1;\r\n    }\r\n\r\n    .unfriend-btn {\r\n        padding: 0.4rem;\r\n    }\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -13637,6 +14152,57 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/* Profile.css */
     background-color: #c82333;
 }
 
+.add-friend-profile-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.add-friend-profile-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.add-friend-profile-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.unfriend-profile-btn {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.unfriend-profile-btn:hover {
+    background-color: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.unfriend-profile-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 /* Ensure the profile header layout works well with the buttons */
 .profile-header {
     display: flex;
@@ -13661,7 +14227,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/* Profile.css */
     .delete-profile-btn {
         margin-top: 0;
     }
-}`, "",{"version":3,"sources":["webpack://./frontend/src/components/Profile.css"],"names":[],"mappings":"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","sourcesContent":["/* Profile.css */\r\n.profile-card {\r\n    background: white;\r\n    border-radius: 12px;\r\n    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);\r\n    padding: 2rem;\r\n    font-family: 'Inter', sans-serif;\r\n}\r\n\r\n.profile-header {\r\n    display: flex;\r\n    align-items: flex-start;\r\n    gap: 2rem;\r\n    margin-bottom: 2rem;\r\n    flex-wrap: wrap;\r\n}\r\n\r\n.profile-avatar {\r\n    flex-shrink: 0;\r\n}\r\n\r\n.avatar-placeholder {\r\n    width: 120px;\r\n    height: 120px;\r\n    border-radius: 50%;\r\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    color: white;\r\n    font-weight: 600;\r\n    font-size: 2.5rem;\r\n    border: 4px solid white;\r\n    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);\r\n}\r\n\r\n.profile-info {\r\n    flex: 1;\r\n    min-width: 0;\r\n}\r\n\r\n.profile-name {\r\n    font-size: 2rem;\r\n    font-weight: 700;\r\n    color: #1a1a1a;\r\n    margin: 0 0 0.5rem 0;\r\n}\r\n\r\n.profile-username {\r\n    font-size: 1.1rem;\r\n    color: #667eea;\r\n    margin: 0 0 1rem 0;\r\n    font-weight: 500;\r\n}\r\n\r\n.profile-bio {\r\n    font-size: 1rem;\r\n    color: #555;\r\n    line-height: 1.6;\r\n    margin: 0;\r\n}\r\n\r\n.edit-profile-btn {\r\n    background: rgba(102, 126, 234, 0.1);\r\n    color: #667eea;\r\n    border: 1px solid rgba(102, 126, 234, 0.2);\r\n    padding: 0.75rem 1.5rem;\r\n    border-radius: 8px;\r\n    font-family: 'Inter', sans-serif;\r\n    font-weight: 500;\r\n    cursor: pointer;\r\n    transition: all 0.2s ease;\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 0.5rem;\r\n    height: fit-content;\r\n}\r\n\r\n.edit-profile-btn:hover {\r\n    background: rgba(102, 126, 234, 0.15);\r\n    border-color: rgba(102, 126, 234, 0.3);\r\n    transform: translateY(-1px);\r\n}\r\n\r\n.profile-details {\r\n    display: grid;\r\n    gap: 2rem;\r\n}\r\n\r\n.profile-stats {\r\n    display: flex;\r\n    gap: 3rem;\r\n    padding: 1.5rem;\r\n    background: rgba(102, 126, 234, 0.05);\r\n    border-radius: 8px;\r\n    border: 1px solid rgba(102, 126, 234, 0.1);\r\n}\r\n\r\n.stat-item {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    text-align: center;\r\n}\r\n\r\n.stat-number {\r\n    font-size: 1.8rem;\r\n    font-weight: 700;\r\n    color: #667eea;\r\n    margin-bottom: 0.25rem;\r\n}\r\n\r\n.stat-label {\r\n    font-size: 0.9rem;\r\n    color: #666;\r\n    font-weight: 500;\r\n    text-transform: uppercase;\r\n    letter-spacing: 0.5px;\r\n}\r\n\r\n.profile-meta {\r\n    display: grid;\r\n    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\r\n    gap: 1rem;\r\n}\r\n\r\n.meta-item {\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 0.75rem;\r\n    color: #666;\r\n    font-size: 0.95rem;\r\n}\r\n\r\n.meta-item svg {\r\n    color: #667eea;\r\n    flex-shrink: 0;\r\n}\r\n\r\n.profile-link {\r\n    color: #667eea;\r\n    text-decoration: none;\r\n    transition: color 0.2s ease;\r\n}\r\n\r\n.profile-link:hover {\r\n    color: #764ba2;\r\n    text-decoration: underline;\r\n}\r\n\r\n/* Responsive */\r\n@media (max-width: 768px) {\r\n    .profile-card {\r\n        padding: 1.5rem;\r\n    }\r\n    \r\n    .profile-header {\r\n        flex-direction: column;\r\n        text-align: center;\r\n        gap: 1.5rem;\r\n    }\r\n    \r\n    .avatar-placeholder {\r\n        width: 100px;\r\n        height: 100px;\r\n        font-size: 2rem;\r\n        margin: 0 auto;\r\n    }\r\n    \r\n    .profile-name {\r\n        font-size: 1.5rem;\r\n    }\r\n    \r\n    .profile-stats {\r\n        gap: 2rem;\r\n        justify-content: center;\r\n    }\r\n    \r\n    .profile-meta {\r\n        grid-template-columns: 1fr;\r\n        gap: 0.75rem;\r\n    }\r\n}\r\n\r\n@media (max-width: 480px) {\r\n    .profile-card {\r\n        padding: 1rem;\r\n    }\r\n    \r\n    .profile-stats {\r\n        flex-direction: column;\r\n        gap: 1rem;\r\n        text-align: center;\r\n    }\r\n    \r\n    .stat-item {\r\n        flex-direction: row;\r\n        justify-content: space-between;\r\n    }\r\n    \r\n    .stat-number {\r\n        font-size: 1.5rem;\r\n        margin-bottom: 0;\r\n    }\r\n}\r\n\r\n.profile-actions {\r\n    display: flex;\r\n    gap: 10px;\r\n    margin-left: auto;\r\n    flex-direction: column;\r\n    align-items: flex-end;\r\n}\r\n\r\n.edit-profile-btn {\r\n    background-color: #007bff;\r\n    color: white;\r\n    border: none;\r\n    padding: 8px 16px;\r\n    border-radius: 6px;\r\n    cursor: pointer;\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 6px;\r\n    font-size: 14px;\r\n    transition: background-color 0.2s;\r\n}\r\n\r\n.edit-profile-btn:hover {\r\n    background-color: #0056b3;\r\n}\r\n\r\n.delete-profile-btn {\r\n    background-color: #dc3545;\r\n    color: white;\r\n    border: none;\r\n    padding: 8px 16px;\r\n    border-radius: 6px;\r\n    cursor: pointer;\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 6px;\r\n    font-size: 14px;\r\n    transition: background-color 0.2s;\r\n    margin-top: 8px;\r\n}\r\n\r\n.delete-profile-btn:hover {\r\n    background-color: #c82333;\r\n}\r\n\r\n/* Ensure the profile header layout works well with the buttons */\r\n.profile-header {\r\n    display: flex;\r\n    align-items: flex-start;\r\n    gap: 20px;\r\n    position: relative;\r\n}\r\n\r\n.profile-info {\r\n    flex: 1;\r\n}\r\n\r\n@media (max-width: 768px) {\r\n    .profile-actions {\r\n        flex-direction: row;\r\n        margin-left: 0;\r\n        margin-top: 15px;\r\n        width: 100%;\r\n        justify-content: flex-start;\r\n    }\r\n    \r\n    .delete-profile-btn {\r\n        margin-top: 0;\r\n    }\r\n}"],"sourceRoot":""}]);
+}`, "",{"version":3,"sources":["webpack://./frontend/src/components/Profile.css"],"names":[],"mappings":"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","sourcesContent":["/* Profile.css */\r\n.profile-card {\r\n    background: white;\r\n    border-radius: 12px;\r\n    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);\r\n    padding: 2rem;\r\n    font-family: 'Inter', sans-serif;\r\n}\r\n\r\n.profile-header {\r\n    display: flex;\r\n    align-items: flex-start;\r\n    gap: 2rem;\r\n    margin-bottom: 2rem;\r\n    flex-wrap: wrap;\r\n}\r\n\r\n.profile-avatar {\r\n    flex-shrink: 0;\r\n}\r\n\r\n.avatar-placeholder {\r\n    width: 120px;\r\n    height: 120px;\r\n    border-radius: 50%;\r\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    color: white;\r\n    font-weight: 600;\r\n    font-size: 2.5rem;\r\n    border: 4px solid white;\r\n    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);\r\n}\r\n\r\n.profile-info {\r\n    flex: 1;\r\n    min-width: 0;\r\n}\r\n\r\n.profile-name {\r\n    font-size: 2rem;\r\n    font-weight: 700;\r\n    color: #1a1a1a;\r\n    margin: 0 0 0.5rem 0;\r\n}\r\n\r\n.profile-username {\r\n    font-size: 1.1rem;\r\n    color: #667eea;\r\n    margin: 0 0 1rem 0;\r\n    font-weight: 500;\r\n}\r\n\r\n.profile-bio {\r\n    font-size: 1rem;\r\n    color: #555;\r\n    line-height: 1.6;\r\n    margin: 0;\r\n}\r\n\r\n.edit-profile-btn {\r\n    background: rgba(102, 126, 234, 0.1);\r\n    color: #667eea;\r\n    border: 1px solid rgba(102, 126, 234, 0.2);\r\n    padding: 0.75rem 1.5rem;\r\n    border-radius: 8px;\r\n    font-family: 'Inter', sans-serif;\r\n    font-weight: 500;\r\n    cursor: pointer;\r\n    transition: all 0.2s ease;\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 0.5rem;\r\n    height: fit-content;\r\n}\r\n\r\n.edit-profile-btn:hover {\r\n    background: rgba(102, 126, 234, 0.15);\r\n    border-color: rgba(102, 126, 234, 0.3);\r\n    transform: translateY(-1px);\r\n}\r\n\r\n.profile-details {\r\n    display: grid;\r\n    gap: 2rem;\r\n}\r\n\r\n.profile-stats {\r\n    display: flex;\r\n    gap: 3rem;\r\n    padding: 1.5rem;\r\n    background: rgba(102, 126, 234, 0.05);\r\n    border-radius: 8px;\r\n    border: 1px solid rgba(102, 126, 234, 0.1);\r\n}\r\n\r\n.stat-item {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    text-align: center;\r\n}\r\n\r\n.stat-number {\r\n    font-size: 1.8rem;\r\n    font-weight: 700;\r\n    color: #667eea;\r\n    margin-bottom: 0.25rem;\r\n}\r\n\r\n.stat-label {\r\n    font-size: 0.9rem;\r\n    color: #666;\r\n    font-weight: 500;\r\n    text-transform: uppercase;\r\n    letter-spacing: 0.5px;\r\n}\r\n\r\n.profile-meta {\r\n    display: grid;\r\n    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\r\n    gap: 1rem;\r\n}\r\n\r\n.meta-item {\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 0.75rem;\r\n    color: #666;\r\n    font-size: 0.95rem;\r\n}\r\n\r\n.meta-item svg {\r\n    color: #667eea;\r\n    flex-shrink: 0;\r\n}\r\n\r\n.profile-link {\r\n    color: #667eea;\r\n    text-decoration: none;\r\n    transition: color 0.2s ease;\r\n}\r\n\r\n.profile-link:hover {\r\n    color: #764ba2;\r\n    text-decoration: underline;\r\n}\r\n\r\n/* Responsive */\r\n@media (max-width: 768px) {\r\n    .profile-card {\r\n        padding: 1.5rem;\r\n    }\r\n    \r\n    .profile-header {\r\n        flex-direction: column;\r\n        text-align: center;\r\n        gap: 1.5rem;\r\n    }\r\n    \r\n    .avatar-placeholder {\r\n        width: 100px;\r\n        height: 100px;\r\n        font-size: 2rem;\r\n        margin: 0 auto;\r\n    }\r\n    \r\n    .profile-name {\r\n        font-size: 1.5rem;\r\n    }\r\n    \r\n    .profile-stats {\r\n        gap: 2rem;\r\n        justify-content: center;\r\n    }\r\n    \r\n    .profile-meta {\r\n        grid-template-columns: 1fr;\r\n        gap: 0.75rem;\r\n    }\r\n}\r\n\r\n@media (max-width: 480px) {\r\n    .profile-card {\r\n        padding: 1rem;\r\n    }\r\n    \r\n    .profile-stats {\r\n        flex-direction: column;\r\n        gap: 1rem;\r\n        text-align: center;\r\n    }\r\n    \r\n    .stat-item {\r\n        flex-direction: row;\r\n        justify-content: space-between;\r\n    }\r\n    \r\n    .stat-number {\r\n        font-size: 1.5rem;\r\n        margin-bottom: 0;\r\n    }\r\n}\r\n\r\n.profile-actions {\r\n    display: flex;\r\n    gap: 10px;\r\n    margin-left: auto;\r\n    flex-direction: column;\r\n    align-items: flex-end;\r\n}\r\n\r\n.edit-profile-btn {\r\n    background-color: #007bff;\r\n    color: white;\r\n    border: none;\r\n    padding: 8px 16px;\r\n    border-radius: 6px;\r\n    cursor: pointer;\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 6px;\r\n    font-size: 14px;\r\n    transition: background-color 0.2s;\r\n}\r\n\r\n.edit-profile-btn:hover {\r\n    background-color: #0056b3;\r\n}\r\n\r\n.delete-profile-btn {\r\n    background-color: #dc3545;\r\n    color: white;\r\n    border: none;\r\n    padding: 8px 16px;\r\n    border-radius: 6px;\r\n    cursor: pointer;\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 6px;\r\n    font-size: 14px;\r\n    transition: background-color 0.2s;\r\n    margin-top: 8px;\r\n}\r\n\r\n.delete-profile-btn:hover {\r\n    background-color: #c82333;\r\n}\r\n\r\n.add-friend-profile-btn {\r\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\r\n    color: white;\r\n    border: none;\r\n    padding: 8px 16px;\r\n    border-radius: 6px;\r\n    cursor: pointer;\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 6px;\r\n    font-size: 14px;\r\n    transition: all 0.2s;\r\n    font-weight: 500;\r\n}\r\n\r\n.add-friend-profile-btn:hover {\r\n    transform: translateY(-1px);\r\n    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);\r\n}\r\n\r\n.add-friend-profile-btn:disabled {\r\n    opacity: 0.6;\r\n    cursor: not-allowed;\r\n    transform: none;\r\n}\r\n\r\n.unfriend-profile-btn {\r\n    background-color: rgba(239, 68, 68, 0.1);\r\n    color: #ef4444;\r\n    border: 1px solid rgba(239, 68, 68, 0.2);\r\n    padding: 8px 16px;\r\n    border-radius: 6px;\r\n    cursor: pointer;\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 6px;\r\n    font-size: 14px;\r\n    transition: all 0.2s;\r\n    font-weight: 500;\r\n}\r\n\r\n.unfriend-profile-btn:hover {\r\n    background-color: rgba(239, 68, 68, 0.15);\r\n    border-color: rgba(239, 68, 68, 0.3);\r\n}\r\n\r\n.unfriend-profile-btn:disabled {\r\n    opacity: 0.6;\r\n    cursor: not-allowed;\r\n}\r\n\r\n/* Ensure the profile header layout works well with the buttons */\r\n.profile-header {\r\n    display: flex;\r\n    align-items: flex-start;\r\n    gap: 20px;\r\n    position: relative;\r\n}\r\n\r\n.profile-info {\r\n    flex: 1;\r\n}\r\n\r\n@media (max-width: 768px) {\r\n    .profile-actions {\r\n        flex-direction: row;\r\n        margin-left: 0;\r\n        margin-top: 15px;\r\n        width: 100%;\r\n        justify-content: flex-start;\r\n    }\r\n    \r\n    .delete-profile-btn {\r\n        margin-top: 0;\r\n    }\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

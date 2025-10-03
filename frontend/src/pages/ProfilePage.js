@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // Added useNavigate
 import Header from '../components/Header';
 import Profile from '../components/Profile';
@@ -21,21 +21,26 @@ const ProfilePage = () => {
         collaborationsCount: 0,
         friendsCount: 0
     });
+    const [isFriend, setIsFriend] = useState(false);
+    const [friendActionLoading, setFriendActionLoading] = useState(false);
 
     // Determine if viewing own profile (no ID = own profile)
     const isOwnProfile = !id;
 
-    // Get current user ID from localStorage
-    const getCurrentUserId = () => {
+    // Get current user ID from localStorage - memoized to prevent unnecessary recalculations
+    const getCurrentUserId = useCallback(() => {
         const user = localStorage.getItem('user');
         if (user) {
             const parsedUser = JSON.parse(user);
             return parsedUser._id;
         }
         return null;
-    };
+    }, []);
 
-    const userId = isOwnProfile ? getCurrentUserId() : id;
+    // Memoize userId to prevent unnecessary re-renders
+    const userId = useMemo(() => {
+        return isOwnProfile ? getCurrentUserId() : id;
+    }, [isOwnProfile, id, getCurrentUserId]);
 
    const handleDeleteProfile = async () => {
     if (!userId) {
@@ -88,16 +93,22 @@ const ProfilePage = () => {
 
     // Fetch user data from backend
     useEffect(() => {
+        let isMounted = true; // Track if component is still mounted
+
         const fetchUserData = async () => {
             if (!userId) {
-                setLoading(false);
-                setError('Please log in to view profile');
-                console.error('No user ID found. User might not be logged in.');
+                if (isMounted) {
+                    setLoading(false);
+                    setError('Please log in to view profile');
+                    console.error('No user ID found. User might not be logged in.');
+                }
                 return;
             }
 
             try {
-                setLoading(true);
+                if (isMounted) {
+                    setLoading(true);
+                }
                 console.log('Fetching user data for userId:', userId);
                 const response = await fetch(`http://localhost:3000/api/users/${userId}`);
 
@@ -106,6 +117,8 @@ const ProfilePage = () => {
                 }
 
                 const data = await response.json();
+
+                if (!isMounted) return; // Don't update state if unmounted
 
                 // Transform data to match frontend format
                 const transformedUser = {
@@ -127,22 +140,47 @@ const ProfilePage = () => {
                 const friendsResponse = await fetch(`http://localhost:3000/api/users/${userId}/friends`);
                 const friendsData = await friendsResponse.json();
 
+                if (!isMounted) return; // Don't update state if unmounted
+
                 setStats({
                     projectsCount: data.projects?.length || 0,
                     collaborationsCount: data.projects?.filter(p => p.ownerId !== userId).length || 0,
                     friendsCount: friendsData.friends?.length || 0
                 });
 
+                // Check if this user is a friend (only if viewing another user's profile)
+                if (!isOwnProfile) {
+                    const currentUserId = getCurrentUserId();
+                    if (currentUserId) {
+                        const myFriendsResponse = await fetch(`http://localhost:3000/api/users/${currentUserId}/friends`);
+                        const myFriendsData = await myFriendsResponse.json();
+
+                        if (!isMounted) return; // Don't update state if unmounted
+
+                        const isFriendStatus = myFriendsData.friends?.some(friend => friend._id === userId);
+                        setIsFriend(isFriendStatus);
+                    }
+                }
+
             } catch (err) {
                 console.error('Error fetching user data:', err);
-                setError(err.message);
+                if (isMounted) {
+                    setError(err.message);
+                }
             } finally {
-                setLoading(false);
+                if (isMounted) {
+                    setLoading(false);
+                }
             }
         };
 
         fetchUserData();
-    }, [userId]);
+
+        // Cleanup function
+        return () => {
+            isMounted = false;
+        };
+    }, [userId, isOwnProfile, getCurrentUserId]);
 
     // Handle profile save
     const handleProfileSave = async (formData) => {
@@ -189,6 +227,70 @@ const ProfilePage = () => {
         }
     };
 
+    // Handle send friend request
+    const handleSendFriendRequest = async () => {
+        const currentUserId = getCurrentUserId();
+        if (!currentUserId || !userId) return;
+
+        try {
+            setFriendActionLoading(true);
+            const response = await fetch(`http://localhost:3000/api/users/${currentUserId}/friends`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ friendId: userId })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to send friend request');
+            }
+
+            setIsFriend(true);
+            setStats(prev => ({ ...prev, friendsCount: prev.friendsCount + 1 }));
+            alert('Friend request sent successfully!');
+        } catch (err) {
+            console.error('Error sending friend request:', err);
+            alert(err.message || 'Failed to send friend request. Please try again.');
+        } finally {
+            setFriendActionLoading(false);
+        }
+    };
+
+    // Handle unfriend
+    const handleUnfriend = async () => {
+        const currentUserId = getCurrentUserId();
+        if (!currentUserId || !userId) return;
+
+        if (!window.confirm(`Are you sure you want to unfriend ${userData.username}?`)) {
+            return;
+        }
+
+        try {
+            setFriendActionLoading(true);
+            const response = await fetch(`http://localhost:3000/api/users/${currentUserId}/friends/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to unfriend user');
+            }
+
+            setIsFriend(false);
+            setStats(prev => ({ ...prev, friendsCount: Math.max(0, prev.friendsCount - 1) }));
+            alert('Friend removed successfully');
+        } catch (err) {
+            console.error('Error unfriending user:', err);
+            alert('Failed to unfriend user. Please try again.');
+        } finally {
+            setFriendActionLoading(false);
+        }
+    };
+
     if (loading) {
         return (
             <div className="profile-page">
@@ -231,6 +333,10 @@ const ProfilePage = () => {
                             onEdit={isOwnProfile ? () => setIsEditing(true) : undefined}
                             onDelete={isOwnProfile ? handleDeleteProfile : undefined}
                             isOwnProfile={isOwnProfile}
+                            isFriend={isFriend}
+                            onSendFriendRequest={handleSendFriendRequest}
+                            onUnfriend={handleUnfriend}
+                            friendActionLoading={friendActionLoading}
                         />
                     )}
 

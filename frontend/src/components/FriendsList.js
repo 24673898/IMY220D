@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { userAPI } from '../services/api';
 import './FriendsList.css';
 
 const FriendsList = ({ userId }) => {
     const [friends, setFriends] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [unfriendingId, setUnfriendingId] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -50,6 +52,27 @@ const FriendsList = ({ userId }) => {
 
     const handleFriendClick = (friend) => {
         navigate(`/profile/${friend.id}`);
+    };
+
+    const handleUnfriend = async (friendId, friendName, e) => {
+        e.stopPropagation(); // Prevent navigation when clicking unfriend
+
+        if (!window.confirm(`Are you sure you want to unfriend ${friendName}?`)) {
+            return;
+        }
+
+        try {
+            setUnfriendingId(friendId);
+            await userAPI.unfriend(userId, friendId);
+
+            // Remove friend from local state
+            setFriends(friends.filter(friend => friend.id !== friendId));
+        } catch (err) {
+            console.error('Error unfriending user:', err);
+            alert('Failed to unfriend user. Please try again.');
+        } finally {
+            setUnfriendingId(null);
+        }
     };
 
     if (loading) {
@@ -108,8 +131,26 @@ const FriendsList = ({ userId }) => {
                                 <p className="friend-username">@{friend.username}</p>
                             </div>
 
-                            <div className="friend-status">
-                                <span className={`status-dot ${friend.isOnline ? 'online' : 'offline'}`}></span>
+                            <div className="friend-actions">
+                                <button
+                                    className="unfriend-btn"
+                                    onClick={(e) => handleUnfriend(friend.id, friend.name, e)}
+                                    disabled={unfriendingId === friend.id}
+                                    title="Unfriend"
+                                >
+                                    {unfriendingId === friend.id ? (
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" opacity="0.3"/>
+                                        </svg>
+                                    ) : (
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2"/>
+                                            <circle cx="8.5" cy="7" r="4" stroke="currentColor" strokeWidth="2"/>
+                                            <line x1="18" y1="8" x2="23" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                            <line x1="23" y1="8" x2="18" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                        </svg>
+                                    )}
+                                </button>
                             </div>
                         </div>
                     ))

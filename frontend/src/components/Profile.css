@@ -249,6 +249,57 @@
     background-color: #c82333;
 }
 
+.add-friend-profile-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.add-friend-profile-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.add-friend-profile-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.unfriend-profile-btn {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.unfriend-profile-btn:hover {
+    background-color: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.unfriend-profile-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 /* Ensure the profile header layout works well with the buttons */
 .profile-header {
     display: flex;

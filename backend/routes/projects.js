@@ -1,16 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const { getDB } = require('../config/database');
+const { ObjectId } = require('mongodb');
 
 // GET /api/projects - Get all projects or filter by user
 router.get('/', async (req, res) => {
     try {
         const { userId, type } = req.query;
         const db = getDB();
-        
+
         let query = {};
         if (userId) {
-            query.members = userId;
+            // Handle both string and ObjectId formats for userId
+            const userIdOptions = [userId];
+            if (ObjectId.isValid(userId)) {
+                try {
+                    userIdOptions.push(new ObjectId(userId));
+                } catch (e) {
+                    // Ignore conversion error
+                }
+            }
+            query.members = { $in: userIdOptions };
         }
         if (type) {
             query.type = type;
@@ -34,29 +44,65 @@ router.get('/:projectId', async (req, res) => {
     try {
         const { projectId } = req.params;
         const db = getDB();
-        
-        const project = await db.collection('projects').findOne({ _id: projectId });
-        
+
+        // Convert string ID to ObjectId if it's a valid ObjectId format, otherwise use as string
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId; // fallback to string for old projects
+        }
+
+        const project = await db.collection('projects').findOne({ _id: projectIdQuery });
+
         if (!project) {
             return res.status(404).json({ error: 'Project not found' });
         }
 
         // Get project activity (check-ins)
         const activity = await db.collection('checkins')
-            .find({ projectId })
+            .find({ projectId: project._id })
             .sort({ timestamp: -1 })
             .toArray();
 
-        // Get owner info
-        const owner = await db.collection('users')
-            .findOne({ _id: project.ownerId }, { projection: { password: 0 } });
+        // Get owner info - try both ObjectId and string formats
+        let owner;
+        try {
+            // First try with the ownerId as is
+            owner = await db.collection('users')
+                .findOne({ _id: project.ownerId }, { projection: { password: 0 } });
 
-        // Get members info
+            // If not found and ownerId is a string that looks like an ObjectId, try converting it
+            if (!owner && typeof project.ownerId === 'string' && ObjectId.isValid(project.ownerId)) {
+                owner = await db.collection('users')
+                    .findOne({ _id: new ObjectId(project.ownerId) }, { projection: { password: 0 } });
+            }
+        } catch (e) {
+            console.error('Error fetching owner:', e);
+        }
+
+        // Get members info - handle both ObjectId and string formats
+        const memberIds = project.members.map(memberId => {
+            // Try to convert to ObjectId if it's a valid ObjectId string
+            if (typeof memberId === 'string' && ObjectId.isValid(memberId)) {
+                try {
+                    return new ObjectId(memberId);
+                } catch (e) {
+                    return memberId;
+                }
+            }
+            return memberId;
+        });
+
         const members = await db.collection('users')
-            .find({ _id: { $in: project.members } }, { projection: { password: 0 } })
+            .find({
+                _id: {
+                    $in: [...project.members, ...memberIds] // Try both original and converted IDs
+                }
+            }, { projection: { password: 0 } })
             .toArray();
 
-        res.json({ 
+        res.json({
             project,
             activity,
             owner,
@@ -76,48 +122,62 @@ router.post('/', async (req, res) => {
 
         // Validation
         if (!name || !description || !ownerId || !type) {
-            return res.status(400).json({ 
-                error: 'Missing required fields: name, description, ownerId, type' 
+            return res.status(400).json({
+                error: 'Missing required fields: name, description, ownerId, type'
             });
         }
 
         const db = getDB();
 
+        // Convert ownerId to ObjectId if it's a valid ObjectId string
+        let ownerIdToStore = ownerId;
+        if (typeof ownerId === 'string' && ObjectId.isValid(ownerId)) {
+            try {
+                ownerIdToStore = new ObjectId(ownerId);
+            } catch (e) {
+                // Keep as string if conversion fails
+                ownerIdToStore = ownerId;
+            }
+        }
+
         const newProject = {
-            _id: `project${Date.now()}`,
             name,
             description,
-            ownerId,
-            members: [ownerId],
+            ownerId: ownerIdToStore,
+            members: [ownerIdToStore],
             image: image || '/assets/images/default-project.jpg',
             type,
             tags: tags || [],
-            version: '1.0.0',
+            version: req.body.version || '1.0.0',
             status: 'checked-in',
             checkedOutBy: null,
             createdAt: new Date(),
-            files: files || []
+            files: files || [],
+            downloads: 0,
+            stars: 0
         };
 
         const result = await db.collection('projects').insertOne(newProject);
 
+        // Get the inserted project with its MongoDB-generated _id
+        const insertedProject = { ...newProject, _id: result.insertedId };
+
         // Create initial check-in
         const initialCheckin = {
-            _id: `checkin${Date.now()}`,
-            projectId: newProject._id,
+            projectId: result.insertedId,
             userId: ownerId,
             type: 'checkin',
             message: 'Initial commit: Project created',
-            version: '1.0.0',
+            version: insertedProject.version,
             timestamp: new Date(),
             files: files || []
         };
 
         await db.collection('checkins').insertOne(initialCheckin);
 
-        res.status(201).json({ 
+        res.status(201).json({
             message: 'Project created successfully',
-            project: newProject
+            project: insertedProject
         });
 
     } catch (error) {
@@ -130,18 +190,28 @@ router.post('/', async (req, res) => {
 router.put('/:projectId', async (req, res) => {
     try {
         const { projectId } = req.params;
-        const { name, description, image, type } = req.body;
-        
+        const { name, description, image, type, tags, version } = req.body;
+
         const db = getDB();
-        
+
+        // Convert string ID to ObjectId if valid
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId;
+        }
+
         const updateData = {};
         if (name) updateData.name = name;
         if (description) updateData.description = description;
         if (image) updateData.image = image;
         if (type) updateData.type = type;
+        if (tags) updateData.tags = tags;
+        if (version) updateData.version = version;
 
         const result = await db.collection('projects').updateOne(
-            { _id: projectId },
+            { _id: projectIdQuery },
             { $set: updateData }
         );
 
@@ -149,9 +219,9 @@ router.put('/:projectId', async (req, res) => {
             return res.status(404).json({ error: 'Project not found' });
         }
 
-        const updatedProject = await db.collection('projects').findOne({ _id: projectId });
+        const updatedProject = await db.collection('projects').findOne({ _id: projectIdQuery });
 
-        res.json({ 
+        res.json({
             message: 'Project updated successfully',
             project: updatedProject
         });
@@ -168,14 +238,22 @@ router.delete('/:projectId', async (req, res) => {
         const { projectId } = req.params;
         const db = getDB();
 
-        const result = await db.collection('projects').deleteOne({ _id: projectId });
+        // Convert string ID to ObjectId if valid
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId;
+        }
+
+        const result = await db.collection('projects').deleteOne({ _id: projectIdQuery });
 
         if (result.deletedCount === 0) {
             return res.status(404).json({ error: 'Project not found' });
         }
 
         // Delete related check-ins
-        await db.collection('checkins').deleteMany({ projectId });
+        await db.collection('checkins').deleteMany({ projectId: projectIdQuery });
 
         res.json({ message: 'Project deleted successfully' });
 
@@ -195,42 +273,66 @@ router.post('/:projectId/checkout', async (req, res) => {
             return res.status(400).json({ error: 'userId is required' });
         }
 
+        // Convert string ID to ObjectId if valid
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId;
+        }
+
+        // Convert userId to ObjectId if valid
+        let userIdToCheck = userId;
+        if (typeof userId === 'string' && ObjectId.isValid(userId)) {
+            try {
+                userIdToCheck = new ObjectId(userId);
+            } catch (e) {
+                userIdToCheck = userId;
+            }
+        }
+
         const db = getDB();
-        const project = await db.collection('projects').findOne({ _id: projectId });
+        const project = await db.collection('projects').findOne({ _id: projectIdQuery });
 
         if (!project) {
             return res.status(404).json({ error: 'Project not found' });
         }
 
-        // Check if user is a member
-        if (!project.members.includes(userId)) {
+        // Check if user is a member (check both string and ObjectId formats)
+        const isMember = project.members.some(memberId => {
+            // Compare as strings
+            const memberIdStr = memberId.toString();
+            const userIdStr = userId.toString();
+            return memberIdStr === userIdStr;
+        });
+
+        if (!isMember) {
             return res.status(403).json({ error: 'User is not a member of this project' });
         }
 
         // Check if already checked out
         if (project.status === 'checked-out') {
-            return res.status(409).json({ 
+            return res.status(409).json({
                 error: 'Project is already checked out',
                 checkedOutBy: project.checkedOutBy
             });
         }
 
-        // Checkout project
+        // Checkout project - store userId in the same format as members
         await db.collection('projects').updateOne(
-            { _id: projectId },
-            { 
-                $set: { 
+            { _id: projectIdQuery },
+            {
+                $set: {
                     status: 'checked-out',
-                    checkedOutBy: userId
+                    checkedOutBy: userIdToCheck
                 }
             }
         );
 
         // Create checkout activity
         const checkoutActivity = {
-            _id: `checkin${Date.now()}`,
-            projectId,
-            userId,
+            projectId: projectIdQuery,
+            userId: userIdToCheck,
             type: 'checkout',
             message: 'Checked out project for editing',
             version: project.version,
@@ -240,9 +342,9 @@ router.post('/:projectId/checkout', async (req, res) => {
 
         await db.collection('checkins').insertOne(checkoutActivity);
 
-        res.json({ 
+        res.json({
             message: 'Project checked out successfully',
-            project: { ...project, status: 'checked-out', checkedOutBy: userId }
+            project: { ...project, status: 'checked-out', checkedOutBy: userIdToCheck }
         });
 
     } catch (error) {
@@ -258,22 +360,43 @@ router.post('/:projectId/checkin', async (req, res) => {
         const { userId, message, version, files } = req.body;
 
         if (!userId || !message) {
-            return res.status(400).json({ 
-                error: 'userId and message are required' 
+            return res.status(400).json({
+                error: 'userId and message are required'
             });
         }
 
+        // Convert string ID to ObjectId if valid
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId;
+        }
+
+        // Convert userId to ObjectId if valid
+        let userIdToCheck = userId;
+        if (typeof userId === 'string' && ObjectId.isValid(userId)) {
+            try {
+                userIdToCheck = new ObjectId(userId);
+            } catch (e) {
+                userIdToCheck = userId;
+            }
+        }
+
         const db = getDB();
-        const project = await db.collection('projects').findOne({ _id: projectId });
+        const project = await db.collection('projects').findOne({ _id: projectIdQuery });
 
         if (!project) {
             return res.status(404).json({ error: 'Project not found' });
         }
 
-        // Check if project is checked out by this user
-        if (project.status !== 'checked-out' || project.checkedOutBy !== userId) {
-            return res.status(403).json({ 
-                error: 'Project is not checked out by this user' 
+        // Check if project is checked out by this user (compare as strings)
+        const isCheckedOutByUser = project.checkedOutBy &&
+            project.checkedOutBy.toString() === userId.toString();
+
+        if (project.status !== 'checked-out' || !isCheckedOutByUser) {
+            return res.status(403).json({
+                error: 'Project is not checked out by this user'
             });
         }
 
@@ -287,15 +410,14 @@ router.post('/:projectId/checkin', async (req, res) => {
         if (files && files.length > 0) updateData.files = files;
 
         await db.collection('projects').updateOne(
-            { _id: projectId },
+            { _id: projectIdQuery },
             { $set: updateData }
         );
 
         // Create checkin activity
         const checkinActivity = {
-            _id: `checkin${Date.now()}`,
-            projectId,
-            userId,
+            projectId: projectIdQuery,
+            userId: userIdToCheck,
             type: 'checkin',
             message,
             version: version || project.version,
@@ -305,9 +427,9 @@ router.post('/:projectId/checkin', async (req, res) => {
 
         await db.collection('checkins').insertOne(checkinActivity);
 
-        const updatedProject = await db.collection('projects').findOne({ _id: projectId });
+        const updatedProject = await db.collection('projects').findOne({ _id: projectIdQuery });
 
-        res.json({ 
+        res.json({
             message: 'Project checked in successfully',
             project: updatedProject
         });

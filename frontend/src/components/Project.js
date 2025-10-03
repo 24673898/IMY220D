@@ -5,13 +5,6 @@ const Project = ({ project, onEdit, currentUserId = 1 }) => {
     const isOwner = project.owner.id === currentUserId;
     const canEdit = isOwner; // Could also check if user is collaborator
 
-    const handleCheckOut = () => {
-        if (project.status === 'Checked In') {
-            console.log('Check out project:', project.name);
-            // TODO: Implement check out functionality
-        }
-    };
-
     const handleCheckIn = () => {
         if (project.status === 'Checked Out') {
             console.log('Check in project:', project.name);
@@ -51,14 +44,6 @@ const Project = ({ project, onEdit, currentUserId = 1 }) => {
                     </div>
                     
                     <div className="project-actions">
-                        <button 
-                            className={`action-btn checkout-btn ${project.status === 'Checked In' ? 'available' : 'disabled'}`}
-                            onClick={handleCheckOut}
-                            disabled={project.status !== 'Checked In'}
-                        >
-                            {project.status === 'Checked In' ? 'Check Out' : 'Checked Out'}
-                        </button>
-                        
                         <button className="action-btn download-btn" onClick={handleDownload}>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" 
