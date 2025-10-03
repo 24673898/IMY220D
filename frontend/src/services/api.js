@@ -1,8 +1,8 @@
 // frontend/src/services/api.js
 // This file contains all API calls for the frontend
 
-// Remove process.env and use direct URL
-const API_BASE_URL = 'http://localhost:3000/api';
+// Use relative URL so it works in both dev and Docker
+const API_BASE_URL = '/api';
 
 // Helper function to handle fetch requests
 async function fetchAPI(endpoint, options = {}) {

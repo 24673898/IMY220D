@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authAPI } from '../services/api';
 import './SignUpForm.css';
 
 const SignUpForm = ({ onToggleForm }) => {
@@ -76,40 +77,26 @@ const SignUpForm = ({ onToggleForm }) => {
         }
 
         setIsLoading(true);
-        
+
         try {
-            const response = await fetch('http://localhost:3000/api/auth/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    firstName: formData.firstName,
-                    lastName: formData.lastName,
-                    name: `${formData.firstName} ${formData.lastName}`,
-                    username: formData.username,
-                    email: formData.email,
-                    password: formData.password
-                })
+            const data = await authAPI.signup({
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                name: `${formData.firstName} ${formData.lastName}`,
+                username: formData.username,
+                email: formData.email,
+                password: formData.password
             });
 
-            const data = await response.json();
+            // Store user data in localStorage (use 'user' key to match ProfilePage)
+            localStorage.setItem('user', JSON.stringify(data.user));
 
-            if (response.ok) {
-                // Store user data in localStorage (use 'user' key to match ProfilePage)
-                localStorage.setItem('user', JSON.stringify(data.user));
-
-                // Redirect to home page
-                navigate('/home');
-            } else {
-                setErrors({
-                    form: data.error || data.message || 'Signup failed'
-                });
-            }
+            // Redirect to home page
+            navigate('/home');
         } catch (error) {
             console.error('Signup error:', error);
             setErrors({
-                form: 'Network error. Please try again.'
+                form: error.message || 'Signup failed. Please try again.'
             });
         } finally {
             setIsLoading(false);

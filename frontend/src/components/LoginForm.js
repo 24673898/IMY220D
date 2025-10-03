@@ -1,6 +1,7 @@
 // frontend/src/components/LoginForm.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authAPI } from '../services/api';
 import './LoginForm.css'; // Keep your existing CSS
 
 const LoginForm = ({ onToggleForm }) => {
@@ -16,27 +17,13 @@ const LoginForm = ({ onToggleForm }) => {
         setLoading(true);
 
         try {
-            // API call to your backend
-            const response = await fetch('http://localhost:3000/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password })
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                // Store user data
-                localStorage.setItem('user', JSON.stringify(data.user));
-                // Redirect to home
-                navigate('/home');
-            } else {
-                setError(data.error || 'Login failed');
-            }
+            const data = await authAPI.login(email, password);
+            // Store user data
+            localStorage.setItem('user', JSON.stringify(data.user));
+            // Redirect to home
+            navigate('/home');
         } catch (err) {
-            setError('Network error. Please check your connection.');
+            setError(err.message || 'Login failed');
             console.error('Login error:', err);
         } finally {
             setLoading(false);

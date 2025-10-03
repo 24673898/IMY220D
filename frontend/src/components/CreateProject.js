@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { projectAPI } from '../services/api';
 import './CreateProject.css';
 
 const CreateProject = ({ onCancel, onSave }) => {
@@ -112,23 +113,10 @@ const CreateProject = ({ onCancel, onSave }) => {
             console.log('Creating project with data:', projectData);
 
             // Make API call
-            const response = await fetch('http://localhost:3000/api/projects', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(projectData)
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                console.log('Project created successfully:', data);
-                alert('Project created successfully!');
-                onSave(data.project);
-            } else {
-                alert(data.error || 'Failed to create project');
-            }
+            const data = await projectAPI.createProject(projectData);
+            console.log('Project created successfully:', data);
+            alert('Project created successfully!');
+            onSave(data.project);
         } catch (error) {
             console.error('Error creating project:', error);
             alert('Network error. Please try again.');

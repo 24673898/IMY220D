@@ -6,6 +6,7 @@ import EditProfile from '../components/EditProfile';
 import ProjectList from '../components/ProjectList';
 import CreateProject from '../components/CreateProject';
 import FriendsList from '../components/FriendsList';
+import { userAPI } from '../services/api';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
@@ -63,21 +64,9 @@ const ProfilePage = () => {
         const userToDeleteId = currentUser?._id || userId;
 
         console.log('Attempting to delete user with ID:', userToDeleteId);
-        
-        const response = await fetch(`http://localhost:3000/api/users/${userToDeleteId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to delete profile');
-        }
+        await userAPI.deleteProfile(userToDeleteId);
 
-        const result = await response.json();
-        
         // Clear localStorage and redirect to home page
         localStorage.removeItem('user');
         localStorage.removeItem('token'); // if you have tokens
@@ -110,13 +99,7 @@ const ProfilePage = () => {
                     setLoading(true);
                 }
                 console.log('Fetching user data for userId:', userId);
-                const response = await fetch(`http://localhost:3000/api/users/${userId}`);
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user data');
-                }
-
-                const data = await response.json();
+                const data = await userAPI.getProfile(userId);
 
                 if (!isMounted) return; // Don't update state if unmounted
 
@@ -137,8 +120,7 @@ const ProfilePage = () => {
                 setUserData(transformedUser);
 
                 // Fetch stats
-                const friendsResponse = await fetch(`http://localhost:3000/api/users/${userId}/friends`);
-                const friendsData = await friendsResponse.json();
+                const friendsData = await userAPI.getFriends(userId);
 
                 if (!isMounted) return; // Don't update state if unmounted
 
@@ -152,8 +134,7 @@ const ProfilePage = () => {
                 if (!isOwnProfile) {
                     const currentUserId = getCurrentUserId();
                     if (currentUserId) {
-                        const myFriendsResponse = await fetch(`http://localhost:3000/api/users/${currentUserId}/friends`);
-                        const myFriendsData = await myFriendsResponse.json();
+                        const myFriendsData = await userAPI.getFriends(currentUserId);
 
                         if (!isMounted) return; // Don't update state if unmounted
 
@@ -185,19 +166,7 @@ const ProfilePage = () => {
     // Handle profile save
     const handleProfileSave = async (formData) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update profile');
-            }
-
-            const data = await response.json();
+            const data = await userAPI.updateProfile(userId, formData);
 
             // Update local userData state
             const transformedUser = {
@@ -234,18 +203,7 @@ const ProfilePage = () => {
 
         try {
             setFriendActionLoading(true);
-            const response = await fetch(`http://localhost:3000/api/users/${currentUserId}/friends`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ friendId: userId })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to send friend request');
-            }
+            await userAPI.sendFriendRequest(currentUserId, userId);
 
             setIsFriend(true);
             setStats(prev => ({ ...prev, friendsCount: prev.friendsCount + 1 }));
@@ -269,16 +227,7 @@ const ProfilePage = () => {
 
         try {
             setFriendActionLoading(true);
-            const response = await fetch(`http://localhost:3000/api/users/${currentUserId}/friends/${userId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to unfriend user');
-            }
+            await userAPI.unfriend(currentUserId, userId);
 
             setIsFriend(false);
             setStats(prev => ({ ...prev, friendsCount: Math.max(0, prev.friendsCount - 1) }));

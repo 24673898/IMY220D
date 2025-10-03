@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Feed from '../components/Feed';
+import { activityAPI } from '../services/api';
 import './HomePage.css'; // Keep your existing CSS
 
 const HomePage = () => {
@@ -33,16 +34,10 @@ const HomePage = () => {
             setLoading(true);
             setError(null);
 
-            const response = await fetch('http://localhost:3000/api/checkins/global');
-            const data = await response.json();
-
-            if (response.ok) {
-                setActivity(data.activity);
-            } else {
-                setError(data.error || 'Failed to load activity');
-            }
+            const data = await activityAPI.getGlobalFeed();
+            setActivity(data.activity);
         } catch (err) {
-            setError('Network error. Please try again.');
+            setError(err.message || 'Failed to load activity');
             console.error('Load activity error:', err);
         } finally {
             setLoading(false);

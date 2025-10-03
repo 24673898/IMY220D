@@ -78,7 +78,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _CreateProject_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CreateProject.css */ "./frontend/src/components/CreateProject.css");
+/* harmony import */ var _services_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/api */ "./frontend/src/services/api.js");
+/* harmony import */ var _CreateProject_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CreateProject.css */ "./frontend/src/components/CreateProject.css");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
@@ -95,6 +96,7 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
 
 
 var CreateProject = function CreateProject(_ref) {
@@ -168,7 +170,7 @@ var CreateProject = function CreateProject(_ref) {
   };
   var handleSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(e) {
-      var currentUser, user, tags, projectData, response, data, _t;
+      var currentUser, user, tags, projectData, data, _t;
       return _regenerator().w(function (_context) {
         while (1) switch (_context.p = _context.n) {
           case 0:
@@ -205,37 +207,23 @@ var CreateProject = function CreateProject(_ref) {
 
             // Make API call
             _context.n = 3;
-            return fetch('http://localhost:3000/api/projects', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(projectData)
-            });
+            return _services_api__WEBPACK_IMPORTED_MODULE_1__.projectAPI.createProject(projectData);
           case 3:
-            response = _context.v;
-            _context.n = 4;
-            return response.json();
-          case 4:
             data = _context.v;
-            if (response.ok) {
-              console.log('Project created successfully:', data);
-              alert('Project created successfully!');
-              onSave(data.project);
-            } else {
-              alert(data.error || 'Failed to create project');
-            }
-            _context.n = 6;
+            console.log('Project created successfully:', data);
+            alert('Project created successfully!');
+            onSave(data.project);
+            _context.n = 5;
             break;
-          case 5:
-            _context.p = 5;
+          case 4:
+            _context.p = 4;
             _t = _context.v;
             console.error('Error creating project:', _t);
             alert('Network error. Please try again.');
-          case 6:
+          case 5:
             return _context.a(2);
         }
-      }, _callee, null, [[1, 5]]);
+      }, _callee, null, [[1, 4]]);
     }));
     return function handleSubmit(_x) {
       return _ref2.apply(this, arguments);
@@ -2040,7 +2028,7 @@ var FriendsList = function FriendsList(_ref) {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var fetchFriends = /*#__PURE__*/function () {
       var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-        var response, data, transformedFriends, _t;
+        var data, transformedFriends, _t;
         return _regenerator().w(function (_context) {
           while (1) switch (_context.p = _context.n) {
             case 0:
@@ -2054,18 +2042,8 @@ var FriendsList = function FriendsList(_ref) {
               _context.p = 1;
               setLoading(true);
               _context.n = 2;
-              return fetch("http://localhost:3000/api/users/".concat(userId, "/friends"));
+              return _services_api__WEBPACK_IMPORTED_MODULE_2__.userAPI.getFriends(userId);
             case 2:
-              response = _context.v;
-              if (response.ok) {
-                _context.n = 3;
-                break;
-              }
-              throw new Error('Failed to fetch friends');
-            case 3:
-              _context.n = 4;
-              return response.json();
-            case 4:
               data = _context.v;
               // Transform friends data
               transformedFriends = data.friends.map(function (friend) {
@@ -2078,21 +2056,21 @@ var FriendsList = function FriendsList(_ref) {
                 };
               });
               setFriends(transformedFriends);
-              _context.n = 6;
+              _context.n = 4;
               break;
-            case 5:
-              _context.p = 5;
+            case 3:
+              _context.p = 3;
               _t = _context.v;
               console.error('Error fetching friends:', _t);
               setError(_t.message);
-            case 6:
-              _context.p = 6;
+            case 4:
+              _context.p = 4;
               setLoading(false);
-              return _context.f(6);
-            case 7:
+              return _context.f(4);
+            case 5:
               return _context.a(2);
           }
-        }, _callee, null, [[1, 5, 6, 7]]);
+        }, _callee, null, [[1, 3, 4, 5]]);
       }));
       return function fetchFriends() {
         return _ref2.apply(this, arguments);
@@ -2454,7 +2432,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
-/* harmony import */ var _LoginForm_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LoginForm.css */ "./frontend/src/components/LoginForm.css");
+/* harmony import */ var _services_api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/api */ "./frontend/src/services/api.js");
+/* harmony import */ var _LoginForm_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./LoginForm.css */ "./frontend/src/components/LoginForm.css");
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -2466,6 +2445,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 // frontend/src/components/LoginForm.js
+
 
 
  // Keep your existing CSS
@@ -2491,7 +2471,7 @@ var LoginForm = function LoginForm(_ref) {
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
   var handleSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(e) {
-      var response, data, _t;
+      var data, _t;
       return _regenerator().w(function (_context) {
         while (1) switch (_context.p = _context.n) {
           case 0:
@@ -2500,45 +2480,28 @@ var LoginForm = function LoginForm(_ref) {
             setLoading(true);
             _context.p = 1;
             _context.n = 2;
-            return fetch('http://localhost:3000/api/auth/login', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                email: email,
-                password: password
-              })
-            });
+            return _services_api__WEBPACK_IMPORTED_MODULE_2__.authAPI.login(email, password);
           case 2:
-            response = _context.v;
-            _context.n = 3;
-            return response.json();
-          case 3:
             data = _context.v;
-            if (response.ok) {
-              // Store user data
-              localStorage.setItem('user', JSON.stringify(data.user));
-              // Redirect to home
-              navigate('/home');
-            } else {
-              setError(data.error || 'Login failed');
-            }
-            _context.n = 5;
+            // Store user data
+            localStorage.setItem('user', JSON.stringify(data.user));
+            // Redirect to home
+            navigate('/home');
+            _context.n = 4;
             break;
+          case 3:
+            _context.p = 3;
+            _t = _context.v;
+            setError(_t.message || 'Login failed');
+            console.error('Login error:', _t);
           case 4:
             _context.p = 4;
-            _t = _context.v;
-            setError('Network error. Please check your connection.');
-            console.error('Login error:', _t);
-          case 5:
-            _context.p = 5;
             setLoading(false);
-            return _context.f(5);
-          case 6:
+            return _context.f(4);
+          case 5:
             return _context.a(2);
         }
-      }, _callee, null, [[1, 4, 5, 6]]);
+      }, _callee, null, [[1, 3, 4, 5]]);
     }));
     return function handleSubmit(_x) {
       return _ref2.apply(this, arguments);
@@ -4395,7 +4358,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
-/* harmony import */ var _SignUpForm_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SignUpForm.css */ "./frontend/src/components/SignUpForm.css");
+/* harmony import */ var _services_api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/api */ "./frontend/src/services/api.js");
+/* harmony import */ var _SignUpForm_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SignUpForm.css */ "./frontend/src/components/SignUpForm.css");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
@@ -4412,6 +4376,7 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
 
 
 
@@ -4483,7 +4448,7 @@ var SignUpForm = function SignUpForm(_ref) {
   };
   var handleSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(e) {
-      var response, data, _t;
+      var data, _t;
       return _regenerator().w(function (_context) {
         while (1) switch (_context.p = _context.n) {
           case 0:
@@ -4497,54 +4462,38 @@ var SignUpForm = function SignUpForm(_ref) {
             setIsLoading(true);
             _context.p = 2;
             _context.n = 3;
-            return fetch('http://localhost:3000/api/auth/signup', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                name: "".concat(formData.firstName, " ").concat(formData.lastName),
-                username: formData.username,
-                email: formData.email,
-                password: formData.password
-              })
+            return _services_api__WEBPACK_IMPORTED_MODULE_2__.authAPI.signup({
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              name: "".concat(formData.firstName, " ").concat(formData.lastName),
+              username: formData.username,
+              email: formData.email,
+              password: formData.password
             });
           case 3:
-            response = _context.v;
-            _context.n = 4;
-            return response.json();
-          case 4:
             data = _context.v;
-            if (response.ok) {
-              // Store user data in localStorage (use 'user' key to match ProfilePage)
-              localStorage.setItem('user', JSON.stringify(data.user));
+            // Store user data in localStorage (use 'user' key to match ProfilePage)
+            localStorage.setItem('user', JSON.stringify(data.user));
 
-              // Redirect to home page
-              navigate('/home');
-            } else {
-              setErrors({
-                form: data.error || data.message || 'Signup failed'
-              });
-            }
-            _context.n = 6;
+            // Redirect to home page
+            navigate('/home');
+            _context.n = 5;
             break;
-          case 5:
-            _context.p = 5;
+          case 4:
+            _context.p = 4;
             _t = _context.v;
             console.error('Signup error:', _t);
             setErrors({
-              form: 'Network error. Please try again.'
+              form: _t.message || 'Signup failed. Please try again.'
             });
-          case 6:
-            _context.p = 6;
+          case 5:
+            _context.p = 5;
             setIsLoading(false);
-            return _context.f(6);
-          case 7:
+            return _context.f(5);
+          case 6:
             return _context.a(2);
         }
-      }, _callee, null, [[2, 5, 6, 7]]);
+      }, _callee, null, [[2, 4, 5, 6]]);
     }));
     return function handleSubmit(_x) {
       return _ref2.apply(this, arguments);
@@ -4736,7 +4685,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_Header__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Header */ "./frontend/src/components/Header.js");
 /* harmony import */ var _components_Feed__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Feed */ "./frontend/src/components/Feed.js");
-/* harmony import */ var _HomePage_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HomePage.css */ "./frontend/src/pages/HomePage.css");
+/* harmony import */ var _services_api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/api */ "./frontend/src/services/api.js");
+/* harmony import */ var _HomePage_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./HomePage.css */ "./frontend/src/pages/HomePage.css");
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -4748,6 +4698,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 // frontend/src/pages/HomePage.js
+
 
 
 
@@ -4790,7 +4741,7 @@ var HomePage = function HomePage() {
   }, [user]);
   var loadActivity = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-      var response, data, _t;
+      var data, _t;
       return _regenerator().w(function (_context) {
         while (1) switch (_context.p = _context.n) {
           case 0:
@@ -4798,33 +4749,25 @@ var HomePage = function HomePage() {
             setLoading(true);
             setError(null);
             _context.n = 1;
-            return fetch('http://localhost:3000/api/checkins/global');
+            return _services_api__WEBPACK_IMPORTED_MODULE_3__.activityAPI.getGlobalFeed();
           case 1:
-            response = _context.v;
-            _context.n = 2;
-            return response.json();
-          case 2:
             data = _context.v;
-            if (response.ok) {
-              setActivity(data.activity);
-            } else {
-              setError(data.error || 'Failed to load activity');
-            }
-            _context.n = 4;
+            setActivity(data.activity);
+            _context.n = 3;
             break;
+          case 2:
+            _context.p = 2;
+            _t = _context.v;
+            setError(_t.message || 'Failed to load activity');
+            console.error('Load activity error:', _t);
           case 3:
             _context.p = 3;
-            _t = _context.v;
-            setError('Network error. Please try again.');
-            console.error('Load activity error:', _t);
-          case 4:
-            _context.p = 4;
             setLoading(false);
-            return _context.f(4);
-          case 5:
+            return _context.f(3);
+          case 4:
             return _context.a(2);
         }
-      }, _callee, null, [[0, 3, 4, 5]]);
+      }, _callee, null, [[0, 2, 3, 4]]);
     }));
     return function loadActivity() {
       return _ref.apply(this, arguments);
@@ -4922,7 +4865,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_ProjectList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/ProjectList */ "./frontend/src/components/ProjectList.js");
 /* harmony import */ var _components_CreateProject__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/CreateProject */ "./frontend/src/components/CreateProject.js");
 /* harmony import */ var _components_FriendsList__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/FriendsList */ "./frontend/src/components/FriendsList.js");
-/* harmony import */ var _ProfilePage_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ProfilePage.css */ "./frontend/src/pages/ProfilePage.css");
+/* harmony import */ var _services_api__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../services/api */ "./frontend/src/services/api.js");
+/* harmony import */ var _ProfilePage_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ProfilePage.css */ "./frontend/src/pages/ProfilePage.css");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -4941,6 +4885,7 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
  // Added useNavigate
+
 
 
 
@@ -5008,7 +4953,7 @@ var ProfilePage = function ProfilePage() {
   }, [isOwnProfile, id, getCurrentUserId]);
   var handleDeleteProfile = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-      var confirmed, currentUser, userToDeleteId, response, errorData, result, _t;
+      var confirmed, currentUser, userToDeleteId, _t;
       return _regenerator().w(function (_context) {
         while (1) switch (_context.p = _context.n) {
           case 0:
@@ -5033,45 +4978,25 @@ var ProfilePage = function ProfilePage() {
             userToDeleteId = (currentUser === null || currentUser === void 0 ? void 0 : currentUser._id) || userId;
             console.log('Attempting to delete user with ID:', userToDeleteId);
             _context.n = 3;
-            return fetch("http://localhost:3000/api/users/".concat(userToDeleteId), {
-              method: 'DELETE',
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            });
+            return _services_api__WEBPACK_IMPORTED_MODULE_8__.userAPI.deleteProfile(userToDeleteId);
           case 3:
-            response = _context.v;
-            if (response.ok) {
-              _context.n = 5;
-              break;
-            }
-            _context.n = 4;
-            return response.json();
-          case 4:
-            errorData = _context.v;
-            throw new Error(errorData.error || 'Failed to delete profile');
-          case 5:
-            _context.n = 6;
-            return response.json();
-          case 6:
-            result = _context.v;
             // Clear localStorage and redirect to home page
             localStorage.removeItem('user');
             localStorage.removeItem('token'); // if you have tokens
 
             alert('Profile deleted successfully');
             navigate('/'); // Redirect to home page
-            _context.n = 8;
+            _context.n = 5;
             break;
-          case 7:
-            _context.p = 7;
+          case 4:
+            _context.p = 4;
             _t = _context.v;
             console.error('Error deleting profile:', _t);
             alert("Failed to delete profile: ".concat(_t.message));
-          case 8:
+          case 5:
             return _context.a(2);
         }
-      }, _callee, null, [[2, 7]]);
+      }, _callee, null, [[2, 4]]);
     }));
     return function handleDeleteProfile() {
       return _ref.apply(this, arguments);
@@ -5084,7 +5009,7 @@ var ProfilePage = function ProfilePage() {
 
     var fetchUserData = /*#__PURE__*/function () {
       var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-        var _data$projects, _data$projects2, _friendsData$friends, response, data, transformedUser, friendsResponse, friendsData, currentUserId, _myFriendsData$friend, myFriendsResponse, myFriendsData, isFriendStatus, _t2;
+        var _data$projects, _data$projects2, _friendsData$friends, data, transformedUser, friendsData, currentUserId, _myFriendsData$friend, myFriendsData, isFriendStatus, _t2;
         return _regenerator().w(function (_context2) {
           while (1) switch (_context2.p = _context2.n) {
             case 0:
@@ -5105,25 +5030,15 @@ var ProfilePage = function ProfilePage() {
               }
               console.log('Fetching user data for userId:', userId);
               _context2.n = 2;
-              return fetch("http://localhost:3000/api/users/".concat(userId));
+              return _services_api__WEBPACK_IMPORTED_MODULE_8__.userAPI.getProfile(userId);
             case 2:
-              response = _context2.v;
-              if (response.ok) {
+              data = _context2.v;
+              if (isMounted) {
                 _context2.n = 3;
                 break;
               }
-              throw new Error('Failed to fetch user data');
-            case 3:
-              _context2.n = 4;
-              return response.json();
-            case 4:
-              data = _context2.v;
-              if (isMounted) {
-                _context2.n = 5;
-                break;
-              }
               return _context2.a(2);
-            case 5:
+            case 3:
               // Don't update state if unmounted
               // Transform data to match frontend format
               transformedUser = {
@@ -5144,20 +5059,16 @@ var ProfilePage = function ProfilePage() {
               setUserData(transformedUser);
 
               // Fetch stats
-              _context2.n = 6;
-              return fetch("http://localhost:3000/api/users/".concat(userId, "/friends"));
-            case 6:
-              friendsResponse = _context2.v;
-              _context2.n = 7;
-              return friendsResponse.json();
-            case 7:
+              _context2.n = 4;
+              return _services_api__WEBPACK_IMPORTED_MODULE_8__.userAPI.getFriends(userId);
+            case 4:
               friendsData = _context2.v;
               if (isMounted) {
-                _context2.n = 8;
+                _context2.n = 5;
                 break;
               }
               return _context2.a(2);
-            case 8:
+            case 5:
               // Don't update state if unmounted
 
               setStats({
@@ -5170,53 +5081,49 @@ var ProfilePage = function ProfilePage() {
 
               // Check if this user is a friend (only if viewing another user's profile)
               if (isOwnProfile) {
-                _context2.n = 12;
+                _context2.n = 8;
                 break;
               }
               currentUserId = getCurrentUserId();
               if (!currentUserId) {
-                _context2.n = 12;
+                _context2.n = 8;
                 break;
               }
-              _context2.n = 9;
-              return fetch("http://localhost:3000/api/users/".concat(currentUserId, "/friends"));
-            case 9:
-              myFriendsResponse = _context2.v;
-              _context2.n = 10;
-              return myFriendsResponse.json();
-            case 10:
+              _context2.n = 6;
+              return _services_api__WEBPACK_IMPORTED_MODULE_8__.userAPI.getFriends(currentUserId);
+            case 6:
               myFriendsData = _context2.v;
               if (isMounted) {
-                _context2.n = 11;
+                _context2.n = 7;
                 break;
               }
               return _context2.a(2);
-            case 11:
+            case 7:
               // Don't update state if unmounted
               isFriendStatus = (_myFriendsData$friend = myFriendsData.friends) === null || _myFriendsData$friend === void 0 ? void 0 : _myFriendsData$friend.some(function (friend) {
                 return friend._id === userId;
               });
               setIsFriend(isFriendStatus);
-            case 12:
-              _context2.n = 14;
+            case 8:
+              _context2.n = 10;
               break;
-            case 13:
-              _context2.p = 13;
+            case 9:
+              _context2.p = 9;
               _t2 = _context2.v;
               console.error('Error fetching user data:', _t2);
               if (isMounted) {
                 setError(_t2.message);
               }
-            case 14:
-              _context2.p = 14;
+            case 10:
+              _context2.p = 10;
               if (isMounted) {
                 setLoading(false);
               }
-              return _context2.f(14);
-            case 15:
+              return _context2.f(10);
+            case 11:
               return _context2.a(2);
           }
-        }, _callee2, null, [[1, 13, 14, 15]]);
+        }, _callee2, null, [[1, 9, 10, 11]]);
       }));
       return function fetchUserData() {
         return _ref2.apply(this, arguments);
@@ -5233,30 +5140,14 @@ var ProfilePage = function ProfilePage() {
   // Handle profile save
   var handleProfileSave = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(formData) {
-      var response, data, transformedUser, _t3;
+      var data, transformedUser, _t3;
       return _regenerator().w(function (_context3) {
         while (1) switch (_context3.p = _context3.n) {
           case 0:
             _context3.p = 0;
             _context3.n = 1;
-            return fetch("http://localhost:3000/api/users/".concat(userId), {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(formData)
-            });
+            return _services_api__WEBPACK_IMPORTED_MODULE_8__.userAPI.updateProfile(userId, formData);
           case 1:
-            response = _context3.v;
-            if (response.ok) {
-              _context3.n = 2;
-              break;
-            }
-            throw new Error('Failed to update profile');
-          case 2:
-            _context3.n = 3;
-            return response.json();
-          case 3:
             data = _context3.v;
             // Update local userData state
             transformedUser = {
@@ -5278,17 +5169,17 @@ var ProfilePage = function ProfilePage() {
               localStorage.setItem('user', JSON.stringify(data.user));
             }
             setIsEditing(false);
-            _context3.n = 5;
+            _context3.n = 3;
             break;
-          case 4:
-            _context3.p = 4;
+          case 2:
+            _context3.p = 2;
             _t3 = _context3.v;
             console.error('Error updating profile:', _t3);
             alert('Failed to update profile. Please try again.');
-          case 5:
+          case 3:
             return _context3.a(2);
         }
-      }, _callee3, null, [[0, 4]]);
+      }, _callee3, null, [[0, 2]]);
     }));
     return function handleProfileSave(_x) {
       return _ref3.apply(this, arguments);
@@ -5298,7 +5189,7 @@ var ProfilePage = function ProfilePage() {
   // Handle send friend request
   var handleSendFriendRequest = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
-      var currentUserId, response, errorData, _t4;
+      var currentUserId, _t4;
       return _regenerator().w(function (_context4) {
         while (1) switch (_context4.p = _context4.n) {
           case 0:
@@ -5312,27 +5203,8 @@ var ProfilePage = function ProfilePage() {
             _context4.p = 1;
             setFriendActionLoading(true);
             _context4.n = 2;
-            return fetch("http://localhost:3000/api/users/".concat(currentUserId, "/friends"), {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                friendId: userId
-              })
-            });
+            return _services_api__WEBPACK_IMPORTED_MODULE_8__.userAPI.sendFriendRequest(currentUserId, userId);
           case 2:
-            response = _context4.v;
-            if (response.ok) {
-              _context4.n = 4;
-              break;
-            }
-            _context4.n = 3;
-            return response.json();
-          case 3:
-            errorData = _context4.v;
-            throw new Error(errorData.error || 'Failed to send friend request');
-          case 4:
             setIsFriend(true);
             setStats(function (prev) {
               return _objectSpread(_objectSpread({}, prev), {}, {
@@ -5340,21 +5212,21 @@ var ProfilePage = function ProfilePage() {
               });
             });
             alert('Friend request sent successfully!');
-            _context4.n = 6;
+            _context4.n = 4;
             break;
-          case 5:
-            _context4.p = 5;
+          case 3:
+            _context4.p = 3;
             _t4 = _context4.v;
             console.error('Error sending friend request:', _t4);
             alert(_t4.message || 'Failed to send friend request. Please try again.');
-          case 6:
-            _context4.p = 6;
+          case 4:
+            _context4.p = 4;
             setFriendActionLoading(false);
-            return _context4.f(6);
-          case 7:
+            return _context4.f(4);
+          case 5:
             return _context4.a(2);
         }
-      }, _callee4, null, [[1, 5, 6, 7]]);
+      }, _callee4, null, [[1, 3, 4, 5]]);
     }));
     return function handleSendFriendRequest() {
       return _ref4.apply(this, arguments);
@@ -5364,7 +5236,7 @@ var ProfilePage = function ProfilePage() {
   // Handle unfriend
   var handleUnfriend = /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
-      var currentUserId, response, _t5;
+      var currentUserId, _t5;
       return _regenerator().w(function (_context5) {
         while (1) switch (_context5.p = _context5.n) {
           case 0:
@@ -5384,20 +5256,8 @@ var ProfilePage = function ProfilePage() {
             _context5.p = 2;
             setFriendActionLoading(true);
             _context5.n = 3;
-            return fetch("http://localhost:3000/api/users/".concat(currentUserId, "/friends/").concat(userId), {
-              method: 'DELETE',
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            });
+            return _services_api__WEBPACK_IMPORTED_MODULE_8__.userAPI.unfriend(currentUserId, userId);
           case 3:
-            response = _context5.v;
-            if (response.ok) {
-              _context5.n = 4;
-              break;
-            }
-            throw new Error('Failed to unfriend user');
-          case 4:
             setIsFriend(false);
             setStats(function (prev) {
               return _objectSpread(_objectSpread({}, prev), {}, {
@@ -5405,21 +5265,21 @@ var ProfilePage = function ProfilePage() {
               });
             });
             alert('Friend removed successfully');
-            _context5.n = 6;
+            _context5.n = 5;
             break;
-          case 5:
-            _context5.p = 5;
+          case 4:
+            _context5.p = 4;
             _t5 = _context5.v;
             console.error('Error unfriending user:', _t5);
             alert('Failed to unfriend user. Please try again.');
-          case 6:
-            _context5.p = 6;
+          case 5:
+            _context5.p = 5;
             setFriendActionLoading(false);
-            return _context5.f(6);
-          case 7:
+            return _context5.f(5);
+          case 6:
             return _context5.a(2);
         }
-      }, _callee5, null, [[2, 5, 6, 7]]);
+      }, _callee5, null, [[2, 4, 5, 6]]);
     }));
     return function handleUnfriend() {
       return _ref5.apply(this, arguments);
@@ -6576,8 +6436,8 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 // frontend/src/services/api.js
 // This file contains all API calls for the frontend
 
-// Remove process.env and use direct URL
-var API_BASE_URL = 'http://localhost:3000/api';
+// Use relative URL so it works in both dev and Docker
+var API_BASE_URL = '/api';
 
 // Helper function to handle fetch requests
 function fetchAPI(_x) {

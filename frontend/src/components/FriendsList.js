@@ -19,13 +19,7 @@ const FriendsList = ({ userId }) => {
 
             try {
                 setLoading(true);
-                const response = await fetch(`http://localhost:3000/api/users/${userId}/friends`);
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch friends');
-                }
-
-                const data = await response.json();
+                const data = await userAPI.getFriends(userId);
 
                 // Transform friends data
                 const transformedFriends = data.friends.map(friend => ({

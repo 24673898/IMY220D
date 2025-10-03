@@ -3,23 +3,26 @@ FROM node:18-alpine
 # Set working directory
 WORKDIR /app
 
-# Copy package files first (for better caching)
+# Copy root package.json and install root dependencies
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
 
-# Copy source code
+# Copy backend package.json and install backend dependencies
+COPY backend/package.json ./backend/
+RUN cd backend && npm install
+
+# Copy all source code
 COPY . .
 
-# Build frontend
+# Build frontend with webpack
 RUN npm run build:frontend
 
-# Set environment variable
-ENV PORT=1337
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=3000
 
-# Expose the port your app runs on
-EXPOSE 1337
+# Expose port
+EXPOSE 3000
 
-# Start the application
-CMD ["node", "backend/dist/server.js"]
+# Start the backend server directly
+CMD ["node", "backend/server.js"]
