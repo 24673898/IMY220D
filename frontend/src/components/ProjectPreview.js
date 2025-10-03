@@ -1,14 +1,24 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ProjectPreview.css';
 
 const ProjectPreview = ({ project }) => {
-    const handleTagClick = (tag) => {
-       
-        console.log('Search for tag:', tag);
+    const navigate = useNavigate();
+
+    const handleTagClick = (e, tag) => {
+        e.stopPropagation(); // Prevent project navigation
+        // Navigate to search with tag
+        navigate(`/search?q=${encodeURIComponent(tag)}`);
+    };
+
+    const handleProjectClick = () => {
+        if (project.projectId) {
+            navigate(`/project/${project.projectId}`);
+        }
     };
 
     return (
-        <div className="project-preview">
+        <div className="project-preview" onClick={handleProjectClick} style={{ cursor: 'pointer' }}>
             <div className="project-header">
                 <h3 className="project-user">{project.userName}'s post</h3>
                 <span className="project-timestamp">{project.timestamp}</span>
@@ -34,7 +44,7 @@ const ProjectPreview = ({ project }) => {
                                 <button
                                     key={index}
                                     className="project-tag"
-                                    onClick={() => handleTagClick(tag)}
+                                    onClick={(e) => handleTagClick(e, tag)}
                                 >
                                     {tag}
                                 </button>

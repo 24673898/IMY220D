@@ -1066,6 +1066,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _ProjectPreview__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProjectPreview */ "./frontend/src/components/ProjectPreview.js");
 /* harmony import */ var _Feed_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Feed.css */ "./frontend/src/components/Feed.css");
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -1076,7 +1084,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 var Feed = function Feed() {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('local'),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('global'),
     _useState2 = _slicedToArray(_useState, 2),
     activeTab = _useState2[0],
     setActiveTab = _useState2[1];
@@ -1084,36 +1092,135 @@ var Feed = function Feed() {
     _useState4 = _slicedToArray(_useState3, 2),
     sortBy = _useState4[0],
     setSortBy = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState6 = _slicedToArray(_useState5, 2),
+    activity = _useState6[0],
+    setActivity = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
+    _useState8 = _slicedToArray(_useState7, 2),
+    loading = _useState8[0],
+    setLoading = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState0 = _slicedToArray(_useState9, 2),
+    error = _useState0[0],
+    setError = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState10 = _slicedToArray(_useState1, 2),
+    currentUserId = _useState10[0],
+    setCurrentUserId = _useState10[1];
 
-  // Dummy data for demonstration
-  var projects = [{
-    id: 1,
-    userName: "Franky",
-    projectName: "React Dashboard",
-    content: "Created a modern dashboard with React hooks and context API",
-    image: "/assets/images/project1.jpg",
-    tags: ["#react", "#javascript"],
-    status: "Checked In",
-    timestamp: "2 hours ago"
-  }, {
-    id: 2,
-    userName: "Alex",
-    projectName: "Node.js API",
-    content: "Built RESTful API with authentication and MongoDB integration",
-    image: "/assets/images/project2.jpg",
-    tags: ["#nodejs", "#mongodb"],
-    status: "Checked Out",
-    timestamp: "5 hours ago"
-  }, {
-    id: 3,
-    userName: "Sarah",
-    projectName: "Vue.js Website",
-    content: "Responsive website with Vue.js and Vuetify components",
-    image: "/assets/images/project3.jpg",
-    tags: ["#vuejs", "#css"],
-    status: "Checked In",
-    timestamp: "1 day ago"
-  }];
+  // Get current user on mount
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var user = localStorage.getItem('user');
+    if (user) {
+      var parsedUser = JSON.parse(user);
+      setCurrentUserId(parsedUser._id);
+    }
+  }, []);
+
+  // Fetch activity when tab or userId changes
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    fetchActivity();
+  }, [activeTab, currentUserId]);
+  var fetchActivity = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+      var endpoint, response, data, _t;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.p = _context.n) {
+          case 0:
+            if (!(!currentUserId && activeTab === 'local')) {
+              _context.n = 1;
+              break;
+            }
+            return _context.a(2);
+          case 1:
+            _context.p = 1;
+            setLoading(true);
+            setError(null);
+            endpoint = activeTab === 'local' ? "/api/checkins/local/".concat(currentUserId) : '/api/checkins/global';
+            _context.n = 2;
+            return fetch(endpoint);
+          case 2:
+            response = _context.v;
+            if (response.ok) {
+              _context.n = 3;
+              break;
+            }
+            throw new Error('Failed to fetch activity');
+          case 3:
+            _context.n = 4;
+            return response.json();
+          case 4:
+            data = _context.v;
+            setActivity(data.activity || []);
+            _context.n = 6;
+            break;
+          case 5:
+            _context.p = 5;
+            _t = _context.v;
+            console.error('Error fetching activity:', _t);
+            setError(_t.message);
+          case 6:
+            _context.p = 6;
+            setLoading(false);
+            return _context.f(6);
+          case 7:
+            return _context.a(2);
+        }
+      }, _callee, null, [[1, 5, 6, 7]]);
+    }));
+    return function fetchActivity() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  var formatTimeAgo = function formatTimeAgo(timestamp) {
+    if (!timestamp) return 'Unknown';
+    var now = new Date();
+    var activityDate = new Date(timestamp);
+    var diffMs = now - activityDate;
+    var diffMins = Math.floor(diffMs / 60000);
+    var diffHours = Math.floor(diffMs / 3600000);
+    var diffDays = Math.floor(diffMs / 86400000);
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return "".concat(diffMins, " minute").concat(diffMins > 1 ? 's' : '', " ago");
+    if (diffHours < 24) return "".concat(diffHours, " hour").concat(diffHours > 1 ? 's' : '', " ago");
+    if (diffDays < 7) return "".concat(diffDays, " day").concat(diffDays > 1 ? 's' : '', " ago");
+    return activityDate.toLocaleDateString();
+  };
+
+  // Transform activity data to match ProjectPreview format
+  var transformedProjects = activity.map(function (item) {
+    var _item$project, _item$project2, _item$project3;
+    return {
+      id: item._id,
+      userName: item.user ? "".concat(item.user.firstName || '', " ").concat(item.user.lastName || '').trim() || item.user.username : 'Unknown',
+      projectName: ((_item$project = item.project) === null || _item$project === void 0 ? void 0 : _item$project.name) || 'Unknown Project',
+      content: item.message || '',
+      image: ((_item$project2 = item.project) === null || _item$project2 === void 0 ? void 0 : _item$project2.image) || '/assets/images/default-project.jpg',
+      tags: ((_item$project3 = item.project) === null || _item$project3 === void 0 || (_item$project3 = _item$project3.tags) === null || _item$project3 === void 0 ? void 0 : _item$project3.map(function (tag) {
+        return tag.startsWith('#') ? tag : "#".concat(tag);
+      })) || [],
+      status: item.type === 'checkin' ? 'Checked In' : 'Checked Out',
+      timestamp: formatTimeAgo(item.timestamp),
+      projectId: item.projectId
+    };
+  });
+
+  // Sort projects
+  var sortedProjects = _toConsumableArray(transformedProjects).sort(function (a, b) {
+    switch (sortBy) {
+      case 'date':
+        return 0;
+      // Already sorted by date from backend
+      case 'name':
+        return a.projectName.localeCompare(b.projectName);
+      case 'popularity':
+        // Could be based on stars/downloads if available
+        return 0;
+      default:
+        return 0;
+    }
+  });
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "feed"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -1153,7 +1260,31 @@ var Feed = function Feed() {
     value: "name"
   }, "Name"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "feed-content"
-  }, projects.map(function (project) {
+  }, loading && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "feed-loading",
+    style: {
+      padding: '2rem',
+      textAlign: 'center'
+    }
+  }, "Loading activity..."), error && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "feed-error",
+    style: {
+      padding: '2rem',
+      textAlign: 'center',
+      color: '#dc2626'
+    }
+  }, "Error: ", error), !loading && !error && sortedProjects.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "feed-empty",
+    style: {
+      padding: '3rem',
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "No Activity Yet"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: {
+      color: '#6b7280',
+      marginTop: '0.5rem'
+    }
+  }, activeTab === 'local' ? 'Check in some projects or connect with friends to see activity here.' : 'No activity found. Be the first to check in a project!')), !loading && !error && sortedProjects.map(function (project) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ProjectPreview__WEBPACK_IMPORTED_MODULE_1__["default"], {
       key: project.id,
       project: project
@@ -4009,16 +4140,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _ProjectPreview_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProjectPreview.css */ "./frontend/src/components/ProjectPreview.css");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var _ProjectPreview_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ProjectPreview.css */ "./frontend/src/components/ProjectPreview.css");
+
 
 
 var ProjectPreview = function ProjectPreview(_ref) {
   var project = _ref.project;
-  var handleTagClick = function handleTagClick(tag) {
-    console.log('Search for tag:', tag);
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
+  var handleTagClick = function handleTagClick(e, tag) {
+    e.stopPropagation(); // Prevent project navigation
+    // Navigate to search with tag
+    navigate("/search?q=".concat(encodeURIComponent(tag)));
+  };
+  var handleProjectClick = function handleProjectClick() {
+    if (project.projectId) {
+      navigate("/project/".concat(project.projectId));
+    }
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "project-preview"
+    className: "project-preview",
+    onClick: handleProjectClick,
+    style: {
+      cursor: 'pointer'
+    }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "project-header"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", {
@@ -4047,8 +4192,8 @@ var ProjectPreview = function ProjectPreview(_ref) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
       key: index,
       className: "project-tag",
-      onClick: function onClick() {
-        return handleTagClick(tag);
+      onClick: function onClick(e) {
+        return handleTagClick(e, tag);
       }
     }, tag);
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
