@@ -5,6 +5,8 @@ import Project from '../components/Project';
 import EditProject from '../components/EditProject';
 import FilesList from '../components/FilesList';
 import Messages from '../components/Messages';
+import AddContributor from '../components/AddContributor';
+import TransferOwnership from '../components/TransferOwnership';
 import './ProjectPage.css';
 
 const ProjectPage = () => {
@@ -24,6 +26,10 @@ const ProjectPage = () => {
     const [showCheckinForm, setShowCheckinForm] = useState(false);
     const [newFiles, setNewFiles] = useState([]);
 
+    // New states for contributor management
+    const [showAddContributor, setShowAddContributor] = useState(false);
+    const [showTransferOwnership, setShowTransferOwnership] = useState(false);
+
     // Get current user from localStorage
     const getCurrentUser = () => {
         const user = localStorage.getItem('user');
@@ -32,6 +38,7 @@ const ProjectPage = () => {
 
     const currentUser = getCurrentUser();
     const isProjectMember = currentUser && members.some(member => member._id === currentUser._id);
+    const isProjectOwner = currentUser && owner && owner._id === currentUser._id;
     const isProjectCheckedOut = projectData?.status === 'checked-out';
     const isCheckedOutByCurrentUser = isProjectCheckedOut && projectData?.checkedOutBy === currentUser?._id;
 
@@ -155,6 +162,38 @@ const ProjectPage = () => {
 
     const handleRemoveFile = (index) => {
         setNewFiles(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const handleRemoveMember = async (memberId) => {
+        if (!isProjectOwner) {
+            alert('Only the project owner can remove members');
+            return;
+        }
+
+        const memberToRemove = members.find(m => m._id === memberId);
+        const confirmMessage = `Are you sure you want to remove ${memberToRemove?.firstName} ${memberToRemove?.lastName} from this project?`;
+
+        if (!window.confirm(confirmMessage)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/projects/${id}/members/${memberId}`, {
+                method: 'DELETE'
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Member removed successfully');
+                fetchProject(); // Refresh project data
+            } else {
+                alert(data.error || 'Failed to remove member');
+            }
+        } catch (err) {
+            console.error('Remove member error:', err);
+            alert('Failed to remove member');
+        }
     };
 
     const handleEdit = () => {
@@ -396,7 +435,35 @@ const ProjectPage = () => {
                                         </div>
 
                                         <div className="collaborators-section">
-                                            <h3>Collaborators</h3>
+                                            <div className="collaborators-header">
+                                                <h3>Collaborators</h3>
+                                                <div className="collaborators-actions">
+                                                    {isProjectOwner && (
+                                                        <>
+                                                            <button
+                                                                className="add-contributor-btn"
+                                                                onClick={() => setShowAddContributor(true)}
+                                                            >
+                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                                                    <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                                                </svg>
+                                                                Add Contributor
+                                                            </button>
+                                                            <button
+                                                                className="transfer-ownership-btn"
+                                                                onClick={() => setShowTransferOwnership(true)}
+                                                                title="Transfer ownership"
+                                                            >
+                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                                                    <path d="M17 11l-5-5-5 5M12 6v12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                                    <path d="M19 19H5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                                                </svg>
+                                                                Transfer Ownership
+                                                            </button>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </div>
                                             <div className="collaborators-list">
                                                 <div className="collaborator owner">
                                                     <div className="collaborator-avatar">
@@ -408,15 +475,28 @@ const ProjectPage = () => {
                                                     </div>
                                                 </div>
 
-                                                {members.map(member => (
+                                                {members.filter(member => member._id !== owner._id).map(member => (
                                                     <div key={member._id} className="collaborator">
-                                                        <div className="collaborator-avatar">
-                                                            <span>{member.firstName?.charAt(0)}{member.lastName?.charAt(0)}</span>
+                                                        <div className="collaborator-left">
+                                                            <div className="collaborator-avatar">
+                                                                <span>{member.firstName?.charAt(0)}{member.lastName?.charAt(0)}</span>
+                                                            </div>
+                                                            <div className="collaborator-info">
+                                                                <span className="collaborator-name">{member.firstName} {member.lastName}</span>
+                                                                <span className="collaborator-role">Member</span>
+                                                            </div>
                                                         </div>
-                                                        <div className="collaborator-info">
-                                                            <span className="collaborator-name">{member.firstName} {member.lastName}</span>
-                                                            <span className="collaborator-role">Member</span>
-                                                        </div>
+                                                        {isProjectOwner && (
+                                                            <button
+                                                                className="remove-member-btn"
+                                                                onClick={() => handleRemoveMember(member._id)}
+                                                                title="Remove member"
+                                                            >
+                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                                                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                                                </svg>
+                                                            </button>
+                                                        )}
                                                     </div>
                                                 ))}
                                             </div>
@@ -425,9 +505,9 @@ const ProjectPage = () => {
                                 )}
 
                                 {activeTab === 'files' && (
-                                    <FilesList 
-                                        projectId={projectData._id} 
-                                        canUpload={isCheckedOutByCurrentUser}
+                                    <FilesList
+                                        projectId={projectData._id}
+                                        canUpload={isProjectMember}
                                         onFilesUpdate={setNewFiles}
                                     />
                                 )}
@@ -438,6 +518,28 @@ const ProjectPage = () => {
                             </div>
                         </div>
                     </>
+                )}
+
+                {/* Add Contributor Modal */}
+                {showAddContributor && (
+                    <AddContributor
+                        projectId={id}
+                        currentMembers={members}
+                        onMemberAdded={fetchProject}
+                        onClose={() => setShowAddContributor(false)}
+                    />
+                )}
+
+                {/* Transfer Ownership Modal */}
+                {showTransferOwnership && (
+                    <TransferOwnership
+                        projectId={id}
+                        currentOwnerId={currentUser?._id}
+                        members={members}
+                        owner={owner}
+                        onTransfer={fetchProject}
+                        onClose={() => setShowTransferOwnership(false)}
+                    />
                 )}
             </div>
         </div>

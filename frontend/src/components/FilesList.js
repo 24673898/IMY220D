@@ -7,6 +7,16 @@ const FilesList = ({ projectId, canUpload = false, onFilesUpdate }) => {
     const [files, setFiles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragCounter, setDragCounter] = useState(0);
+
+    // Get current user
+    const getCurrentUser = () => {
+        const user = localStorage.getItem('user');
+        return user ? JSON.parse(user) : null;
+    };
 
     useEffect(() => {
         const fetchFiles = async () => {
@@ -189,10 +199,160 @@ const FilesList = ({ projectId, canUpload = false, onFilesUpdate }) => {
         // TODO: Implement file viewing functionality
     };
 
-    const handleDownloadFile = (file, e) => {
+    const handleDownloadFile = async (file, e) => {
         e.stopPropagation();
-        console.log('Download file:', file.name);
-        // TODO: Implement file download functionality
+        try {
+            const response = await fetch(`/api/projects/${projectId}/files/${file.storedName}`);
+
+            if (!response.ok) {
+                throw new Error('Download failed');
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = file.name;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (err) {
+            console.error('Download error:', err);
+            alert('Failed to download file');
+        }
+    };
+
+    const uploadFiles = async (files) => {
+        if (!files || files.length === 0) return;
+
+        const currentUser = getCurrentUser();
+        if (!currentUser) {
+            alert('Please log in to upload files');
+            return;
+        }
+
+        setUploading(true);
+        setUploadProgress(0);
+
+        try {
+            const formData = new FormData();
+            formData.append('userId', currentUser._id);
+
+            Array.from(files).forEach(file => {
+                formData.append('files', file);
+            });
+
+            const response = await fetch(`/api/projects/${projectId}/files`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(`${files.length} file(s) uploaded successfully!`);
+                // Refresh files list
+                const projectResponse = await fetch(`/api/projects/${projectId}`);
+                const projectData = await projectResponse.json();
+                setFiles(projectData.project.files || []);
+            } else {
+                alert(data.error || 'Failed to upload files');
+            }
+        } catch (err) {
+            console.error('Upload error:', err);
+            alert('Failed to upload files');
+        } finally {
+            setUploading(false);
+            setUploadProgress(0);
+        }
+    };
+
+    const handleFileUpload = async (event) => {
+        const selectedFiles = event.target.files;
+        await uploadFiles(selectedFiles);
+        // Reset file input
+        event.target.value = '';
+    };
+
+    // Drag and drop handlers
+    const handleDragEnter = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragCounter(prev => prev + 1);
+        if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+            setIsDragging(true);
+        }
+    };
+
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragCounter(prev => {
+            const newCounter = prev - 1;
+            if (newCounter === 0) {
+                setIsDragging(false);
+            }
+            return newCounter;
+        });
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    const handleDrop = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+        setDragCounter(0);
+
+        if (!canUpload) {
+            alert('You must be a project member to upload files');
+            return;
+        }
+
+        const files = e.dataTransfer.files;
+        if (files && files.length > 0) {
+            await uploadFiles(files);
+        }
+    };
+
+    const handleDeleteFile = async (file, e) => {
+        e.stopPropagation();
+
+        const currentUser = getCurrentUser();
+        if (!currentUser) {
+            alert('Please log in to delete files');
+            return;
+        }
+
+        if (!window.confirm(`Are you sure you want to delete "${file.name}"?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `/api/projects/${projectId}/files/${file.storedName}?userId=${currentUser._id}`,
+                { method: 'DELETE' }
+            );
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('File deleted successfully');
+                // Refresh files list
+                const projectResponse = await fetch(`/api/projects/${projectId}`);
+                const projectData = await projectResponse.json();
+                setFiles(projectData.project.files || []);
+            } else {
+                alert(data.error || 'Failed to delete file');
+            }
+        } catch (err) {
+            console.error('Delete error:', err);
+            alert('Failed to delete file');
+        }
     };
 
     const sortedFiles = [...files].sort((a, b) => {
@@ -278,11 +438,49 @@ const FilesList = ({ projectId, canUpload = false, onFilesUpdate }) => {
     }
 
     return (
-        <div className="files-list-container">
+        <div
+            className={`files-list-container ${isDragging ? 'dragging' : ''}`}
+            onDragEnter={canUpload ? handleDragEnter : undefined}
+            onDragLeave={canUpload ? handleDragLeave : undefined}
+            onDragOver={canUpload ? handleDragOver : undefined}
+            onDrop={canUpload ? handleDrop : undefined}
+        >
+            {isDragging && canUpload && (
+                <div className="drag-overlay">
+                    <div className="drag-content">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" className="drag-icon">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"
+                                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <h3>Drop files here to upload</h3>
+                        <p>Release to upload your files</p>
+                    </div>
+                </div>
+            )}
+
             <div className="files-header">
                 <h3 className="files-title">Project Files</h3>
 
                 <div className="files-controls">
+                    {canUpload && (
+                        <div className="upload-control">
+                            <input
+                                type="file"
+                                id="file-upload"
+                                multiple
+                                onChange={handleFileUpload}
+                                style={{ display: 'none' }}
+                                disabled={uploading}
+                            />
+                            <label htmlFor="file-upload" className="upload-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"
+                                          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                                {uploading ? 'Uploading...' : 'Upload Files'}
+                            </label>
+                        </div>
+                    )}
                     <div className="view-toggle">
                         <button
                             className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
@@ -364,7 +562,7 @@ const FilesList = ({ projectId, canUpload = false, onFilesUpdate }) => {
 
                             <div className="file-actions">
                                 <button
-                                    className="file-action-btn"
+                                    className="file-action-btn download-btn"
                                     onClick={(e) => handleDownloadFile(file, e)}
                                     title="Download file"
                                 >
@@ -373,6 +571,18 @@ const FilesList = ({ projectId, canUpload = false, onFilesUpdate }) => {
                                               stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                     </svg>
                                 </button>
+                                {canUpload && (
+                                    <button
+                                        className="file-action-btn delete-btn"
+                                        onClick={(e) => handleDeleteFile(file, e)}
+                                        title="Delete file"
+                                    >
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                                                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                        </svg>
+                                    </button>
+                                )}
                             </div>
                         </div>
                     );
@@ -388,7 +598,11 @@ const FilesList = ({ projectId, canUpload = false, onFilesUpdate }) => {
                         </svg>
                     </div>
                     <h4>No Files Found</h4>
-                    <p>This project doesn't have any files yet. Check in some files to get started.</p>
+                    {canUpload ? (
+                        <p>Drag and drop files here, or click "Upload Files" to get started.</p>
+                    ) : (
+                        <p>This project doesn't have any files yet.</p>
+                    )}
                 </div>
             )}
         </div>

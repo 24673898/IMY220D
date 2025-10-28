@@ -37,6 +37,32 @@ const upload = multer({
     }
 });
 
+// Configure multer for project files (documents, code, etc.)
+const fileStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const projectId = req.params.projectId;
+        const uploadDir = path.join(__dirname, '../uploads/project-files', projectId);
+        // Ensure directory exists
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        // Create unique filename: timestamp-originalname
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const sanitizedName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
+        cb(null, uniqueSuffix + '-' + sanitizedName);
+    }
+});
+
+const fileUpload = multer({
+    storage: fileStorage,
+    limits: {
+        fileSize: 50 * 1024 * 1024 // 50MB limit for project files
+    }
+});
+
 // GET /api/projects - Get all projects or filter by user
 router.get('/', async (req, res) => {
     try {
@@ -486,6 +512,20 @@ router.post('/:projectId/checkin', async (req, res) => {
             return res.status(404).json({ error: 'Project not found' });
         }
 
+        // Check if user is a project member
+        const isMember = project.members.some(memberId =>
+            memberId === userId ||
+            memberId.toString() === userId ||
+            memberId === userId.toString() ||
+            memberId.toString() === userId.toString()
+        );
+
+        if (!isMember) {
+            return res.status(403).json({
+                error: 'Only project members can check in'
+            });
+        }
+
         // Check if project is checked out by this user (compare as strings)
         const isCheckedOutByUser = project.checkedOutBy &&
             project.checkedOutBy.toString() === userId.toString();
@@ -546,22 +586,47 @@ router.post('/:projectId/members', async (req, res) => {
             return res.status(400).json({ error: 'userId is required' });
         }
 
+        // Convert string ID to ObjectId if valid
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId;
+        }
+
+        // Convert userId to ObjectId if valid
+        let userIdToAdd = userId;
+        if (typeof userId === 'string' && ObjectId.isValid(userId)) {
+            try {
+                userIdToAdd = new ObjectId(userId);
+            } catch (e) {
+                userIdToAdd = userId;
+            }
+        }
+
         const db = getDB();
-        const project = await db.collection('projects').findOne({ _id: projectId });
+        const project = await db.collection('projects').findOne({ _id: projectIdQuery });
 
         if (!project) {
             return res.status(404).json({ error: 'Project not found' });
         }
 
-        // Check if already a member
-        if (project.members.includes(userId)) {
+        // Check if already a member (handle both string and ObjectId formats)
+        const isMember = project.members.some(memberId =>
+            memberId === userId ||
+            memberId.toString() === userId ||
+            memberId === userId.toString() ||
+            memberId.toString() === userId.toString()
+        );
+
+        if (isMember) {
             return res.status(409).json({ error: 'User is already a member' });
         }
 
-        // Add member
+        // Add member (use the converted ObjectId)
         await db.collection('projects').updateOne(
-            { _id: projectId },
-            { $push: { members: userId } }
+            { _id: projectIdQuery },
+            { $push: { members: userIdToAdd } }
         );
 
         res.json({ message: 'Member added successfully' });
@@ -569,6 +634,358 @@ router.post('/:projectId/members', async (req, res) => {
     } catch (error) {
         console.error('Add member error:', error);
         res.status(500).json({ error: 'Failed to add member' });
+    }
+});
+
+// PUT /api/projects/:projectId/owner - Transfer project ownership
+router.put('/:projectId/owner', async (req, res) => {
+    try {
+        const { projectId } = req.params;
+        const { currentOwnerId, newOwnerId } = req.body;
+
+        if (!currentOwnerId || !newOwnerId) {
+            return res.status(400).json({ error: 'currentOwnerId and newOwnerId are required' });
+        }
+
+        if (currentOwnerId === newOwnerId) {
+            return res.status(400).json({ error: 'New owner must be different from current owner' });
+        }
+
+        // Convert string ID to ObjectId if valid
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId;
+        }
+
+        const db = getDB();
+        const project = await db.collection('projects').findOne({ _id: projectIdQuery });
+
+        if (!project) {
+            return res.status(404).json({ error: 'Project not found' });
+        }
+
+        // Verify current user is the owner
+        if (project.ownerId.toString() !== currentOwnerId && project.ownerId !== currentOwnerId) {
+            return res.status(403).json({ error: 'Only the project owner can transfer ownership' });
+        }
+
+        // Check if new owner is a project member
+        const isNewOwnerMember = project.members.some(memberId =>
+            memberId === newOwnerId ||
+            memberId.toString() === newOwnerId ||
+            memberId === newOwnerId.toString() ||
+            memberId.toString() === newOwnerId.toString()
+        );
+
+        if (!isNewOwnerMember) {
+            return res.status(400).json({ error: 'New owner must be a project member' });
+        }
+
+        // Convert newOwnerId to appropriate format
+        let newOwnerIdToStore = newOwnerId;
+        if (typeof newOwnerId === 'string' && ObjectId.isValid(newOwnerId)) {
+            try {
+                newOwnerIdToStore = new ObjectId(newOwnerId);
+            } catch (e) {
+                newOwnerIdToStore = newOwnerId;
+            }
+        }
+
+        // Update project owner
+        await db.collection('projects').updateOne(
+            { _id: projectIdQuery },
+            { $set: { ownerId: newOwnerIdToStore } }
+        );
+
+        // Get updated project with new owner info
+        const updatedProject = await db.collection('projects').findOne({ _id: projectIdQuery });
+        const newOwner = await db.collection('users').findOne(
+            { _id: newOwnerIdToStore },
+            { projection: { password: 0 } }
+        );
+
+        res.json({
+            message: 'Ownership transferred successfully',
+            project: updatedProject,
+            newOwner
+        });
+
+    } catch (error) {
+        console.error('Transfer ownership error:', error);
+        res.status(500).json({ error: 'Failed to transfer ownership' });
+    }
+});
+
+// DELETE /api/projects/:projectId/members/:userId - Remove member from project
+router.delete('/:projectId/members/:userId', async (req, res) => {
+    try {
+        const { projectId, userId } = req.params;
+
+        // Convert string ID to ObjectId if valid
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId;
+        }
+
+        const db = getDB();
+        const project = await db.collection('projects').findOne({ _id: projectIdQuery });
+
+        if (!project) {
+            return res.status(404).json({ error: 'Project not found' });
+        }
+
+        // Don't allow removing the owner
+        if (project.ownerId === userId || project.ownerId.toString() === userId) {
+            return res.status(400).json({ error: 'Cannot remove project owner' });
+        }
+
+        // Check if user is a member
+        const isMember = project.members.some(memberId =>
+            memberId === userId || memberId.toString() === userId
+        );
+
+        if (!isMember) {
+            return res.status(404).json({ error: 'User is not a member of this project' });
+        }
+
+        // If project is checked out by this user, check it back in first
+        if (project.status === 'checked-out' &&
+            (project.checkedOutBy === userId || project.checkedOutBy?.toString() === userId)) {
+            await db.collection('projects').updateOne(
+                { _id: projectIdQuery },
+                {
+                    $set: {
+                        status: 'checked-in',
+                        checkedOutBy: null
+                    }
+                }
+            );
+        }
+
+        // Remove member (handle both ObjectId and string formats)
+        await db.collection('projects').updateOne(
+            { _id: projectIdQuery },
+            { $pull: { members: userId } }
+        );
+
+        // Also try removing if stored as ObjectId
+        try {
+            if (ObjectId.isValid(userId)) {
+                await db.collection('projects').updateOne(
+                    { _id: projectIdQuery },
+                    { $pull: { members: new ObjectId(userId) } }
+                );
+            }
+        } catch (e) {
+            // Ignore if ObjectId conversion fails
+        }
+
+        res.json({ message: 'Member removed successfully' });
+
+    } catch (error) {
+        console.error('Remove member error:', error);
+        res.status(500).json({ error: 'Failed to remove member' });
+    }
+});
+
+// POST /api/projects/:projectId/files - Upload files to project
+router.post('/:projectId/files', fileUpload.array('files', 10), async (req, res) => {
+    try {
+        const { projectId } = req.params;
+        const { userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'userId is required' });
+        }
+
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ error: 'No files uploaded' });
+        }
+
+        // Convert string ID to ObjectId if valid
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId;
+        }
+
+        const db = getDB();
+        const project = await db.collection('projects').findOne({ _id: projectIdQuery });
+
+        if (!project) {
+            // Clean up uploaded files if project not found
+            req.files.forEach(file => {
+                fs.unlinkSync(file.path);
+            });
+            return res.status(404).json({ error: 'Project not found' });
+        }
+
+        // Check if user is a project member
+        const isMember = project.members.some(memberId =>
+            memberId === userId ||
+            memberId.toString() === userId ||
+            memberId === userId.toString() ||
+            memberId.toString() === userId.toString()
+        );
+
+        if (!isMember) {
+            // Clean up uploaded files
+            req.files.forEach(file => {
+                fs.unlinkSync(file.path);
+            });
+            return res.status(403).json({ error: 'Only project members can upload files' });
+        }
+
+        // Prepare file documents
+        const uploadedFiles = req.files.map(file => ({
+            name: file.originalname,
+            storedName: file.filename,
+            size: file.size,
+            path: `/uploads/project-files/${projectId}/${file.filename}`,
+            uploadedAt: new Date(),
+            uploadedBy: userId,
+            mimetype: file.mimetype
+        }));
+
+        // Add files to project
+        await db.collection('projects').updateOne(
+            { _id: projectIdQuery },
+            { $push: { files: { $each: uploadedFiles } } }
+        );
+
+        res.json({
+            message: 'Files uploaded successfully',
+            files: uploadedFiles
+        });
+
+    } catch (error) {
+        console.error('Upload files error:', error);
+        // Clean up uploaded files on error
+        if (req.files) {
+            req.files.forEach(file => {
+                try {
+                    fs.unlinkSync(file.path);
+                } catch (e) {
+                    console.error('Error deleting file:', e);
+                }
+            });
+        }
+        res.status(500).json({ error: 'Failed to upload files' });
+    }
+});
+
+// GET /api/projects/:projectId/files/:filename - Download a specific file
+router.get('/:projectId/files/:filename', async (req, res) => {
+    try {
+        const { projectId, filename } = req.params;
+
+        // Convert string ID to ObjectId if valid
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId;
+        }
+
+        const db = getDB();
+        const project = await db.collection('projects').findOne({ _id: projectIdQuery });
+
+        if (!project) {
+            return res.status(404).json({ error: 'Project not found' });
+        }
+
+        // Check if file exists in project
+        const fileDoc = project.files?.find(f => f.storedName === filename);
+        if (!fileDoc) {
+            return res.status(404).json({ error: 'File not found' });
+        }
+
+        const filePath = path.join(__dirname, '../uploads/project-files', projectId, filename);
+
+        // Check if file exists on disk
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ error: 'File not found on server' });
+        }
+
+        // Set appropriate headers
+        res.setHeader('Content-Disposition', `attachment; filename="${fileDoc.name}"`);
+        res.setHeader('Content-Type', fileDoc.mimetype || 'application/octet-stream');
+
+        // Stream the file
+        const fileStream = fs.createReadStream(filePath);
+        fileStream.pipe(res);
+
+    } catch (error) {
+        console.error('Download file error:', error);
+        res.status(500).json({ error: 'Failed to download file' });
+    }
+});
+
+// DELETE /api/projects/:projectId/files/:filename - Delete a file
+router.delete('/:projectId/files/:filename', async (req, res) => {
+    try {
+        const { projectId, filename } = req.params;
+        const { userId } = req.query;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'userId is required' });
+        }
+
+        // Convert string ID to ObjectId if valid
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId;
+        }
+
+        const db = getDB();
+        const project = await db.collection('projects').findOne({ _id: projectIdQuery });
+
+        if (!project) {
+            return res.status(404).json({ error: 'Project not found' });
+        }
+
+        // Check if user is a project member
+        const isMember = project.members.some(memberId =>
+            memberId === userId ||
+            memberId.toString() === userId ||
+            memberId === userId.toString() ||
+            memberId.toString() === userId.toString()
+        );
+
+        if (!isMember) {
+            return res.status(403).json({ error: 'Only project members can delete files' });
+        }
+
+        // Find file in project
+        const fileDoc = project.files?.find(f => f.storedName === filename);
+        if (!fileDoc) {
+            return res.status(404).json({ error: 'File not found in project' });
+        }
+
+        // Delete file from disk
+        const filePath = path.join(__dirname, '../uploads/project-files', projectId, filename);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
+
+        // Remove file from project document
+        await db.collection('projects').updateOne(
+            { _id: projectIdQuery },
+            { $pull: { files: { storedName: filename } } }
+        );
+
+        res.json({ message: 'File deleted successfully' });
+
+    } catch (error) {
+        console.error('Delete file error:', error);
+        res.status(500).json({ error: 'Failed to delete file' });
     }
 });
 
