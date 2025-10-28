@@ -147,6 +147,35 @@ export const projectAPI = {
             body: JSON.stringify(projectData),
         }),
 
+    uploadProjectImage: async (projectId, imageFile) => {
+        const formData = new FormData();
+        formData.append('projectImage', imageFile);
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/projects/${projectId}/image`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                let errorMessage = `HTTP error! status: ${response.status}`;
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.error || errorMessage;
+                } catch (e) {
+                    errorMessage = response.statusText || errorMessage;
+                }
+                throw new Error(errorMessage);
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Project Image Upload Error:', error);
+            throw error;
+        }
+    },
+
     deleteProject: (projectId) =>
         fetchAPI(`/projects/${projectId}`, {
             method: 'DELETE',

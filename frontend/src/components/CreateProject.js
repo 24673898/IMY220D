@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { projectAPI } from '../services/api';
+import ImageDropzone from './ImageDropzone';
 import './CreateProject.css';
 
 const CreateProject = ({ onCancel, onSave }) => {
@@ -11,6 +12,8 @@ const CreateProject = ({ onCancel, onSave }) => {
         version: '1.0.0'
     });
     const [errors, setErrors] = useState({});
+    const [projectImageFile, setProjectImageFile] = useState(null);
+    const [uploadingImage, setUploadingImage] = useState(false);
 
     const projectTypes = [
         'Web Application',
@@ -112,15 +115,35 @@ const CreateProject = ({ onCancel, onSave }) => {
 
             console.log('Creating project with data:', projectData);
 
-            // Make API call
+            // Make API call to create project
             const data = await projectAPI.createProject(projectData);
             console.log('Project created successfully:', data);
+
+            // Upload project image if one was selected
+            if (projectImageFile && data.project?._id) {
+                setUploadingImage(true);
+                try {
+                    await projectAPI.uploadProjectImage(data.project._id, projectImageFile);
+                    console.log('Project image uploaded successfully');
+                } catch (imageError) {
+                    console.error('Error uploading project image:', imageError);
+                    // Don't fail the whole operation if image upload fails
+                    alert('Project created but image upload failed. You can add an image later.');
+                }
+                setUploadingImage(false);
+            }
+
             alert('Project created successfully!');
             onSave(data.project);
         } catch (error) {
             console.error('Error creating project:', error);
             alert('Network error. Please try again.');
+            setUploadingImage(false);
         }
+    };
+
+    const handleImageSelect = (file) => {
+        setProjectImageFile(file);
     };
 
     return (
@@ -211,31 +234,23 @@ const CreateProject = ({ onCancel, onSave }) => {
                     </small>
                 </div>
                 
-                <div className="file-upload-section">
-                    <label className="file-upload-label">Project Files</label>
-                    <div className="file-upload-area">
-                        <div className="file-upload-content">
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" 
-                                      stroke="currentColor" strokeWidth="2"/>
-                                <polyline points="14,2 14,8 20,8" stroke="currentColor" strokeWidth="2"/>
-                                <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" strokeWidth="2"/>
-                                <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" strokeWidth="2"/>
-                                <line x1="12" y1="9" x2="12" y2="21" stroke="currentColor" strokeWidth="2"/>
-                                <line x1="8" y1="13" x2="16" y2="13" stroke="currentColor" strokeWidth="2"/>
-                            </svg>
-                            <p>Drag and drop files here or <button type="button" className="browse-btn">browse</button></p>
-                            <small>Supported formats: .js, .jsx, .ts, .tsx, .py, .java, .cpp, .html, .css, .scss</small>
-                        </div>
-                    </div>
+                <div className="form-group">
+                    <label>Project Cover Image</label>
+                    <ImageDropzone
+                        onImageSelect={handleImageSelect}
+                        maxSize={5 * 1024 * 1024}
+                    />
+                    <small className="input-help">
+                        Upload a cover image for your project (optional)
+                    </small>
                 </div>
                 
                 <div className="form-actions">
-                    <button type="button" className="cancel-btn" onClick={onCancel}>
+                    <button type="button" className="cancel-btn" onClick={onCancel} disabled={uploadingImage}>
                         Cancel
                     </button>
-                    <button type="submit" className="create-btn">
-                        Create Project
+                    <button type="submit" className="create-btn" disabled={uploadingImage}>
+                        {uploadingImage ? 'Creating...' : 'Create Project'}
                     </button>
                 </div>
             </form>

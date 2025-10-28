@@ -2,6 +2,40 @@ const express = require('express');
 const router = express.Router();
 const { getDB } = require('../config/database');
 const { ObjectId } = require('mongodb');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+// Configure multer for project image uploads
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const uploadDir = path.join(__dirname, '../uploads/project-images');
+        // Ensure directory exists
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        // Create unique filename: projectId-timestamp.ext
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, 'project-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB limit
+    },
+    fileFilter: function (req, file, cb) {
+        // Accept images only
+        if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+            return cb(new Error('Only image files are allowed!'), false);
+        }
+        cb(null, true);
+    }
+});
 
 // GET /api/projects - Get all projects or filter by user
 router.get('/', async (req, res) => {
@@ -229,6 +263,68 @@ router.put('/:projectId', async (req, res) => {
     } catch (error) {
         console.error('Update project error:', error);
         res.status(500).json({ error: 'Failed to update project' });
+    }
+});
+
+// POST /api/projects/:projectId/image - Upload project image
+router.post('/:projectId/image', upload.single('projectImage'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No image file provided' });
+        }
+
+        const { projectId } = req.params;
+        const db = getDB();
+
+        // Convert string ID to ObjectId if valid
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId;
+        }
+
+        // Get project to check if old image exists
+        const project = await db.collection('projects').findOne({ _id: projectIdQuery });
+
+        if (!project) {
+            // Delete uploaded file if project not found
+            fs.unlinkSync(req.file.path);
+            return res.status(404).json({ error: 'Project not found' });
+        }
+
+        // Delete old project image if it exists
+        if (project.projectImage && project.projectImage.startsWith('/uploads/')) {
+            const oldImagePath = path.join(__dirname, '..', project.projectImage);
+            if (fs.existsSync(oldImagePath)) {
+                fs.unlinkSync(oldImagePath);
+            }
+        }
+
+        // Generate URL for the uploaded image
+        const imageUrl = `/uploads/project-images/${req.file.filename}`;
+
+        // Update project with new image URL
+        const result = await db.collection('projects').updateOne(
+            { _id: projectIdQuery },
+            { $set: { projectImage: imageUrl } }
+        );
+
+        const updatedProject = await db.collection('projects').findOne({ _id: projectIdQuery });
+
+        res.json({
+            message: 'Project image uploaded successfully',
+            project: updatedProject,
+            imageUrl
+        });
+
+    } catch (error) {
+        console.error('Upload project image error:', error);
+        // Delete uploaded file if there was an error
+        if (req.file && fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
+        }
+        res.status(500).json({ error: error.message || 'Failed to upload project image' });
     }
 });
 

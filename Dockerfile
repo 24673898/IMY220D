@@ -17,6 +17,9 @@ COPY . .
 # Build frontend with webpack
 RUN npm run build:frontend
 
+# Create uploads directory structure
+RUN mkdir -p backend/uploads/profile-images backend/uploads/project-images
+
 # Set environment variables
 ENV NODE_ENV=production
 ENV PORT=3000

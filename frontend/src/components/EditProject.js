@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import ImageDropzone from './ImageDropzone';
+import { projectAPI } from '../services/api';
 import './EditProject.css';
 
 const EditProject = ({ project, onSave, onCancel }) => {
@@ -10,6 +12,8 @@ const EditProject = ({ project, onSave, onCancel }) => {
         hashtags: project.tags.join(', ')
     });
     const [errors, setErrors] = useState({});
+    const [projectImageFile, setProjectImageFile] = useState(null);
+    const [uploadingImage, setUploadingImage] = useState(false);
 
     const projectTypes = [
         'Web Application',
@@ -77,22 +81,39 @@ const EditProject = ({ project, onSave, onCancel }) => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (validateForm()) {
-            // Process hashtags
-            const processedData = {
-                ...formData,
-                hashtags: formData.hashtags 
-                    ? formData.hashtags.split(',').map(tag => tag.trim())
-                    : [],
-                id: project.id
-            };
-            
-            console.log('Project updated:', processedData);
-            onSave(processedData);
+            try {
+                // Upload project image first if a new one was selected
+                if (projectImageFile && project._id) {
+                    setUploadingImage(true);
+                    await projectAPI.uploadProjectImage(project._id, projectImageFile);
+                }
+
+                // Process hashtags
+                const processedData = {
+                    ...formData,
+                    hashtags: formData.hashtags
+                        ? formData.hashtags.split(',').map(tag => tag.trim())
+                        : [],
+                    id: project.id
+                };
+
+                console.log('Project updated:', processedData);
+                onSave(processedData);
+            } catch (error) {
+                console.error('Error updating project:', error);
+                alert(`Failed to update project: ${error.message}`);
+            } finally {
+                setUploadingImage(false);
+            }
         }
+    };
+
+    const handleImageSelect = (file) => {
+        setProjectImageFile(file);
     };
 
     const handleDelete = () => {
@@ -195,21 +216,16 @@ const EditProject = ({ project, onSave, onCancel }) => {
                     </small>
                 </div>
                 
-                <div className="current-image-section">
-                    <label className="current-image-label">Current Project Image</label>
-                    <div className="current-image-preview">
-                        <div className="image-placeholder">
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" 
-                                      stroke="currentColor" strokeWidth="2"/>
-                                <polyline points="14,2 14,8 20,8" stroke="currentColor" strokeWidth="2"/>
-                            </svg>
-                            <span>Current Image</span>
-                        </div>
-                        <button type="button" className="change-image-btn">
-                            Change Image
-                        </button>
-                    </div>
+                <div className="form-group">
+                    <label>Project Cover Image</label>
+                    <ImageDropzone
+                        onImageSelect={handleImageSelect}
+                        currentImage={project.projectImage}
+                        maxSize={5 * 1024 * 1024}
+                    />
+                    <small className="input-help">
+                        Upload a new cover image for your project (optional)
+                    </small>
                 </div>
                 
                 <div className="form-actions">
@@ -225,11 +241,11 @@ const EditProject = ({ project, onSave, onCancel }) => {
                     </div>
                     
                     <div className="form-actions-right">
-                        <button type="button" className="cancel-btn" onClick={onCancel}>
+                        <button type="button" className="cancel-btn" onClick={onCancel} disabled={uploadingImage}>
                             Cancel
                         </button>
-                        <button type="submit" className="save-btn">
-                            Save Changes
+                        <button type="submit" className="save-btn" disabled={uploadingImage}>
+                            {uploadingImage ? 'Uploading...' : 'Save Changes'}
                         </button>
                     </div>
                 </div>

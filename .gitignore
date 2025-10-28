@@ -1,8 +1,9 @@
 # Dependencies
 node_modules/
 
-# Uploads (user-generated content)
-backend/uploads/
+# Uploads (user-generated content) - but keep directory structure
+backend/uploads/**/*
+!backend/uploads/**/.gitkeep
 
 # Environment variables
 .env

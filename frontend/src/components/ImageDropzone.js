@@ -5,6 +5,7 @@ const ImageDropzone = ({ onImageSelect, currentImage, maxSize = 5 * 1024 * 1024 
     const [dragActive, setDragActive] = useState(false);
     const [preview, setPreview] = useState(currentImage || null);
     const [error, setError] = useState('');
+    const [imageLoadError, setImageLoadError] = useState(false);
 
     const validateFile = (file) => {
         // Check file type
@@ -71,7 +72,13 @@ const ImageDropzone = ({ onImageSelect, currentImage, maxSize = 5 * 1024 * 1024 
         e.preventDefault();
         setPreview(null);
         setError('');
+        setImageLoadError(false);
         onImageSelect(null);
+    };
+
+    const handleImageLoadError = () => {
+        setImageLoadError(true);
+        setPreview(null);
     };
 
     return (
@@ -83,9 +90,14 @@ const ImageDropzone = ({ onImageSelect, currentImage, maxSize = 5 * 1024 * 1024 
                 onDragOver={handleDrag}
                 onDrop={handleDrop}
             >
-                {preview ? (
+                {preview && !imageLoadError ? (
                     <div className="image-preview-container">
-                        <img src={preview} alt="Preview" className="image-preview" />
+                        <img
+                            src={preview}
+                            alt="Preview"
+                            className="image-preview"
+                            onError={handleImageLoadError}
+                        />
                         <div className="image-overlay">
                             <button
                                 type="button"

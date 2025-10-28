@@ -2,6 +2,8 @@ import React from 'react';
 import './Profile.css';
 
 const Profile = ({ user, stats = { projectsCount: 0, collaborationsCount: 0, friendsCount: 0 }, onEdit, onDelete, isOwnProfile, isFriend, onSendFriendRequest, onUnfriend, friendActionLoading }) => {
+    const [imageError, setImageError] = React.useState(false);
+
     const getInitials = () => {
         if (user.firstName && user.lastName) {
             return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
@@ -9,6 +11,10 @@ const Profile = ({ user, stats = { projectsCount: 0, collaborationsCount: 0, fri
             return user.username.charAt(0).toUpperCase();
         }
         return 'U';
+    };
+
+    const handleImageError = () => {
+        setImageError(true);
     };
 
     const handleDeleteClick = () => {
@@ -21,8 +27,13 @@ const Profile = ({ user, stats = { projectsCount: 0, collaborationsCount: 0, fri
         <div className="profile-card">
             <div className="profile-header">
                 <div className="profile-avatar">
-                    {user.profileImage && user.profileImage !== '/assets/images/default-user.jpg' ? (
-                        <img src={user.profileImage} alt={user.username} className="avatar-image" />
+                    {user.profileImage && user.profileImage !== '/assets/images/default-user.jpg' && !imageError ? (
+                        <img
+                            src={user.profileImage}
+                            alt={user.username}
+                            className="avatar-image"
+                            onError={handleImageError}
+                        />
                     ) : (
                         <div className="avatar-placeholder">
                             <span>{getInitials()}</span>

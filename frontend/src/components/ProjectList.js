@@ -9,6 +9,7 @@ const ProjectList = ({ userId, onCreateProject, isOwnProfile }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [editingProject, setEditingProject] = useState(null);
+    const [imageErrors, setImageErrors] = useState({});
 
     useEffect(() => {
         fetchProjects();
@@ -110,6 +111,10 @@ const ProjectList = ({ userId, onCreateProject, isOwnProfile }) => {
         }
     };
 
+    const handleImageError = (projectId) => {
+        setImageErrors(prev => ({ ...prev, [projectId]: true }));
+    };
+
     const formatDate = (date) => {
         const now = new Date();
         const projectDate = new Date(date);
@@ -190,6 +195,15 @@ const ProjectList = ({ userId, onCreateProject, isOwnProfile }) => {
                             className="project-card"
                             onClick={() => handleProjectClick(project)}
                         >
+                            {project.projectImage && !imageErrors[project._id] && (
+                                <div className="project-image">
+                                    <img
+                                        src={project.projectImage}
+                                        alt={project.name}
+                                        onError={() => handleImageError(project._id)}
+                                    />
+                                </div>
+                            )}
                             <div className="project-card-header">
                                 <h4 className="project-name">{project.name}</h4>
                                 {isOwnProfile && (
