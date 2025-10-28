@@ -6,7 +6,7 @@ docker build -t frankcodehub .
 
 # Run the container
 
-docker run -p 1337:1337 frankcodehub
+docker-compose up --build
 
 # Visit http://localhost:1337 to test the application
 

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Feed from '../components/Feed';
 import { activityAPI } from '../services/api';
-import './HomePage.css'; // Keep your existing CSS
+import './HomePage.css'; 
 
 const HomePage = () => {
     const [activity, setActivity] = useState([]);
