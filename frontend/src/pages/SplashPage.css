@@ -8,14 +8,14 @@
 }
 
 .splash-container {
-    min-height: 100vh;
+    min-height: 150vh;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2rem;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .splash-container::before {
@@ -44,6 +44,8 @@
     overflow: hidden;
     position: relative;
     z-index: 2;
+    transition: transform 0.1s ease-out;
+    will-change: transform;
 }
 
 .splash-left {
