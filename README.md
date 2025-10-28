@@ -12,3 +12,7 @@ docker run -p 1337:1337 frankcodehub
 
 https://github.com/24673898/IMY220D1.git
 
+# IMY220D2
+
+docker-compose up --build
+
