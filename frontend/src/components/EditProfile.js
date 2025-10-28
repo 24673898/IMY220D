@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import ImageDropzone from './ImageDropzone';
+import { userAPI } from '../services/api';
 import './EditProfile.css';
 
 const EditProfile = ({ user, onCancel, onSave }) => {
@@ -12,6 +14,8 @@ const EditProfile = ({ user, onCancel, onSave }) => {
         website: user?.website || ''
     });
     const [errors, setErrors] = useState({});
+    const [profileImageFile, setProfileImageFile] = useState(null);
+    const [uploadingImage, setUploadingImage] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -60,14 +64,34 @@ const EditProfile = ({ user, onCancel, onSave }) => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        if (validateForm()) {
+
+        if (!validateForm()) {
+            return;
+        }
+
+        try {
+            // Upload profile image first if a new one was selected
+            if (profileImageFile) {
+                setUploadingImage(true);
+                await userAPI.uploadProfileImage(user.id, profileImageFile);
+            }
+
+            // Then save the rest of the profile data
             console.log('Profile updated:', formData);
             alert('Profile updated successfully!');
             onSave(formData);
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert(`Failed to update profile: ${error.message}`);
+        } finally {
+            setUploadingImage(false);
         }
+    };
+
+    const handleImageSelect = (file) => {
+        setProfileImageFile(file);
     };
 
     return (
@@ -76,8 +100,17 @@ const EditProfile = ({ user, onCancel, onSave }) => {
                 <h2 className="edit-profile-title">Edit Profile</h2>
                 <p className="edit-profile-subtitle">Update your personal information</p>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="edit-profile-form">
+                <div className="form-group">
+                    <label>Profile Image</label>
+                    <ImageDropzone
+                        onImageSelect={handleImageSelect}
+                        currentImage={user?.profileImage}
+                        maxSize={5 * 1024 * 1024}
+                    />
+                </div>
+
                 <div className="form-row">
                     <div className="form-group">
                         <label htmlFor="firstName">First Name</label>
@@ -177,11 +210,11 @@ const EditProfile = ({ user, onCancel, onSave }) => {
                 </div>
                 
                 <div className="form-actions">
-                    <button type="button" className="cancel-btn" onClick={onCancel}>
+                    <button type="button" className="cancel-btn" onClick={onCancel} disabled={uploadingImage}>
                         Cancel
                     </button>
-                    <button type="submit" className="save-btn">
-                        Save Changes
+                    <button type="submit" className="save-btn" disabled={uploadingImage}>
+                        {uploadingImage ? 'Uploading...' : 'Save Changes'}
                     </button>
                 </div>
             </form>

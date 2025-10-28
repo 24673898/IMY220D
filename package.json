@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "backend/server.js",
   "scripts": {
-     "build:frontend": "webpack",
+    "build:frontend": "webpack",
     "build:watch": "webpack --watch",
     "start:backend": "cd backend && node server.js",
     "start:frontend": "webpack --watch",
@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "mongodb": "^6.20.0",
+    "multer": "^2.0.2",
     "path": "^0.12.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

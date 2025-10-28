@@ -75,6 +75,36 @@ export const userAPI = {
             body: JSON.stringify(userData),
         }),
 
+    uploadProfileImage: async (userId, imageFile) => {
+        const formData = new FormData();
+        formData.append('profileImage', imageFile);
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/users/${userId}/profile-image`, {
+                method: 'POST',
+                body: formData,
+                // Don't set Content-Type header - browser will set it with boundary for multipart/form-data
+            });
+
+            if (!response.ok) {
+                let errorMessage = `HTTP error! status: ${response.status}`;
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.error || errorMessage;
+                } catch (e) {
+                    errorMessage = response.statusText || errorMessage;
+                }
+                throw new Error(errorMessage);
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Image Upload Error:', error);
+            throw error;
+        }
+    },
+
     deleteProfile: (userId) =>
         fetchAPI(`/users/${userId}`, {
             method: 'DELETE',

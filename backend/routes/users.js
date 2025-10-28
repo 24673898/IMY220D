@@ -2,6 +2,40 @@ const express = require('express');
 const router = express.Router();
 const { getDB } = require('../config/database');
 const { ObjectId } = require('mongodb');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const uploadDir = path.join(__dirname, '../uploads/profile-images');
+        // Ensure directory exists
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        // Create unique filename: userId-timestamp.ext
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, req.params.userId + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB limit
+    },
+    fileFilter: function (req, file, cb) {
+        // Accept images only
+        if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+            return cb(new Error('Only image files are allowed!'), false);
+        }
+        cb(null, true);
+    }
+});
 
 // GET /api/users/:userId - Get user profile
 router.get('/:userId', async (req, res) => {
@@ -107,6 +141,76 @@ router.put('/:userId', async (req, res) => {
     } catch (error) {
         console.error('Update user error:', error);
         res.status(500).json({ error: 'Failed to update profile' });
+    }
+});
+
+// POST /api/users/:userId/profile-image - Upload profile image
+router.post('/:userId/profile-image', upload.single('profileImage'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No image file provided' });
+        }
+
+        const { userId } = req.params;
+        const db = getDB();
+
+        // Delete old profile image if it exists
+        let user;
+        try {
+            user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+        } catch (e) {
+            user = await db.collection('users').findOne({ _id: userId });
+        }
+
+        if (user && user.profileImage && user.profileImage.startsWith('/uploads/')) {
+            const oldImagePath = path.join(__dirname, '..', user.profileImage);
+            if (fs.existsSync(oldImagePath)) {
+                fs.unlinkSync(oldImagePath);
+            }
+        }
+
+        // Generate URL for the uploaded image
+        const imageUrl = `/uploads/profile-images/${req.file.filename}`;
+
+        // Update user profile with new image URL
+        let result;
+        let queryId;
+        try {
+            queryId = new ObjectId(userId);
+            result = await db.collection('users').updateOne(
+                { _id: queryId },
+                { $set: { profileImage: imageUrl } }
+            );
+        } catch (e) {
+            queryId = userId;
+            result = await db.collection('users').updateOne(
+                { _id: queryId },
+                { $set: { profileImage: imageUrl } }
+            );
+        }
+
+        if (result.matchedCount === 0) {
+            // Delete uploaded file if user not found
+            fs.unlinkSync(req.file.path);
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const updatedUser = await db.collection('users').findOne({ _id: queryId });
+        const { password, ...userWithoutPassword } = updatedUser;
+
+        res.json({
+            message: 'Profile image uploaded successfully',
+            user: userWithoutPassword,
+            imageUrl
+        });
+
+    } catch (error) {
+        console.error('Upload profile image error:', error);
+        // Delete uploaded file if there was an error
+        if (req.file && fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
+        }
+        res.status(500).json({ error: error.message || 'Failed to upload profile image' });
     }
 });
 

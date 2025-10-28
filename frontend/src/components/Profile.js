@@ -21,9 +21,13 @@ const Profile = ({ user, stats = { projectsCount: 0, collaborationsCount: 0, fri
         <div className="profile-card">
             <div className="profile-header">
                 <div className="profile-avatar">
-                    <div className="avatar-placeholder">
-                        <span>{getInitials()}</span>
-                    </div>
+                    {user.profileImage && user.profileImage !== '/assets/images/default-user.jpg' ? (
+                        <img src={user.profileImage} alt={user.username} className="avatar-image" />
+                    ) : (
+                        <div className="avatar-placeholder">
+                            <span>{getInitials()}</span>
+                        </div>
+                    )}
                 </div>
 
                 <div className="profile-info">
