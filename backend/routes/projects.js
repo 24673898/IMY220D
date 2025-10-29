@@ -1138,16 +1138,28 @@ router.put('/:projectId/discussion', optionalAuthenticate, async (req, res) => {
                 return res.status(403).json({ error: 'Only project members or admin can update discussion' });
             }
         } else if (userId) {
-            // For backward compatibility: check membership using userId from body
-            const isMember = project.members.some(memberId =>
-                memberId === userId ||
-                memberId.toString() === userId ||
-                memberId === userId.toString() ||
-                memberId.toString() === userId.toString()
-            );
+            // Check if userId belongs to an admin
+            let user;
+            try {
+                user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+            } catch (e) {
+                user = await db.collection('users').findOne({ _id: userId });
+            }
 
-            if (!isMember) {
-                return res.status(403).json({ error: 'Only project members can update discussion' });
+            if (user && user.role === 'admin') {
+                // Admin can edit any discussion
+            } else {
+                // For backward compatibility: check membership using userId from body
+                const isMember = project.members.some(memberId =>
+                    memberId === userId ||
+                    memberId.toString() === userId ||
+                    memberId === userId.toString() ||
+                    memberId.toString() === userId.toString()
+                );
+
+                if (!isMember) {
+                    return res.status(403).json({ error: 'Only project members can update discussion' });
+                }
             }
         }
         // If neither authenticated nor userId provided, allow (for backward compatibility)
