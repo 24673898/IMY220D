@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Project from '../components/Project';
 import EditProject from '../components/EditProject';
@@ -8,10 +8,13 @@ import Messages from '../components/Messages';
 import AddContributor from '../components/AddContributor';
 import TransferOwnership from '../components/TransferOwnership';
 import ProjectDiscussion from '../components/ProjectDiscussion';
+import { isAdmin, getCurrentUser as getUser } from '../utils/adminHelpers';
+import AdminBadge from '../components/AdminBadge';
 import './ProjectPage.css';
 
 const ProjectPage = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
     const [projectData, setProjectData] = useState(null);
@@ -19,7 +22,7 @@ const ProjectPage = () => {
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    
+
     // New states for checkout/checkin functionality
     const [checkoutLoading, setCheckoutLoading] = useState(false);
     const [checkinLoading, setCheckinLoading] = useState(false);
@@ -31,17 +34,28 @@ const ProjectPage = () => {
     const [showAddContributor, setShowAddContributor] = useState(false);
     const [showTransferOwnership, setShowTransferOwnership] = useState(false);
 
-    // Get current user from localStorage
-    const getCurrentUser = () => {
-        const user = localStorage.getItem('user');
-        return user ? JSON.parse(user) : null;
-    };
+    // Get current user and admin status
+    const currentUser = getUser();
+    const userIsAdmin = isAdmin(currentUser);
+    const currentUserId = currentUser?._id;
 
-    const currentUser = getCurrentUser();
     const isProjectMember = currentUser && members.some(member => member._id === currentUser._id);
     const isProjectOwner = currentUser && owner && owner._id === currentUser._id;
     const isProjectCheckedOut = projectData?.status === 'checked-out';
     const isCheckedOutByCurrentUser = isProjectCheckedOut && projectData?.checkedOutBy === currentUser?._id;
+
+    // Admin permission checks
+    const canEditProject = useMemo(() => {
+        if (!currentUser || !projectData) return false;
+        if (userIsAdmin) return true; // Admins can edit all projects
+        return isProjectMember; // Regular users must be members
+    }, [currentUser, userIsAdmin, projectData, isProjectMember]);
+
+    const canDeleteProject = useMemo(() => {
+        if (!currentUser || !projectData) return false;
+        if (userIsAdmin) return true; // Admins can delete all projects
+        return isProjectOwner; // Regular users must be owners
+    }, [currentUser, userIsAdmin, projectData, isProjectOwner]);
 
     useEffect(() => {
         if (id) {
@@ -166,13 +180,16 @@ const ProjectPage = () => {
     };
 
     const handleRemoveMember = async (memberId) => {
-        if (!isProjectOwner) {
-            alert('Only the project owner can remove members');
+        // Check permissions - owner or admin
+        if (!isProjectOwner && !userIsAdmin) {
+            alert('Only the project owner or admin can remove members');
             return;
         }
 
         const memberToRemove = members.find(m => m._id === memberId);
-        const confirmMessage = `Are you sure you want to remove ${memberToRemove?.firstName} ${memberToRemove?.lastName} from this project?`;
+        const confirmMessage = userIsAdmin && !isProjectOwner
+            ? `Are you sure you want to remove ${memberToRemove?.firstName} ${memberToRemove?.lastName} from this project as an ADMIN?`
+            : `Are you sure you want to remove ${memberToRemove?.firstName} ${memberToRemove?.lastName} from this project?`;
 
         if (!window.confirm(confirmMessage)) {
             return;
@@ -186,7 +203,7 @@ const ProjectPage = () => {
             const data = await response.json();
 
             if (response.ok) {
-                alert('Member removed successfully');
+                alert(userIsAdmin && !isProjectOwner ? 'Member removed successfully (as admin)' : 'Member removed successfully');
                 fetchProject(); // Refresh project data
             } else {
                 alert(data.error || 'Failed to remove member');
@@ -198,17 +215,89 @@ const ProjectPage = () => {
     };
 
     const handleEdit = () => {
+        if (!canEditProject) {
+            alert('You do not have permission to edit this project');
+            return;
+        }
         setIsEditing(true);
     };
 
-    const handleSaveEdit = (updatedProject) => {
-        console.log('Project updated:', updatedProject);
-        setIsEditing(false);
-        fetchProject(); // Refresh project data
+    const handleSaveEdit = async (updatedProject) => {
+        if (!canEditProject || !currentUserId) {
+            alert('You do not have permission to edit this project');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/projects/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: currentUserId,
+                    name: updatedProject.name,
+                    description: updatedProject.description,
+                    type: updatedProject.type,
+                    version: updatedProject.version,
+                    tags: updatedProject.hashtags
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(userIsAdmin && !isProjectOwner ? 'Project updated successfully (as admin)' : 'Project updated successfully');
+                setIsEditing(false);
+                fetchProject(); // Refresh project data
+            } else {
+                alert(data.error || 'Failed to update project');
+            }
+        } catch (error) {
+            console.error('Update project error:', error);
+            alert('Failed to update project');
+        }
     };
 
     const handleCancelEdit = () => {
         setIsEditing(false);
+    };
+
+    const handleDelete = async () => {
+        if (!canDeleteProject) {
+            alert('You do not have permission to delete this project');
+            return;
+        }
+
+        const confirmMessage = userIsAdmin && !isProjectOwner
+            ? `WARNING: You are about to delete "${projectData.name}" as an ADMIN. This will permanently delete the project and all its data. This action cannot be undone. Are you absolutely sure?`
+            : `Are you sure you want to delete "${projectData.name}"? This action cannot be undone and will delete all project data.`;
+
+        if (!window.confirm(confirmMessage)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/projects/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: currentUserId })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(userIsAdmin && !isProjectOwner ? 'Project deleted successfully (as admin)' : 'Project deleted successfully');
+                navigate('/projects'); // Redirect to projects page
+            } else {
+                alert(data.error || 'Failed to delete project');
+            }
+        } catch (err) {
+            console.error('Delete project error:', err);
+            alert('Failed to delete project');
+        }
     };
 
     const formatProjectData = () => {
@@ -220,7 +309,8 @@ const ProjectPage = () => {
                 id: owner._id,
                 firstName: owner.firstName,
                 lastName: owner.lastName,
-                username: owner.username
+                username: owner.username,
+                role: owner.role // Include role for admin badge
             },
             collaborators: members,
             status: projectData.status === 'checked-in' ? 'Checked In' : 'Checked Out',
@@ -283,9 +373,25 @@ const ProjectPage = () => {
                     />
                 ) : (
                     <>
+                        {userIsAdmin && !isProjectOwner && !isProjectMember && (
+                            <div className="admin-notice" style={{
+                                backgroundColor: '#fff3cd',
+                                color: '#856404',
+                                padding: '12px',
+                                borderRadius: '4px',
+                                marginBottom: '16px',
+                                border: '1px solid #ffeaa7'
+                            }}>
+                                <strong>Admin Mode:</strong> You are viewing this project with admin privileges.
+                            </div>
+                        )}
                         <Project
                             project={formattedProject}
-                            onEdit={handleEdit}
+                            onEdit={canEditProject ? handleEdit : undefined}
+                            onDelete={canDeleteProject ? handleDelete : undefined}
+                            isAdmin={userIsAdmin}
+                            isOwner={isProjectOwner}
+                            isMember={isProjectMember}
                         />
                         
                         {/* COLLABORATION CONTROLS */}
@@ -493,11 +599,11 @@ const ProjectPage = () => {
                                                                 <span className="collaborator-role">Member</span>
                                                             </div>
                                                         </div>
-                                                        {isProjectOwner && (
+                                                        {(isProjectOwner || userIsAdmin) && (
                                                             <button
                                                                 className="remove-member-btn"
                                                                 onClick={() => handleRemoveMember(member._id)}
-                                                                title="Remove member"
+                                                                title={userIsAdmin && !isProjectOwner ? "Remove member (Admin)" : "Remove member"}
                                                             >
                                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                                                                     <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>

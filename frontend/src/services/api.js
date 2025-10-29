@@ -46,7 +46,7 @@ async function fetchAPI(endpoint, options = {}) {
 
 // Authentication API calls
 export const authAPI = {
-    signup: (userData) => 
+    signup: (userData) =>
         fetchAPI('/auth/signup', {
             method: 'POST',
             body: JSON.stringify(userData),
@@ -62,6 +62,29 @@ export const authAPI = {
         fetchAPI('/auth/logout', {
             method: 'POST',
         }),
+
+    // Get current user info
+    getCurrentUser: (userId) =>
+        fetchAPI(`/auth/me?userId=${userId}`),
+
+    // Admin management
+    setupAdmin: (adminData) =>
+        fetchAPI('/auth/setup-admin', {
+            method: 'POST',
+            body: JSON.stringify(adminData),
+        }),
+
+    makeAdmin: (userId, targetUserId) =>
+        fetchAPI('/auth/make-admin', {
+            method: 'POST',
+            body: JSON.stringify({ userId, targetUserId }),
+        }),
+
+    removeAdmin: (userId, targetUserId) =>
+        fetchAPI('/auth/remove-admin', {
+            method: 'POST',
+            body: JSON.stringify({ userId, targetUserId }),
+        }),
 };
 
 // User API calls
@@ -69,10 +92,10 @@ export const userAPI = {
     getProfile: (userId) =>
         fetchAPI(`/users/${userId}`),
 
-    updateProfile: (userId, userData) =>
-        fetchAPI(`/users/${userId}`, {
+    updateProfile: (currentUserId, targetUserId, userData) =>
+        fetchAPI(`/users/${targetUserId}`, {
             method: 'PUT',
-            body: JSON.stringify(userData),
+            body: JSON.stringify({ ...userData, userId: currentUserId }),
         }),
 
     uploadProfileImage: async (userId, imageFile) => {
@@ -105,9 +128,10 @@ export const userAPI = {
         }
     },
 
-    deleteProfile: (userId) =>
-        fetchAPI(`/users/${userId}`, {
+    deleteProfile: (currentUserId, targetUserId) =>
+        fetchAPI(`/users/${targetUserId}`, {
             method: 'DELETE',
+            body: JSON.stringify({ userId: currentUserId }),
         }),
 
     getFriends: (userId) =>
@@ -141,10 +165,10 @@ export const projectAPI = {
             body: JSON.stringify(projectData),
         }),
 
-    updateProject: (projectId, projectData) =>
+    updateProject: (userId, projectId, projectData) =>
         fetchAPI(`/projects/${projectId}`, {
             method: 'PUT',
-            body: JSON.stringify(projectData),
+            body: JSON.stringify({ ...projectData, userId }),
         }),
 
     uploadProjectImage: async (projectId, imageFile) => {
@@ -176,9 +200,10 @@ export const projectAPI = {
         }
     },
 
-    deleteProject: (projectId) =>
+    deleteProject: (userId, projectId) =>
         fetchAPI(`/projects/${projectId}`, {
             method: 'DELETE',
+            body: JSON.stringify({ userId }),
         }),
 
     checkoutProject: (projectId, userId) =>
@@ -201,6 +226,12 @@ export const projectAPI = {
 
     getActivity: (projectId) =>
         fetchAPI(`/projects/${projectId}/activity`),
+
+    updateDiscussion: (userId, projectId, discussion) =>
+        fetchAPI(`/projects/${projectId}/discussion`, {
+            method: 'PUT',
+            body: JSON.stringify({ userId, discussion }),
+        }),
 };
 
 // Activity Feed API calls

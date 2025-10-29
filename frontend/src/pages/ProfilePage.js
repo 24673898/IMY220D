@@ -7,6 +7,7 @@ import ProjectList from '../components/ProjectList';
 import CreateProject from '../components/CreateProject';
 import FriendsList from '../components/FriendsList';
 import { userAPI } from '../services/api';
+import { isAdmin, getCurrentUser, canEdit, canDelete } from '../utils/adminHelpers';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
@@ -25,11 +26,16 @@ const ProfilePage = () => {
     const [isFriend, setIsFriend] = useState(false);
     const [friendActionLoading, setFriendActionLoading] = useState(false);
 
+    // Get current logged-in user
+    const currentUser = getCurrentUser();
+    const currentUserId = currentUser?._id;
+    const userIsAdmin = isAdmin(currentUser);
+
     // Determine if viewing own profile (no ID = own profile)
     const isOwnProfile = !id;
 
     // Get current user ID from localStorage - memoized to prevent unnecessary recalculations
-    const getCurrentUserId = useCallback(() => {
+    const getCurrentUserId_old = useCallback(() => {
         const user = localStorage.getItem('user');
         if (user) {
             const parsedUser = JSON.parse(user);
@@ -40,37 +46,56 @@ const ProfilePage = () => {
 
     // Memoize userId to prevent unnecessary re-renders
     const userId = useMemo(() => {
-        return isOwnProfile ? getCurrentUserId() : id;
-    }, [isOwnProfile, id, getCurrentUserId]);
+        return isOwnProfile ? currentUserId : id;
+    }, [isOwnProfile, id, currentUserId]);
+
+    // Check if current user can edit/delete this profile
+    const canEditProfile = useMemo(() => {
+        if (!currentUser || !userId) return false;
+        return userIsAdmin || currentUserId === userId;
+    }, [currentUser, userId, currentUserId, userIsAdmin]);
+
+    const canDeleteProfile = useMemo(() => {
+        if (!currentUser || !userId) return false;
+        // Admins cannot delete their own account
+        if (userIsAdmin && currentUserId === userId) return false;
+        return userIsAdmin || currentUserId === userId;
+    }, [currentUser, userId, currentUserId, userIsAdmin]);
 
    const handleDeleteProfile = async () => {
-    if (!userId) {
+    if (!userId || !currentUserId) {
         alert('Cannot delete profile: User ID not found');
         return;
     }
 
-    // Final confirmation
-    const confirmed = window.confirm(
-        'WARNING: This will permanently delete your profile, all your projects, and all associated data. This action cannot be undone. Are you absolutely sure?'
-    );
+    // Check permissions
+    if (!canDeleteProfile) {
+        alert('You do not have permission to delete this profile');
+        return;
+    }
+
+    // Different confirmation messages for admin vs self-delete
+    const confirmMessage = userIsAdmin && userId !== currentUserId
+        ? `WARNING: You are about to delete ${userData?.username}'s profile as an ADMIN. This will permanently delete their profile, all their projects, and all associated data. This action cannot be undone. Are you absolutely sure?`
+        : 'WARNING: This will permanently delete your profile, all your projects, and all associated data. This action cannot be undone. Are you absolutely sure?';
+
+    const confirmed = window.confirm(confirmMessage);
 
     if (!confirmed) {
         return;
     }
 
     try {
-        // Get the current user data to ensure we have the correct ID format
-        const currentUser = JSON.parse(localStorage.getItem('user'));
-        const userToDeleteId = currentUser?._id || userId;
+        console.log('Attempting to delete user with ID:', userId);
 
-        console.log('Attempting to delete user with ID:', userToDeleteId);
+        await userAPI.deleteProfile(currentUserId, userId);
 
-        await userAPI.deleteProfile(userToDeleteId);
+        // If deleting own profile, clear localStorage
+        if (userId === currentUserId) {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+        }
 
-        // Clear localStorage and redirect to home page
-        localStorage.removeItem('user');
-        localStorage.removeItem('token'); // if you have tokens
-        
         alert('Profile deleted successfully');
         navigate('/'); // Redirect to home page
 
@@ -114,7 +139,8 @@ const ProfilePage = () => {
                     location: data.user.location || '',
                     website: data.user.website || '',
                     joinDate: data.user.createdAt ? new Date(data.user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '',
-                    profileImage: data.user.profileImage || '/assets/images/default-user.jpg'
+                    profileImage: data.user.profileImage || '/assets/images/default-user.jpg',
+                    role: data.user.role // Include role for admin badge
                 };
 
                 setUserData(transformedUser);
@@ -132,9 +158,10 @@ const ProfilePage = () => {
 
                 // Check if this user is a friend (only if viewing another user's profile)
                 if (!isOwnProfile) {
-                    const currentUserId = getCurrentUserId();
-                    if (currentUserId) {
-                        const myFriendsData = await userAPI.getFriends(currentUserId);
+                    const currentLoggedUser = getCurrentUser();
+                    const loggedUserId = currentLoggedUser?._id;
+                    if (loggedUserId) {
+                        const myFriendsData = await userAPI.getFriends(loggedUserId);
 
                         if (!isMounted) return; // Don't update state if unmounted
 
@@ -161,12 +188,17 @@ const ProfilePage = () => {
         return () => {
             isMounted = false;
         };
-    }, [userId, isOwnProfile, getCurrentUserId]);
+    }, [userId, isOwnProfile]);
 
     // Handle profile save
     const handleProfileSave = async (formData) => {
+        if (!canEditProfile) {
+            alert('You do not have permission to edit this profile');
+            return;
+        }
+
         try {
-            const data = await userAPI.updateProfile(userId, formData);
+            const data = await userAPI.updateProfile(currentUserId, userId, formData);
 
             // Update local userData state
             const transformedUser = {
@@ -179,7 +211,8 @@ const ProfilePage = () => {
                 location: data.user.location || '',
                 website: data.user.website || '',
                 joinDate: userData.joinDate,
-                profileImage: data.user.profileImage || '/assets/images/default-user.jpg'
+                profileImage: data.user.profileImage || '/assets/images/default-user.jpg',
+                role: data.user.role // Preserve role
             };
 
             setUserData(transformedUser);
@@ -190,15 +223,15 @@ const ProfilePage = () => {
             }
 
             setIsEditing(false);
+            alert(userIsAdmin && !isOwnProfile ? 'User profile updated successfully (as admin)' : 'Profile updated successfully');
         } catch (err) {
             console.error('Error updating profile:', err);
-            alert('Failed to update profile. Please try again.');
+            alert(`Failed to update profile: ${err.message}`);
         }
     };
 
     // Handle send friend request
     const handleSendFriendRequest = async () => {
-        const currentUserId = getCurrentUserId();
         if (!currentUserId || !userId) return;
 
         try {
@@ -218,7 +251,6 @@ const ProfilePage = () => {
 
     // Handle unfriend
     const handleUnfriend = async () => {
-        const currentUserId = getCurrentUserId();
         if (!currentUserId || !userId) return;
 
         if (!window.confirm(`Are you sure you want to unfriend ${userData.username}?`)) {
@@ -269,7 +301,7 @@ const ProfilePage = () => {
             <Header />
             <div className="profile-container">
                 <div className="profile-main">
-                    {isEditing && isOwnProfile ? (
+                    {isEditing && canEditProfile ? (
                         <EditProfile
                             user={userData}
                             onCancel={() => setIsEditing(false)}
@@ -279,13 +311,15 @@ const ProfilePage = () => {
                         <Profile
                             user={userData}
                             stats={stats}
-                            onEdit={isOwnProfile ? () => setIsEditing(true) : undefined}
-                            onDelete={isOwnProfile ? handleDeleteProfile : undefined}
+                            onEdit={canEditProfile ? () => setIsEditing(true) : undefined}
+                            onDelete={canDeleteProfile ? handleDeleteProfile : undefined}
                             isOwnProfile={isOwnProfile}
                             isFriend={isFriend}
                             onSendFriendRequest={handleSendFriendRequest}
                             onUnfriend={handleUnfriend}
                             friendActionLoading={friendActionLoading}
+                            isAdmin={userIsAdmin}
+                            currentUserRole={currentUser?.role}
                         />
                     )}
 

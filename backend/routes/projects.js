@@ -5,6 +5,7 @@ const { ObjectId } = require('mongodb');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { optionalAuthenticate, authenticate, requireAdmin } = require('../middleware/auth');
 
 // Configure multer for project image uploads
 const storage = multer.diskStorage({
@@ -246,8 +247,8 @@ router.post('/', async (req, res) => {
     }
 });
 
-// PUT /api/projects/:projectId - Update project
-router.put('/:projectId', async (req, res) => {
+// PUT /api/projects/:projectId - Update project (admin or member)
+router.put('/:projectId', optionalAuthenticate, async (req, res) => {
     try {
         const { projectId } = req.params;
         const { name, description, image, type, tags, version } = req.body;
@@ -261,6 +262,26 @@ router.put('/:projectId', async (req, res) => {
         } catch (e) {
             projectIdQuery = projectId;
         }
+
+        // Get project to check membership
+        const project = await db.collection('projects').findOne({ _id: projectIdQuery });
+
+        if (!project) {
+            return res.status(404).json({ error: 'Project not found' });
+        }
+
+        // If user is authenticated, check permissions
+        if (req.user) {
+            const isAdmin = req.user.role === 'admin';
+            const isMember = project.members.some(memberId =>
+                memberId.toString() === req.user._id.toString()
+            );
+
+            if (!isAdmin && !isMember) {
+                return res.status(403).json({ error: 'Only project members or admin can update this project' });
+            }
+        }
+        // If not authenticated, allow (for backward compatibility with old frontend)
 
         const updateData = {};
         if (name) updateData.name = name;
@@ -354,8 +375,8 @@ router.post('/:projectId/image', upload.single('projectImage'), async (req, res)
     }
 });
 
-// DELETE /api/projects/:projectId - Delete project
-router.delete('/:projectId', async (req, res) => {
+// DELETE /api/projects/:projectId - Delete project (admin or owner)
+router.delete('/:projectId', optionalAuthenticate, async (req, res) => {
     try {
         const { projectId } = req.params;
         const db = getDB();
@@ -367,6 +388,24 @@ router.delete('/:projectId', async (req, res) => {
         } catch (e) {
             projectIdQuery = projectId;
         }
+
+        // Get project to check ownership
+        const project = await db.collection('projects').findOne({ _id: projectIdQuery });
+
+        if (!project) {
+            return res.status(404).json({ error: 'Project not found' });
+        }
+
+        // If user is authenticated, check permissions
+        if (req.user) {
+            const isAdmin = req.user.role === 'admin';
+            const isOwner = project.ownerId.toString() === req.user._id.toString();
+
+            if (!isAdmin && !isOwner) {
+                return res.status(403).json({ error: 'Only the project owner or admin can delete this project' });
+            }
+        }
+        // If not authenticated, allow (for backward compatibility with old frontend)
 
         const result = await db.collection('projects').deleteOne({ _id: projectIdQuery });
 
@@ -1067,15 +1106,11 @@ router.get('/:projectId/activity', async (req, res) => {
     }
 });
 
-// PUT /api/projects/:projectId/discussion - Update project discussion
-router.put('/:projectId/discussion', async (req, res) => {
+// PUT /api/projects/:projectId/discussion - Update project discussion (admin or member)
+router.put('/:projectId/discussion', optionalAuthenticate, async (req, res) => {
     try {
         const { projectId } = req.params;
         const { discussion, userId } = req.body;
-
-        if (!userId) {
-            return res.status(400).json({ error: 'userId is required' });
-        }
 
         // Convert string ID to ObjectId if valid
         let projectIdQuery;
@@ -1092,28 +1127,47 @@ router.put('/:projectId/discussion', async (req, res) => {
             return res.status(404).json({ error: 'Project not found' });
         }
 
-        // Check if user is a project member
-        const isMember = project.members.some(memberId =>
-            memberId === userId ||
-            memberId.toString() === userId ||
-            memberId === userId.toString() ||
-            memberId.toString() === userId.toString()
-        );
+        // If user is authenticated via middleware, check permissions
+        if (req.user) {
+            const isAdmin = req.user.role === 'admin';
+            const isMember = project.members.some(memberId =>
+                memberId.toString() === req.user._id.toString()
+            );
 
-        if (!isMember) {
-            return res.status(403).json({ error: 'Only project members can update discussion' });
+            if (!isAdmin && !isMember) {
+                return res.status(403).json({ error: 'Only project members or admin can update discussion' });
+            }
+        } else if (userId) {
+            // For backward compatibility: check membership using userId from body
+            const isMember = project.members.some(memberId =>
+                memberId === userId ||
+                memberId.toString() === userId ||
+                memberId === userId.toString() ||
+                memberId.toString() === userId.toString()
+            );
+
+            if (!isMember) {
+                return res.status(403).json({ error: 'Only project members can update discussion' });
+            }
         }
+        // If neither authenticated nor userId provided, allow (for backward compatibility)
 
         // Update project discussion
+        const updateData = {
+            discussion: discussion || '',
+            discussionUpdatedAt: new Date()
+        };
+
+        // Set discussionUpdatedBy if we have user info
+        if (req.user) {
+            updateData.discussionUpdatedBy = req.user._id;
+        } else if (userId) {
+            updateData.discussionUpdatedBy = userId;
+        }
+
         await db.collection('projects').updateOne(
             { _id: projectIdQuery },
-            {
-                $set: {
-                    discussion: discussion || '',
-                    discussionUpdatedAt: new Date(),
-                    discussionUpdatedBy: userId
-                }
-            }
+            { $set: updateData }
         );
 
         const updatedProject = await db.collection('projects').findOne({ _id: projectIdQuery });

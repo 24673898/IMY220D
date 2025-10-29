@@ -5,6 +5,7 @@ const { ObjectId } = require('mongodb');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { optionalAuthenticate, authenticate, requireAdmin } = require('../middleware/auth');
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -88,13 +89,24 @@ router.get('/:userId', async (req, res) => {
     }
 });
 
-// PUT /api/users/:userId - Update user profile
-router.put('/:userId', async (req, res) => {
+// PUT /api/users/:userId - Update user profile (admin or self)
+router.put('/:userId', optionalAuthenticate, async (req, res) => {
     try {
         const { userId } = req.params;
         const { firstName, lastName, username, email, bio, location, website, name, birthday, work, profileImage } = req.body;
 
         const db = getDB();
+
+        // If user is authenticated, check permissions
+        if (req.user) {
+            const isAdmin = req.user.role === 'admin';
+            const isSelf = req.user._id.toString() === userId;
+
+            if (!isAdmin && !isSelf) {
+                return res.status(403).json({ error: 'You can only update your own profile, unless you are an admin' });
+            }
+        }
+        // If not authenticated, allow (for backward compatibility with old frontend)
 
         const updateData = {};
         if (firstName !== undefined) updateData.firstName = firstName || '';
@@ -214,12 +226,28 @@ router.post('/:userId/profile-image', upload.single('profileImage'), async (req,
     }
 });
 
-// DELETE /api/users/:userId - Delete user profile
-// DELETE /api/users/:userId - Delete user profile
-router.delete('/:userId', async (req, res) => {
+// DELETE /api/users/:userId - Delete user profile (admin or self)
+router.delete('/:userId', optionalAuthenticate, async (req, res) => {
     try {
         const { userId } = req.params;
+
         const db = getDB();
+
+        // If user is authenticated, check permissions
+        if (req.user) {
+            const isAdmin = req.user.role === 'admin';
+            const isSelf = req.user._id.toString() === userId;
+
+            if (!isAdmin && !isSelf) {
+                return res.status(403).json({ error: 'You can only delete your own account, unless you are an admin' });
+            }
+
+            // Prevent admin from deleting themselves (optional safety check)
+            if (isAdmin && isSelf) {
+                return res.status(400).json({ error: 'Admins cannot delete their own account. Please have another admin do this.' });
+            }
+        }
+        // If not authenticated, allow (for backward compatibility with old frontend)
 
         console.log('Attempting to delete user with ID:', userId);
 
@@ -242,7 +270,7 @@ router.delete('/:userId', async (req, res) => {
         console.log('User deleted successfully, cleaning up related data...');
 
         // Delete user's projects (where they are the owner)
-        await db.collection('projects').deleteMany({ 
+        await db.collection('projects').deleteMany({
             $or: [
                 { ownerId: new ObjectId(userId) },
                 { ownerId: userId }
@@ -251,18 +279,18 @@ router.delete('/:userId', async (req, res) => {
 
         // Remove user from project members (handle both ObjectId and string)
         await db.collection('projects').updateMany(
-            { 
+            {
                 $or: [
                     { members: userId },
                     { members: new ObjectId(userId) }
                 ]
             },
-            { 
-                $pull: { 
-                    members: { 
-                        $in: [userId, new ObjectId(userId)] 
-                    } 
-                } 
+            {
+                $pull: {
+                    members: {
+                        $in: [userId, new ObjectId(userId)]
+                    }
+                }
             }
         );
 

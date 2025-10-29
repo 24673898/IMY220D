@@ -1,7 +1,8 @@
 import React from 'react';
+import AdminBadge from './AdminBadge';
 import './Profile.css';
 
-const Profile = ({ user, stats = { projectsCount: 0, collaborationsCount: 0, friendsCount: 0 }, onEdit, onDelete, isOwnProfile, isFriend, onSendFriendRequest, onUnfriend, friendActionLoading }) => {
+const Profile = ({ user, stats = { projectsCount: 0, collaborationsCount: 0, friendsCount: 0 }, onEdit, onDelete, isOwnProfile, isFriend, onSendFriendRequest, onUnfriend, friendActionLoading, isAdmin, currentUserRole }) => {
     const [imageError, setImageError] = React.useState(false);
 
     const getInitials = () => {
@@ -15,12 +16,6 @@ const Profile = ({ user, stats = { projectsCount: 0, collaborationsCount: 0, fri
 
     const handleImageError = () => {
         setImageError(true);
-    };
-
-    const handleDeleteClick = () => {
-        if (window.confirm('Are you sure you want to delete your profile? This action cannot be undone and will delete all your projects and data.')) {
-            onDelete();
-        }
     };
 
     return (
@@ -46,70 +41,78 @@ const Profile = ({ user, stats = { projectsCount: 0, collaborationsCount: 0, fri
                         {user.firstName && user.lastName
                             ? `${user.firstName} ${user.lastName}`
                             : user.username}
+                        <AdminBadge isAdmin={user.role === 'admin'} />
                     </h1>
                     <p className="profile-username">@{user.username}</p>
                     <p className="profile-bio">{user.bio || 'No bio available'}</p>
                 </div>
 
-                {isOwnProfile ? (
-                    <div className="profile-actions">
-                        {onEdit && (
-                            <button className="edit-profile-btn" onClick={onEdit}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                                          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5Z"
-                                          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                                Edit Profile
-                            </button>
-                        )}
-                        {onDelete && (
-                            <button className="delete-profile-btn" onClick={handleDeleteClick}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                    <path d="M3 6h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                                          stroke="currentColor" strokeWidth="2"/>
-                                    <path d="M10 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                                    <path d="M14 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                                </svg>
-                                Delete Profile
-                            </button>
-                        )}
-                    </div>
-                ) : (
-                    <div className="profile-actions">
-                        {isFriend ? (
-                            <button
-                                className="unfriend-profile-btn"
-                                onClick={onUnfriend}
-                                disabled={friendActionLoading}
-                            >
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2"/>
-                                    <circle cx="8.5" cy="7" r="4" stroke="currentColor" strokeWidth="2"/>
-                                    <line x1="18" y1="8" x2="23" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                                    <line x1="23" y1="8" x2="18" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                                </svg>
-                                {friendActionLoading ? 'Removing...' : 'Unfriend'}
-                            </button>
-                        ) : (
-                            <button
-                                className="add-friend-profile-btn"
-                                onClick={onSendFriendRequest}
-                                disabled={friendActionLoading}
-                            >
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2"/>
-                                    <circle cx="8.5" cy="7" r="4" stroke="currentColor" strokeWidth="2"/>
-                                    <line x1="20" y1="8" x2="20" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                                    <line x1="17" y1="11" x2="23" y2="11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                                </svg>
-                                {friendActionLoading ? 'Sending...' : 'Add Friend'}
-                            </button>
-                        )}
-                    </div>
-                )}
+                <div className="profile-actions">
+                    {(onEdit || onDelete) ? (
+                        <>
+                            {!isOwnProfile && isAdmin && (
+                                <div className="admin-notice" style={{fontSize: '12px', color: '#dc3545', marginBottom: '8px'}}>
+                                    Admin Controls
+                                </div>
+                            )}
+                            {onEdit && (
+                                <button className="edit-profile-btn" onClick={onEdit}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                                              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                        <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5Z"
+                                              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    </svg>
+                                    {isOwnProfile ? 'Edit Profile' : 'Edit User (Admin)'}
+                                </button>
+                            )}
+                            {onDelete && (
+                                <button className="delete-profile-btn" onClick={onDelete}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                        <path d="M3 6h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                                              stroke="currentColor" strokeWidth="2"/>
+                                        <path d="M10 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                        <path d="M14 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                    </svg>
+                                    {isOwnProfile ? 'Delete Profile' : 'Delete User (Admin)'}
+                                </button>
+                            )}
+                        </>
+                    ) : !isOwnProfile && (
+                        <>
+                            {isFriend ? (
+                                <button
+                                    className="unfriend-profile-btn"
+                                    onClick={onUnfriend}
+                                    disabled={friendActionLoading}
+                                >
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2"/>
+                                        <circle cx="8.5" cy="7" r="4" stroke="currentColor" strokeWidth="2"/>
+                                        <line x1="18" y1="8" x2="23" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                        <line x1="23" y1="8" x2="18" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                    </svg>
+                                    {friendActionLoading ? 'Removing...' : 'Unfriend'}
+                                </button>
+                            ) : (
+                                <button
+                                    className="add-friend-profile-btn"
+                                    onClick={onSendFriendRequest}
+                                    disabled={friendActionLoading}
+                                >
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2"/>
+                                        <circle cx="8.5" cy="7" r="4" stroke="currentColor" strokeWidth="2"/>
+                                        <line x1="20" y1="8" x2="20" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                        <line x1="17" y1="11" x2="23" y2="11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                    </svg>
+                                    {friendActionLoading ? 'Sending...' : 'Add Friend'}
+                                </button>
+                            )}
+                        </>
+                    )}
+                </div>
             </div>
 
             <div className="profile-details">

@@ -1,9 +1,11 @@
 import React from 'react';
+import AdminBadge from './AdminBadge';
 import './Project.css';
 
-const Project = ({ project, onEdit, currentUserId = 1 }) => {
-    const isOwner = project.owner.id === currentUserId;
-    const canEdit = isOwner; // Could also check if user is collaborator
+const Project = ({ project, onEdit, onDelete, isAdmin, isOwner, isMember, currentUserId = 1 }) => {
+    // Use passed props for permission checks
+    const canEdit = onEdit !== undefined;
+    const canDelete = onDelete !== undefined;
 
     const handleCheckIn = () => {
         if (project.status === 'Checked Out') {
@@ -65,23 +67,49 @@ const Project = ({ project, onEdit, currentUserId = 1 }) => {
                 <div className="project-info">
                     <div className="project-title-section">
                         <h1 className="project-title">{project.name}</h1>
-                        {canEdit && (
-                            <button className="edit-project-btn" onClick={onEdit}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" 
-                                          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5Z" 
-                                          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                                Edit Project
-                            </button>
-                        )}
+                        <div className="project-actions-group">
+                            {canEdit && (
+                                <button className="edit-project-btn" onClick={onEdit}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                                              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                        <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5Z"
+                                              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    </svg>
+                                    {isAdmin && !isOwner ? 'Edit Project (Admin)' : 'Edit Project'}
+                                </button>
+                            )}
+                            {canDelete && (
+                                <button className="delete-project-btn" onClick={onDelete} style={{
+                                    backgroundColor: '#dc3545',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '8px 16px',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    fontSize: '14px'
+                                }}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                        <path d="M3 6h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                                              stroke="currentColor" strokeWidth="2"/>
+                                        <path d="M10 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                        <path d="M14 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                    </svg>
+                                    {isAdmin && !isOwner ? 'Delete Project (Admin)' : 'Delete Project'}
+                                </button>
+                            )}
+                        </div>
                     </div>
-                    
+
                     <div className="project-meta-row">
                         <span className="project-owner">
-                            by <strong>{project.owner.firstName} {project.owner.lastName}</strong> 
-                            (@{project.owner.username})
+                            by <strong>{project.owner.firstName} {project.owner.lastName}</strong>
+                            <AdminBadge isAdmin={project.owner.role === 'admin'} style={{marginLeft: '4px'}} />
+                            <span style={{color: '#666'}}> (@{project.owner.username})</span>
                         </span>
                         <span className={`project-status ${project.status === 'Checked In' ? 'checked-in' : 'checked-out'}`}>
                             {project.status}
