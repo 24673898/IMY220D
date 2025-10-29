@@ -323,23 +323,50 @@ const ProfilePage = () => {
                         />
                     )}
 
-                    {showCreateProject && isOwnProfile ? (
-                        <CreateProject
-                            onCancel={() => setShowCreateProject(false)}
-                            onSave={() => setShowCreateProject(false)}
-                        />
-                    ) : (
-                        <ProjectList
-                            userId={userData.id}
-                            onCreateProject={isOwnProfile ? () => setShowCreateProject(true) : undefined}
-                            isOwnProfile={isOwnProfile}
-                        />
+                    {/* Only show projects if it's own profile, friends, or admin */}
+                    {(isOwnProfile || isFriend || userIsAdmin) && (
+                        <>
+                            {showCreateProject && isOwnProfile ? (
+                                <CreateProject
+                                    onCancel={() => setShowCreateProject(false)}
+                                    onSave={() => setShowCreateProject(false)}
+                                />
+                            ) : (
+                                <ProjectList
+                                    userId={userData.id}
+                                    onCreateProject={isOwnProfile ? () => setShowCreateProject(true) : undefined}
+                                    isOwnProfile={isOwnProfile}
+                                />
+                            )}
+                        </>
+                    )}
+
+                    {/* Show privacy message for non-friends */}
+                    {!isOwnProfile && !isFriend && !userIsAdmin && (
+                        <div style={{
+                            padding: '2rem',
+                            textAlign: 'center',
+                            backgroundColor: '#f8f9fa',
+                            borderRadius: '12px',
+                            marginTop: '2rem'
+                        }}>
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" style={{margin: '0 auto 1rem', color: '#6c757d'}}>
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" strokeWidth="2"/>
+                            </svg>
+                            <h3 style={{color: '#495057', marginBottom: '0.5rem'}}>Private Profile</h3>
+                            <p style={{color: '#6c757d', margin: 0}}>
+                                Add {userData.firstName || userData.username} as a friend to view their projects and more details.
+                            </p>
+                        </div>
                     )}
                 </div>
 
-                <div className="profile-sidebar">
-                    <FriendsList userId={userId} />
-                </div>
+                {/* Only show friends list if it's own profile, friends, or admin */}
+                {(isOwnProfile || isFriend || userIsAdmin) && (
+                    <div className="profile-sidebar">
+                        <FriendsList userId={userId} />
+                    </div>
+                )}
             </div>
         </div>
     );
