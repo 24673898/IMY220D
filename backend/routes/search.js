@@ -2,6 +2,32 @@ const express = require('express');
 const router = express.Router();
 const { getDB } = require('../config/database');
 const { ObjectId } = require('mongodb');
+const { optionalAuthenticate } = require('../middleware/auth');
+
+// GET /api/search/all-users - Get all users (admin only)
+router.get('/all-users', optionalAuthenticate, async (req, res) => {
+    try {
+        // Check if user is admin
+        if (!req.user || req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'Admin privileges required' });
+        }
+
+        const db = getDB();
+
+        // Get all users, excluding passwords
+        const users = await db.collection('users')
+            .find({})
+            .project({ password: 0 })
+            .sort({ username: 1 })
+            .toArray();
+
+        res.json({ users });
+
+    } catch (error) {
+        console.error('Get all users error:', error);
+        res.status(500).json({ error: 'Failed to fetch all users' });
+    }
+});
 
 // GET /api/search/users?q=searchTerm - Search for users
 router.get('/users', async (req, res) => {

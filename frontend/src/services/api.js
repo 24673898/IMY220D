@@ -248,6 +248,9 @@ export const searchAPI = {
     searchUsers: (query) =>
         fetchAPI(`/search/users?q=${encodeURIComponent(query)}`),
 
+    getAllUsers: (userId) =>
+        fetchAPI(`/search/all-users?userId=${userId}`),
+
     searchProjects: (query, filters = {}) => {
         const params = new URLSearchParams({ q: query, ...filters }).toString();
         return fetchAPI(`/search/projects?${params}`);
