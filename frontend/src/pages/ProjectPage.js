@@ -303,8 +303,24 @@ const ProjectPage = () => {
     const formatProjectData = () => {
         if (!projectData || !owner) return null;
 
+        // Helper to fix image path
+        const getImagePath = (imagePath) => {
+            if (!imagePath) return null;
+            // Skip default placeholder images
+            if (imagePath.includes('default-project.jpg')) return null;
+            // If path doesn't start with /, add it
+            if (imagePath.startsWith('uploads/')) {
+                return `/${imagePath}`;
+            }
+            return imagePath;
+        };
+
+        // Use projectImage field first (where uploads are stored), fallback to image
+        const projectImage = projectData.projectImage || projectData.image;
+
         return {
             ...projectData,
+            image: getImagePath(projectImage),
             owner: {
                 id: owner._id,
                 firstName: owner.firstName,

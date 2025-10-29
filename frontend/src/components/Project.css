@@ -28,6 +28,13 @@
     border: 1px solid #e1e5e9;
 }
 
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .image-placeholder {
     width: 100%;
     height: 100%;

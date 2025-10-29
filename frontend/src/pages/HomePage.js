@@ -2,13 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Feed from '../components/Feed';
-import { activityAPI } from '../services/api';
-import './HomePage.css'; 
+import './HomePage.css';
 
 const HomePage = () => {
-    const [activity, setActivity] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
 
     // Get user from localStorage on mount
@@ -22,28 +18,6 @@ const HomePage = () => {
         }
     }, []);
 
-    // Load activity when user changes
-    useEffect(() => {
-        if (user) {
-            loadActivity();
-        }
-    }, [user]);
-
-    const loadActivity = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-
-            const data = await activityAPI.getGlobalFeed();
-            setActivity(data.activity);
-        } catch (err) {
-            setError(err.message || 'Failed to load activity');
-            console.error('Load activity error:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     if (!user) {
         return <div>Loading...</div>;
     }
@@ -53,9 +27,7 @@ const HomePage = () => {
             <Header />
 
             <div className="container">
-                {loading && <div className="loading">Loading activity...</div>}
-                {error && <div className="error">{error}</div>}
-                {!loading && !error && <Feed activity={activity} />}
+                <Feed />
             </div>
         </div>
     );

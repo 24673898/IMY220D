@@ -69,18 +69,35 @@ const Feed = () => {
         return activityDate.toLocaleDateString();
     };
 
+    // Helper to fix image path
+    const getImagePath = (imagePath) => {
+        if (!imagePath) return null;
+        // Skip default placeholder images
+        if (imagePath.includes('default-project.jpg')) return null;
+        // If path doesn't start with /, add it
+        if (imagePath.startsWith('uploads/')) {
+            return `/${imagePath}`;
+        }
+        return imagePath;
+    };
+
     // Transform activity data to match ProjectPreview format
-    const transformedProjects = activity.map(item => ({
-        id: item._id,
-        userName: item.user ? `${item.user.firstName || ''} ${item.user.lastName || ''}`.trim() || item.user.username : 'Unknown',
-        projectName: item.project?.name || 'Unknown Project',
-        content: item.message || '',
-        image: item.project?.image || '/assets/images/default-project.jpg',
-        tags: item.project?.tags?.map(tag => tag.startsWith('#') ? tag : `#${tag}`) || [],
-        status: item.type === 'checkin' ? 'Checked In' : 'Checked Out',
-        timestamp: formatTimeAgo(item.timestamp),
-        projectId: item.projectId
-    }));
+    const transformedProjects = activity.map(item => {
+        // Use projectImage field first (where uploads are stored), fallback to image
+        const projectImage = item.project?.projectImage || item.project?.image;
+
+        return {
+            id: item._id,
+            userName: item.user ? `${item.user.firstName || ''} ${item.user.lastName || ''}`.trim() || item.user.username : 'Unknown',
+            projectName: item.project?.name || 'Unknown Project',
+            content: item.message || '',
+            image: getImagePath(projectImage),
+            tags: item.project?.tags?.map(tag => tag.startsWith('#') ? tag : `#${tag}`) || [],
+            status: item.type === 'checkin' ? 'Checked In' : 'Checked Out',
+            timestamp: formatTimeAgo(item.timestamp),
+            projectId: item.projectId
+        };
+    });
 
     // Sort projects
     const sortedProjects = [...transformedProjects].sort((a, b) => {

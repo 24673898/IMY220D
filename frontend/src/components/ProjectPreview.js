@@ -17,23 +17,39 @@ const ProjectPreview = ({ project }) => {
         }
     };
 
+    const handleImageError = (e) => {
+        e.target.onerror = null;
+        e.target.style.display = 'none';
+        const placeholder = document.createElement('div');
+        placeholder.className = 'image-placeholder';
+        placeholder.innerHTML = `<span>${project.projectName?.charAt(0).toUpperCase() || '?'}</span>`;
+        e.target.parentElement.appendChild(placeholder);
+    };
+
     return (
         <div className="project-preview" onClick={handleProjectClick} style={{ cursor: 'pointer' }}>
             <div className="project-header">
                 <h3 className="project-user">{project.userName}'s post</h3>
                 <span className="project-timestamp">{project.timestamp}</span>
             </div>
-            
+
             <div className="project-content">
                 <div className="project-image-container">
                     <div className="project-image">
-                        {/* Placeholder for project image */}
-                        <div className="image-placeholder">
-                            <span>Image</span>
-                        </div>
+                        {project.image ? (
+                            <img
+                                src={project.image}
+                                alt={project.projectName}
+                                onError={handleImageError}
+                            />
+                        ) : (
+                            <div className="image-placeholder">
+                                <span>{project.projectName?.charAt(0).toUpperCase() || '?'}</span>
+                            </div>
+                        )}
                     </div>
                 </div>
-                
+
                 <div className="project-details">
                     <h4 className="project-name">{project.projectName}</h4>
                     <p className="project-description">{project.content}</p>

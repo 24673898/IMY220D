@@ -13,13 +13,20 @@ const SearchInput = () => {
     const dropdownRef = useRef(null);
     const inputRef = useRef(null);
 
-    const currentUser = getCurrentUser();
-    const userIsAdmin = isAdmin(currentUser);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [userIsAdmin, setUserIsAdmin] = useState(false);
+
+    // Initialize user info once
+    useEffect(() => {
+        const user = getCurrentUser();
+        setCurrentUser(user);
+        setUserIsAdmin(isAdmin(user));
+    }, []);
 
     // Fetch all users when @ is typed (admin only)
     useEffect(() => {
         const fetchUsers = async () => {
-            if (searchTerm.startsWith('@') && userIsAdmin) {
+            if (searchTerm.startsWith('@') && userIsAdmin && currentUser) {
                 setLoading(true);
                 try {
                     const result = await searchAPI.getAllUsers(currentUser._id);
