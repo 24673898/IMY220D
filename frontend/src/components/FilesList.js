@@ -202,10 +202,21 @@ const FilesList = ({ projectId, canUpload = false, onFilesUpdate }) => {
     const handleDownloadFile = async (file, e) => {
         e.stopPropagation();
         try {
-            const response = await fetch(`/api/projects/${projectId}/files/${file.storedName}`);
+            console.log('Downloading file:', file.name, 'stored as:', file.storedName);
+            const downloadUrl = `/api/projects/${projectId}/files/${file.storedName}`;
+            console.log('Download URL:', downloadUrl);
+
+            const response = await fetch(downloadUrl);
 
             if (!response.ok) {
-                throw new Error('Download failed');
+                // Try to get error message from response
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Download failed');
+                } else {
+                    throw new Error(`Download failed with status: ${response.status}`);
+                }
             }
 
             const blob = await response.blob();
@@ -217,9 +228,11 @@ const FilesList = ({ projectId, canUpload = false, onFilesUpdate }) => {
             a.click();
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
+
+            console.log('Download successful:', file.name);
         } catch (err) {
             console.error('Download error:', err);
-            alert('Failed to download file');
+            alert(`Failed to download file: ${err.message}`);
         }
     };
 

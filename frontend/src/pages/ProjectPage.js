@@ -7,6 +7,7 @@ import FilesList from '../components/FilesList';
 import Messages from '../components/Messages';
 import AddContributor from '../components/AddContributor';
 import TransferOwnership from '../components/TransferOwnership';
+import ProjectDiscussion from '../components/ProjectDiscussion';
 import './ProjectPage.css';
 
 const ProjectPage = () => {
@@ -392,19 +393,25 @@ const ProjectPage = () => {
                         
                         <div className="project-tabs">
                             <div className="tab-nav">
-                                <button 
+                                <button
                                     className={`tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
                                     onClick={() => setActiveTab('overview')}
                                 >
                                     Overview
                                 </button>
-                                <button 
+                                <button
                                     className={`tab-btn ${activeTab === 'files' ? 'active' : ''}`}
                                     onClick={() => setActiveTab('files')}
                                 >
                                     Files
                                 </button>
-                                <button 
+                                <button
+                                    className={`tab-btn ${activeTab === 'discussion' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('discussion')}
+                                >
+                                    Discussion
+                                </button>
+                                <button
                                     className={`tab-btn ${activeTab === 'activity' ? 'active' : ''}`}
                                     onClick={() => setActiveTab('activity')}
                                 >
@@ -438,29 +445,29 @@ const ProjectPage = () => {
                                             <div className="collaborators-header">
                                                 <h3>Collaborators</h3>
                                                 <div className="collaborators-actions">
+                                                    {isProjectMember && (
+                                                        <button
+                                                            className="add-contributor-btn"
+                                                            onClick={() => setShowAddContributor(true)}
+                                                        >
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                                                <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                                            </svg>
+                                                            Add Contributor
+                                                        </button>
+                                                    )}
                                                     {isProjectOwner && (
-                                                        <>
-                                                            <button
-                                                                className="add-contributor-btn"
-                                                                onClick={() => setShowAddContributor(true)}
-                                                            >
-                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                                                    <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                                                                </svg>
-                                                                Add Contributor
-                                                            </button>
-                                                            <button
-                                                                className="transfer-ownership-btn"
-                                                                onClick={() => setShowTransferOwnership(true)}
-                                                                title="Transfer ownership"
-                                                            >
-                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                                                    <path d="M17 11l-5-5-5 5M12 6v12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                                    <path d="M19 19H5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                                                                </svg>
-                                                                Transfer Ownership
-                                                            </button>
-                                                        </>
+                                                        <button
+                                                            className="transfer-ownership-btn"
+                                                            onClick={() => setShowTransferOwnership(true)}
+                                                            title="Transfer ownership"
+                                                        >
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                                                <path d="M17 11l-5-5-5 5M12 6v12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                                <path d="M19 19H5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                                            </svg>
+                                                            Transfer Ownership
+                                                        </button>
                                                     )}
                                                 </div>
                                             </div>
@@ -512,6 +519,14 @@ const ProjectPage = () => {
                                     />
                                 )}
 
+                                {activeTab === 'discussion' && (
+                                    <ProjectDiscussion
+                                        projectId={projectData._id}
+                                        initialDiscussion={projectData.discussion || ''}
+                                        isProjectMember={isProjectMember}
+                                    />
+                                )}
+
                                 {activeTab === 'activity' && (
                                     <Messages projectId={projectData._id} />
                                 )}
@@ -527,6 +542,8 @@ const ProjectPage = () => {
                         currentMembers={members}
                         onMemberAdded={fetchProject}
                         onClose={() => setShowAddContributor(false)}
+                        isOwner={isProjectOwner}
+                        currentUserId={currentUser?._id}
                     />
                 )}
 

@@ -884,6 +884,8 @@ router.get('/:projectId/files/:filename', async (req, res) => {
     try {
         const { projectId, filename } = req.params;
 
+        console.log('Download request - projectId:', projectId, 'filename:', filename);
+
         // Convert string ID to ObjectId if valid
         let projectIdQuery;
         try {
@@ -896,19 +898,34 @@ router.get('/:projectId/files/:filename', async (req, res) => {
         const project = await db.collection('projects').findOne({ _id: projectIdQuery });
 
         if (!project) {
+            console.error('Project not found:', projectId);
             return res.status(404).json({ error: 'Project not found' });
         }
 
         // Check if file exists in project
         const fileDoc = project.files?.find(f => f.storedName === filename);
         if (!fileDoc) {
-            return res.status(404).json({ error: 'File not found' });
+            console.error('File not found in project files:', filename);
+            console.log('Available files:', project.files?.map(f => f.storedName));
+            return res.status(404).json({ error: 'File not found in project' });
         }
 
+        // Use the original projectId string for file path (not converted ObjectId)
         const filePath = path.join(__dirname, '../uploads/project-files', projectId, filename);
+        console.log('File path:', filePath);
 
         // Check if file exists on disk
         if (!fs.existsSync(filePath)) {
+            console.error('File not found on disk:', filePath);
+
+            // Check if directory exists
+            const dirPath = path.join(__dirname, '../uploads/project-files', projectId);
+            console.log('Directory exists:', fs.existsSync(dirPath));
+            if (fs.existsSync(dirPath)) {
+                const filesInDir = fs.readdirSync(dirPath);
+                console.log('Files in directory:', filesInDir);
+            }
+
             return res.status(404).json({ error: 'File not found on server' });
         }
 
@@ -916,13 +933,25 @@ router.get('/:projectId/files/:filename', async (req, res) => {
         res.setHeader('Content-Disposition', `attachment; filename="${fileDoc.name}"`);
         res.setHeader('Content-Type', fileDoc.mimetype || 'application/octet-stream');
 
+        console.log('Streaming file:', fileDoc.name);
+
         // Stream the file
         const fileStream = fs.createReadStream(filePath);
+
+        fileStream.on('error', (err) => {
+            console.error('File stream error:', err);
+            if (!res.headersSent) {
+                res.status(500).json({ error: 'Error reading file' });
+            }
+        });
+
         fileStream.pipe(res);
 
     } catch (error) {
         console.error('Download file error:', error);
-        res.status(500).json({ error: 'Failed to download file' });
+        if (!res.headersSent) {
+            res.status(500).json({ error: 'Failed to download file' });
+        }
     }
 });
 
@@ -1035,6 +1064,68 @@ router.get('/:projectId/activity', async (req, res) => {
     } catch (error) {
         console.error('Get project activity error:', error);
         res.status(500).json({ error: 'Failed to fetch activity' });
+    }
+});
+
+// PUT /api/projects/:projectId/discussion - Update project discussion
+router.put('/:projectId/discussion', async (req, res) => {
+    try {
+        const { projectId } = req.params;
+        const { discussion, userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'userId is required' });
+        }
+
+        // Convert string ID to ObjectId if valid
+        let projectIdQuery;
+        try {
+            projectIdQuery = ObjectId.isValid(projectId) ? new ObjectId(projectId) : projectId;
+        } catch (e) {
+            projectIdQuery = projectId;
+        }
+
+        const db = getDB();
+        const project = await db.collection('projects').findOne({ _id: projectIdQuery });
+
+        if (!project) {
+            return res.status(404).json({ error: 'Project not found' });
+        }
+
+        // Check if user is a project member
+        const isMember = project.members.some(memberId =>
+            memberId === userId ||
+            memberId.toString() === userId ||
+            memberId === userId.toString() ||
+            memberId.toString() === userId.toString()
+        );
+
+        if (!isMember) {
+            return res.status(403).json({ error: 'Only project members can update discussion' });
+        }
+
+        // Update project discussion
+        await db.collection('projects').updateOne(
+            { _id: projectIdQuery },
+            {
+                $set: {
+                    discussion: discussion || '',
+                    discussionUpdatedAt: new Date(),
+                    discussionUpdatedBy: userId
+                }
+            }
+        );
+
+        const updatedProject = await db.collection('projects').findOne({ _id: projectIdQuery });
+
+        res.json({
+            message: 'Discussion updated successfully',
+            project: updatedProject
+        });
+
+    } catch (error) {
+        console.error('Update discussion error:', error);
+        res.status(500).json({ error: 'Failed to update discussion' });
     }
 });
 
