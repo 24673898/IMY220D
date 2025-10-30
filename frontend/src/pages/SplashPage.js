@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LoginForm from '../components/LoginForm';
 import SignUpForm from '../components/SignUpForm';
 import './SplashPage.css';
 
 const SplashPage = () => {
     const [isSignUp, setIsSignUp] = useState(false);
+    const [scrollY, setScrollY] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrollY(window.scrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const toggleForm = () => {
         setIsSignUp(!isSignUp);
@@ -12,7 +22,9 @@ const SplashPage = () => {
 
     return (
         <div className="splash-container">
-            <div className="splash-content">
+            <div className="splash-content" style={{
+                transform: `translateY(${scrollY * 0.5}px)`
+            }}>
                 {/* Left Side - Branding and Features */}
                 <div className="splash-left">
                     <div className="branding">

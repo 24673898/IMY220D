@@ -3,19 +3,21 @@
   "version": "1.0.0",
   "main": "backend/server.js",
   "scripts": {
-    "build": "babel ./backend/server.js -d ./backend/dist",
     "build:frontend": "webpack",
     "build:watch": "webpack --watch",
-    "start": "npm run build && node ./backend/dist/server.js",
-    "dev": "nodemon backend/server.js",
-    "dev:frontend": "webpack --watch"
+    "start:backend": "cd backend && node server.js",
+    "start:frontend": "webpack --watch",
+    "start": "npm run build:frontend && npm run start:backend",
+    "dev": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
   },
   "author": "",
   "license": "ISC",
   "description": "Version control website for sharing code projects",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^5.1.0",
+    "express": "^4.21.2",
+    "mongodb": "^6.20.0",
+    "multer": "^2.0.2",
     "path": "^0.12.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

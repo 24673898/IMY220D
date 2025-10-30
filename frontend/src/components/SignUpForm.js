@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authAPI } from '../services/api';
 import './SignUpForm.css';
 
 const SignUpForm = ({ onToggleForm }) => {
@@ -7,6 +8,7 @@ const SignUpForm = ({ onToggleForm }) => {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
+        username: '',
         email: '',
         password: '',
         confirmPassword: ''
@@ -32,33 +34,37 @@ const SignUpForm = ({ onToggleForm }) => {
 
     const validateForm = () => {
         const newErrors = {};
-        
+
         if (!formData.firstName.trim()) {
             newErrors.firstName = 'First name is required';
         }
-        
+
         if (!formData.lastName.trim()) {
             newErrors.lastName = 'Last name is required';
         }
-        
+
+        if (!formData.username.trim()) {
+            newErrors.username = 'Username is required';
+        }
+
         if (!formData.email) {
             newErrors.email = 'Email is required';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
             newErrors.email = 'Email is invalid';
         }
-        
+
         if (!formData.password) {
             newErrors.password = 'Password is required';
         } else if (formData.password.length < 6) {
             newErrors.password = 'Password must be at least 6 characters';
         }
-        
+
         if (!formData.confirmPassword) {
             newErrors.confirmPassword = 'Please confirm your password';
         } else if (formData.password !== formData.confirmPassword) {
             newErrors.confirmPassword = 'Passwords do not match';
         }
-        
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -71,38 +77,26 @@ const SignUpForm = ({ onToggleForm }) => {
         }
 
         setIsLoading(true);
-        
+
         try {
-            const response = await fetch('/api/auth/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    firstName: formData.firstName,
-                    lastName: formData.lastName,
-                    email: formData.email,
-                    password: formData.password
-                })
+            const data = await authAPI.signup({
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                name: `${formData.firstName} ${formData.lastName}`,
+                username: formData.username,
+                email: formData.email,
+                password: formData.password
             });
 
-            const data = await response.json();
+            // Store user data in localStorage (use 'user' key to match ProfilePage)
+            localStorage.setItem('user', JSON.stringify(data.user));
 
-            if (data.success) {
-                // Store user data in localStorage
-                localStorage.setItem('currentUser', JSON.stringify(data.user));
-                
-                // Redirect to home page
-                navigate('/home');
-            } else {
-                setErrors({
-                    form: data.message || 'Signup failed'
-                });
-            }
+            // Redirect to home page
+            navigate('/home');
         } catch (error) {
             console.error('Signup error:', error);
             setErrors({
-                form: 'Network error. Please try again.'
+                form: error.message || 'Signup failed. Please try again.'
             });
         } finally {
             setIsLoading(false);
@@ -152,7 +146,22 @@ const SignUpForm = ({ onToggleForm }) => {
                         {errors.lastName && <span className="error-message">{errors.lastName}</span>}
                     </div>
                 </div>
-                
+
+                <div className="form-group">
+                    <label htmlFor="username">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Choose a username"
+                        value={formData.username}
+                        onChange={handleInputChange}
+                        className={errors.username ? 'error' : ''}
+                        disabled={isLoading}
+                    />
+                    {errors.username && <span className="error-message">{errors.username}</span>}
+                </div>
+
                 <div className="form-group">
                     <label htmlFor="email">Email Address</label>
                     <input

@@ -133,16 +133,63 @@
     transform: translateY(-1px);
 }
 
+/* Test hint styling */
+.test-hint {
+    font-size: 0.85rem;
+    color: #666;
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Signup prompt styling */
+.signup-prompt {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e1e5e9;
+}
+
+.signup-prompt p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.75rem;
+}
+
+.signup-link-button {
+    background: none;
+    border: 1.5px solid #667eea;
+    color: #667eea;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.signup-link-button:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.signup-link-button:active {
+    transform: translateY(0);
+}
+
 /* Responsive adjustments */
 @media (max-width: 640px) {
     .form-title {
         font-size: 1.5rem;
     }
-    
+
     .form-group input {
         padding: 0.75rem;
     }
-    
+
     .submit-btn {
         padding: 0.875rem;
     }

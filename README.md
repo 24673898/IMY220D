@@ -1,14 +1,28 @@
-# IMY220D1
+# FrankCodeHub - IMY220D Project
 
-# Build the Docker image
+## Setup and Run
 
-docker build -t frankcodehub .
+**1. Clone the repository**
+```bash
+git clone https://github.com/24673898/IMY220D.git
+cd IMY220D
+```
 
-# Run the container
+**2. Run with Docker**
+```bash
+docker-compose up --build
+```
 
-docker run -p 1337:1337 frankcodehub
+**3. Open the application**
+```
+http://localhost:3000
+```
 
-# Visit http://localhost:1337 to test the application
+## Stop the application
+```bash
+docker-compose down
+```
 
-https://github.com/24673898/IMY220D1.git
+---
 
+Repository: https://github.com/24673898/IMY220D1.git

@@ -118,6 +118,44 @@
     background: #d1d5db;
 }
 
+.friend-actions {
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.friend-item:hover .friend-actions {
+    opacity: 1;
+}
+
+.unfriend-btn {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.unfriend-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+    transform: scale(1.05);
+}
+
+.unfriend-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.unfriend-btn:disabled:hover {
+    transform: none;
+}
+
 .add-friend-btn {
     width: 100%;
     background: rgba(102, 126, 234, 0.1);
@@ -157,14 +195,23 @@
     .friends-list {
         padding: 1rem;
     }
-    
+
     .friend-item {
         padding: 0.5rem;
     }
-    
+
     .avatar-placeholder {
         width: 36px;
         height: 36px;
         font-size: 0.9rem;
+    }
+
+    /* Always show unfriend button on mobile */
+    .friend-actions {
+        opacity: 1;
+    }
+
+    .unfriend-btn {
+        padding: 0.4rem;
     }
 }

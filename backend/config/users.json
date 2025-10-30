@@ -1,0 +1,30 @@
+[
+  {
+    "_id": "user1",
+    "name": "Test User",
+    "username": "testuser",
+    "email": "test@test.com",
+    "password": "test1234",
+    "profileImage": "/assets/images/default-user.jpg",
+    "bio": "Software developer passionate about version control and collaborative coding",
+    "birthday": "1995-05-15",
+    "work": "Full Stack Developer at Tech Corp",
+    "createdAt": {
+      "$date": "2025-08-01T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": "user2",
+    "name": "Jane Smith",
+    "username": "janesmith",
+    "email": "jane@example.com",
+    "password": "password123",
+    "profileImage": "/assets/images/default-user.jpg",
+    "bio": "Frontend specialist and UI/UX enthusiast. Love creating beautiful interfaces.",
+    "birthday": "1998-03-22",
+    "work": "Frontend Developer at Design Studio",
+    "createdAt": {
+      "$date": "2025-08-05T00:00:00.000Z"
+    }
+  }
+]

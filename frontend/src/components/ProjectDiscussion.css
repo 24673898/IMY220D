@@ -1,0 +1,180 @@
+.project-discussion {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.discussion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.discussion-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.edit-discussion-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.edit-discussion-btn:hover {
+    background: #0056b3;
+}
+
+.edit-discussion-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.discussion-error {
+    background: #fee;
+    color: #c33;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    border-left: 4px solid #c33;
+}
+
+.discussion-edit {
+    margin-top: 16px;
+}
+
+.discussion-textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 200px;
+}
+
+.discussion-textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.discussion-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.btn-save,
+.btn-cancel {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-save {
+    background: #28a745;
+    color: white;
+}
+
+.btn-save:hover:not(:disabled) {
+    background: #218838;
+}
+
+.btn-save:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-cancel:hover:not(:disabled) {
+    background: #5a6268;
+}
+
+.btn-cancel:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.discussion-view {
+    margin-top: 16px;
+}
+
+.discussion-content {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #333;
+}
+
+.discussion-content p {
+    margin: 0 0 12px 0;
+}
+
+.discussion-content p:last-child {
+    margin-bottom: 0;
+}
+
+.discussion-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+}
+
+.discussion-empty p {
+    margin: 8px 0;
+}
+
+.discussion-hint {
+    font-size: 13px;
+    color: #666;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .project-discussion {
+        padding: 16px;
+    }
+
+    .discussion-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .edit-discussion-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .discussion-actions {
+        flex-direction: column;
+    }
+
+    .btn-save,
+    .btn-cancel {
+        width: 100%;
+    }
+}

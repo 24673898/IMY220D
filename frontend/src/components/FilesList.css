@@ -1,6 +1,86 @@
 /* FilesList.css */
 .files-list-container {
     font-family: 'Inter', sans-serif;
+    position: relative;
+}
+
+/* Drag and Drop Overlay */
+.drag-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(102, 126, 234, 0.95);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.drag-content {
+    text-align: center;
+    color: white;
+    padding: 3rem;
+    border: 3px dashed rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+    50% {
+        transform: scale(1.05);
+        border-color: rgba(255, 255, 255, 0.8);
+    }
+}
+
+.drag-icon {
+    color: white;
+    margin-bottom: 1rem;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.drag-content h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+}
+
+.drag-content p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+.files-list-container.dragging {
+    pointer-events: none;
 }
 
 .files-header {
@@ -23,6 +103,41 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.upload-control {
+    margin-right: auto;
+}
+
+.upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.upload-btn:active {
+    transform: translateY(0);
+}
+
+.upload-btn svg {
+    width: 16px;
+    height: 16px;
 }
 
 .view-toggle {
@@ -267,6 +382,16 @@
     transform: translateY(-1px);
 }
 
+.file-action-btn.delete-btn {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.file-action-btn.delete-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #dc2626;
+}
+
 /* Folder styling */
 .file-item.folder {
     background: rgba(245, 158, 11, 0.05);
@@ -283,9 +408,16 @@
     text-align: center;
     padding: 3rem 2rem;
     color: #666;
-    background: white;
+    background: rgba(102, 126, 234, 0.02);
     border-radius: 12px;
-    border: 1px solid #e1e5e9;
+    border: 2px dashed #e5e7eb;
+    margin: 2rem 0;
+    transition: all 0.3s ease;
+}
+
+.empty-files:hover {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.05);
 }
 
 .empty-icon {

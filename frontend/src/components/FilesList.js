@@ -1,12 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './FilesList.css';
 
-const FilesList = ({ projectId, isOwner = false }) => {
+const FilesList = ({ projectId, canUpload = false, onFilesUpdate }) => {
     const [viewMode, setViewMode] = useState('list');
     const [sortBy, setSortBy] = useState('name');
-    
-    // Dummy files data
-    const filesData = [
+    const [files, setFiles] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragCounter, setDragCounter] = useState(0);
+
+    // Get current user
+    const getCurrentUser = () => {
+        const user = localStorage.getItem('user');
+        return user ? JSON.parse(user) : null;
+    };
+
+    useEffect(() => {
+        const fetchFiles = async () => {
+            if (!projectId) {
+                setLoading(false);
+                return;
+            }
+
+            try {
+                setLoading(true);
+                const response = await fetch(`/api/projects/${projectId}`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch project');
+                }
+
+                const data = await response.json();
+                setFiles(data.project.files || []);
+            } catch (err) {
+                console.error('Error fetching files:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchFiles();
+    }, [projectId]);
+
+    // Dummy files data for display format reference
+    const filesDataOld = [
         {
             id: 1,
             name: 'server.js',
@@ -158,38 +199,303 @@ const FilesList = ({ projectId, isOwner = false }) => {
         // TODO: Implement file viewing functionality
     };
 
-    const handleDownloadFile = (file, e) => {
+    const handleDownloadFile = async (file, e) => {
         e.stopPropagation();
-        console.log('Download file:', file.name);
-        // TODO: Implement file download functionality
+        try {
+            console.log('Downloading file:', file.name, 'stored as:', file.storedName);
+            const downloadUrl = `/api/projects/${projectId}/files/${file.storedName}`;
+            console.log('Download URL:', downloadUrl);
+
+            const response = await fetch(downloadUrl);
+
+            if (!response.ok) {
+                // Try to get error message from response
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Download failed');
+                } else {
+                    throw new Error(`Download failed with status: ${response.status}`);
+                }
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = file.name;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+
+            console.log('Download successful:', file.name);
+        } catch (err) {
+            console.error('Download error:', err);
+            alert(`Failed to download file: ${err.message}`);
+        }
     };
 
-    const sortedFiles = [...filesData].sort((a, b) => {
-        // Always show folders first
-        if (a.isFolder && !b.isFolder) return -1;
-        if (!a.isFolder && b.isFolder) return 1;
-        
+    const uploadFiles = async (files) => {
+        if (!files || files.length === 0) return;
+
+        const currentUser = getCurrentUser();
+        if (!currentUser) {
+            alert('Please log in to upload files');
+            return;
+        }
+
+        setUploading(true);
+        setUploadProgress(0);
+
+        try {
+            const formData = new FormData();
+            formData.append('userId', currentUser._id);
+
+            Array.from(files).forEach(file => {
+                formData.append('files', file);
+            });
+
+            const response = await fetch(`/api/projects/${projectId}/files`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(`${files.length} file(s) uploaded successfully!`);
+                // Refresh files list
+                const projectResponse = await fetch(`/api/projects/${projectId}`);
+                const projectData = await projectResponse.json();
+                setFiles(projectData.project.files || []);
+            } else {
+                alert(data.error || 'Failed to upload files');
+            }
+        } catch (err) {
+            console.error('Upload error:', err);
+            alert('Failed to upload files');
+        } finally {
+            setUploading(false);
+            setUploadProgress(0);
+        }
+    };
+
+    const handleFileUpload = async (event) => {
+        const selectedFiles = event.target.files;
+        await uploadFiles(selectedFiles);
+        // Reset file input
+        event.target.value = '';
+    };
+
+    // Drag and drop handlers
+    const handleDragEnter = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragCounter(prev => prev + 1);
+        if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+            setIsDragging(true);
+        }
+    };
+
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragCounter(prev => {
+            const newCounter = prev - 1;
+            if (newCounter === 0) {
+                setIsDragging(false);
+            }
+            return newCounter;
+        });
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    const handleDrop = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+        setDragCounter(0);
+
+        if (!canUpload) {
+            alert('You must be a project member to upload files');
+            return;
+        }
+
+        const files = e.dataTransfer.files;
+        if (files && files.length > 0) {
+            await uploadFiles(files);
+        }
+    };
+
+    const handleDeleteFile = async (file, e) => {
+        e.stopPropagation();
+
+        const currentUser = getCurrentUser();
+        if (!currentUser) {
+            alert('Please log in to delete files');
+            return;
+        }
+
+        if (!window.confirm(`Are you sure you want to delete "${file.name}"?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `/api/projects/${projectId}/files/${file.storedName}?userId=${currentUser._id}`,
+                { method: 'DELETE' }
+            );
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('File deleted successfully');
+                // Refresh files list
+                const projectResponse = await fetch(`/api/projects/${projectId}`);
+                const projectData = await projectResponse.json();
+                setFiles(projectData.project.files || []);
+            } else {
+                alert(data.error || 'Failed to delete file');
+            }
+        } catch (err) {
+            console.error('Delete error:', err);
+            alert('Failed to delete file');
+        }
+    };
+
+    const sortedFiles = [...files].sort((a, b) => {
         switch (sortBy) {
             case 'name':
-                return a.name.localeCompare(b.name);
+                return (a.name || '').localeCompare(b.name || '');
             case 'size':
-                // Simple size comparison (would need proper parsing in real app)
-                return a.size.localeCompare(b.size);
+                return (a.size || 0) - (b.size || 0);
             case 'modified':
-                return a.lastModified.localeCompare(b.lastModified);
+                return new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0);
             default:
                 return 0;
         }
     });
 
+    const formatFileSize = (bytes) => {
+        if (!bytes || bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    };
+
+    const formatTimeAgo = (timestamp) => {
+        if (!timestamp) return 'Unknown';
+        const now = new Date();
+        const fileDate = new Date(timestamp);
+        const diffMs = now - fileDate;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+        if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+        if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+        return fileDate.toLocaleDateString();
+    };
+
+    const getFileType = (filename) => {
+        if (!filename) return 'file';
+        const ext = filename.split('.').pop().toLowerCase();
+        const typeMap = {
+            'js': 'javascript',
+            'jsx': 'react',
+            'ts': 'javascript',
+            'tsx': 'react',
+            'css': 'css',
+            'scss': 'css',
+            'json': 'json',
+            'md': 'markdown',
+            'html': 'html',
+            'py': 'python',
+            'java': 'java'
+        };
+        return typeMap[ext] || 'file';
+    };
+
+    if (loading) {
+        return (
+            <div className="files-list-container">
+                <div className="files-header">
+                    <h3 className="files-title">Project Files</h3>
+                </div>
+                <div className="loading" style={{ padding: '2rem', textAlign: 'center' }}>
+                    Loading files...
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="files-list-container">
+                <div className="files-header">
+                    <h3 className="files-title">Project Files</h3>
+                </div>
+                <div className="error" style={{ padding: '2rem', textAlign: 'center', color: '#dc2626' }}>
+                    Failed to load files: {error}
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className="files-list-container">
+        <div
+            className={`files-list-container ${isDragging ? 'dragging' : ''}`}
+            onDragEnter={canUpload ? handleDragEnter : undefined}
+            onDragLeave={canUpload ? handleDragLeave : undefined}
+            onDragOver={canUpload ? handleDragOver : undefined}
+            onDrop={canUpload ? handleDrop : undefined}
+        >
+            {isDragging && canUpload && (
+                <div className="drag-overlay">
+                    <div className="drag-content">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" className="drag-icon">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"
+                                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <h3>Drop files here to upload</h3>
+                        <p>Release to upload your files</p>
+                    </div>
+                </div>
+            )}
+
             <div className="files-header">
                 <h3 className="files-title">Project Files</h3>
-                
+
                 <div className="files-controls">
+                    {canUpload && (
+                        <div className="upload-control">
+                            <input
+                                type="file"
+                                id="file-upload"
+                                multiple
+                                onChange={handleFileUpload}
+                                style={{ display: 'none' }}
+                                disabled={uploading}
+                            />
+                            <label htmlFor="file-upload" className="upload-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"
+                                          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                                {uploading ? 'Uploading...' : 'Upload Files'}
+                            </label>
+                        </div>
+                    )}
                     <div className="view-toggle">
-                        <button 
+                        <button
                             className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
                             onClick={() => setViewMode('list')}
                         >
@@ -202,7 +508,7 @@ const FilesList = ({ projectId, isOwner = false }) => {
                                 <line x1="3" y1="18" x2="3.01" y2="18" stroke="currentColor" strokeWidth="2"/>
                             </svg>
                         </button>
-                        <button 
+                        <button
                             className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
                             onClick={() => setViewMode('grid')}
                         >
@@ -214,12 +520,12 @@ const FilesList = ({ projectId, isOwner = false }) => {
                             </svg>
                         </button>
                     </div>
-                    
+
                     <div className="sort-control">
                         <label htmlFor="sort-files">Sort by:</label>
-                        <select 
+                        <select
                             id="sort-files"
-                            value={sortBy} 
+                            value={sortBy}
                             onChange={(e) => setSortBy(e.target.value)}
                             className="sort-select"
                         >
@@ -232,64 +538,84 @@ const FilesList = ({ projectId, isOwner = false }) => {
             </div>
 
             <div className={`files-content ${viewMode}`}>
-                {sortedFiles.map(file => (
-                    <div 
-                        key={file.id} 
-                        className={`file-item ${file.isFolder ? 'folder' : 'file'}`}
-                        onClick={() => handleFileClick(file)}
-                    >
-                        <div className="file-icon-container">
-                            {getFileIcon(file)}
-                        </div>
-                        
-                        <div className="file-info">
-                            <div className="file-name-section">
-                                <span className="file-name">{file.name}</span>
-                                {file.language && (
-                                    <span className="file-language">{file.language}</span>
-                                )}
+                {sortedFiles.map((file, index) => {
+                    const fileType = getFileType(file.name);
+                    const fileObj = {
+                        ...file,
+                        type: fileType,
+                        isFolder: false
+                    };
+
+                    return (
+                        <div
+                            key={file._id || index}
+                            className="file-item file"
+                            onClick={() => handleFileClick(file)}
+                        >
+                            <div className="file-icon-container">
+                                {getFileIcon(fileObj)}
                             </div>
-                            
-                            <div className="file-details">
-                                <span className="file-path">{file.path}</span>
-                                <span className="file-size">{file.size}</span>
+
+                            <div className="file-info">
+                                <div className="file-name-section">
+                                    <span className="file-name">{file.name}</span>
+                                </div>
+
+                                <div className="file-details">
+                                    <span className="file-path">{file.path || '/'}</span>
+                                    <span className="file-size">{formatFileSize(file.size)}</span>
+                                </div>
+
+                                <div className="file-meta">
+                                    <span className="file-modified">
+                                        Uploaded {formatTimeAgo(file.uploadedAt)}
+                                    </span>
+                                </div>
                             </div>
-                            
-                            <div className="file-meta">
-                                <span className="file-modified">
-                                    Modified {file.lastModified} by {file.modifiedBy}
-                                </span>
-                            </div>
-                        </div>
-                        
-                        {!file.isFolder && (
+
                             <div className="file-actions">
-                                <button 
-                                    className="file-action-btn"
+                                <button
+                                    className="file-action-btn download-btn"
                                     onClick={(e) => handleDownloadFile(file, e)}
                                     title="Download file"
                                 >
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" 
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"
                                               stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                     </svg>
                                 </button>
+                                {canUpload && (
+                                    <button
+                                        className="file-action-btn delete-btn"
+                                        onClick={(e) => handleDeleteFile(file, e)}
+                                        title="Delete file"
+                                    >
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                                                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                        </svg>
+                                    </button>
+                                )}
                             </div>
-                        )}
-                    </div>
-                ))}
+                        </div>
+                    );
+                })}
             </div>
-            
+
             {sortedFiles.length === 0 && (
                 <div className="empty-files">
                     <div className="empty-icon">
                         <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
-                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" 
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
                                   stroke="currentColor" strokeWidth="2"/>
                         </svg>
                     </div>
                     <h4>No Files Found</h4>
-                    <p>This project doesn't have any files yet.</p>
+                    {canUpload ? (
+                        <p>Drag and drop files here, or click "Upload Files" to get started.</p>
+                    ) : (
+                        <p>This project doesn't have any files yet.</p>
+                    )}
                 </div>
             )}
         </div>

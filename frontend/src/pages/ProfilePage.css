@@ -6,9 +6,12 @@
 }
 
 .profile-container {
-    max-width: 1000px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 2rem;
 }
 
 .profile-main {
@@ -17,7 +20,23 @@
     gap: 2rem;
 }
 
+.profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
 /* Responsive */
+@media (max-width: 1024px) {
+    .profile-container {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-sidebar {
+        order: -1;
+    }
+}
+
 @media (max-width: 768px) {
     .profile-container {
         padding: 1rem;

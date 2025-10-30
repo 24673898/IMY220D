@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb+srv://frankyliu1996_db_user:yXLc2y1ybFbKee7W@imy220projectcluster.w35t9gj.mongodb.net/?retryWrites=true&w=majority&appName=IMY220ProjectCluster
+      - PORT=3000
+      - NODE_ENV=production
+    volumes:
+      # Persist uploaded files across container restarts
+      - uploads-data:/app/backend/uploads
+    restart: unless-stopped
+
+volumes:
+  # Named volume to persist user uploads
+  uploads-data:

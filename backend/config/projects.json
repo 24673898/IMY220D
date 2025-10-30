@@ -1,0 +1,83 @@
+[
+  {
+    "_id": "project1",
+    "name": "React Dashboard",
+    "description": "A modern admin dashboard built with React and TailwindCSS. Features include user management, analytics, and real-time data visualization.",
+    "ownerId": "user1",
+    "members": [
+      "user1",
+      "user2"
+    ],
+    "image": "/assets/images/default-project.jpg",
+    "type": "web-application",
+    "tags": [
+      "JavaScript",
+      "React",
+      "TailwindCSS" 
+    ],
+    "version": "1.2.0",
+    "status": "checked-in",
+    "checkedOutBy": null,
+    "createdAt": {
+      "$date": "2025-08-10T00:00:00.000Z"
+    },
+    "files": [
+      {
+        "name": "App.js",
+        "path": "/src/App.js",
+        "size": 2048
+      },
+      {
+        "name": "index.html",
+        "path": "/public/index.html",
+        "size": 512
+      },
+      {
+        "name": "style.css",
+        "path": "/src/style.css",
+        "size": 1024
+      }
+    ]
+  },
+  {
+    "_id": "project2",
+    "name": "Node API Server",
+    "description": "RESTful API server with Express and MongoDB. Includes authentication, user management, and data persistence.",
+    "ownerId": "user2",
+    "members": [
+      "user1",
+      "user2"
+    ],
+    "image": "/assets/images/default-project.jpg",
+    "type": "backend-application",
+    "tags": [
+      "JavaScript",
+      "NodeJS",
+      "Express",
+      "MongoDB"
+    ],
+    "version": "2.0.1",
+    "status": "checked-out",
+    "checkedOutBy": "user2",
+    "createdAt": {
+      "$date": "2025-08-15T00:00:00.000Z"
+    },
+    "files": [
+      {
+        "name": "server.js",
+        "path": "/backend/server.js",
+        "size": 3072
+      },
+      {
+        "name": "routes.js",
+        "path": "/backend/routes.js",
+        "size": 1536
+      },
+      {
+        "name": "database.js",
+        "path": "/backend/config/database.js",
+        "size": 896
+      }
+    ]
+  }
+]

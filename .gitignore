@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Uploads (user-generated content) - but keep directory structure
+backend/uploads/**/*
+!backend/uploads/**/.gitkeep
+
+# Environment variables
+.env
+.env.local
+
+# Build outputs
+frontend/public/bundle.js
+frontend/public/bundle.js.map
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
