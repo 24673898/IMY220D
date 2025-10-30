@@ -213,9 +213,7 @@ router.post('/', async (req, res) => {
             status: 'checked-in',
             checkedOutBy: null,
             createdAt: new Date(),
-            files: files || [],
-            downloads: 0,
-            stars: 0
+            files: files || []
         };
 
         const result = await db.collection('projects').insertOne(newProject);

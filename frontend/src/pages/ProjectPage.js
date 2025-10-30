@@ -4,10 +4,6 @@ import Header from '../components/Header';
 import Project from '../components/Project';
 import EditProject from '../components/EditProject';
 import FilesList from '../components/FilesList';
-import Messages from '../components/Messages';
-import AddContributor from '../components/AddContributor';
-import TransferOwnership from '../components/TransferOwnership';
-import ProjectDiscussion from '../components/ProjectDiscussion';
 import { isAdmin, getCurrentUser as getUser } from '../utils/adminHelpers';
 import AdminBadge from '../components/AdminBadge';
 import './ProjectPage.css';
@@ -335,9 +331,7 @@ const ProjectPage = () => {
                 month: 'long',
                 day: 'numeric'
             }),
-            lastModified: new Date(projectData.createdAt).toLocaleDateString(),
-            downloads: projectData.downloads || 0,
-            stars: projectData.stars || 0
+            lastModified: new Date(projectData.createdAt).toLocaleDateString()
         };
     };
 

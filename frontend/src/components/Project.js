@@ -14,16 +14,6 @@ const Project = ({ project, onEdit, onDelete, isAdmin, isOwner, isMember, curren
         }
     };
 
-    const handleDownload = () => {
-        console.log('Download project:', project.name);
-        // TODO: Implement download functionality
-    };
-
-    const handleStar = () => {
-        console.log('Star project:', project.name);
-        // TODO: Implement star functionality
-    };
-
     const handleTagClick = (tag) => {
         console.log('Search for tag:', tag);
         // TODO: Implement hashtag search
@@ -70,23 +60,6 @@ const Project = ({ project, onEdit, onDelete, isAdmin, isOwner, isMember, curren
                         )}
                     </div>
                     
-                    <div className="project-actions">
-                        <button className="action-btn download-btn" onClick={handleDownload}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" 
-                                      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            Download
-                        </button>
-                        
-                        <button className="action-btn star-btn" onClick={handleStar}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2" 
-                                         stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            Star
-                        </button>
-                    </div>
                 </div>
                 
                 <div className="project-info">
@@ -177,24 +150,6 @@ const Project = ({ project, onEdit, onDelete, isAdmin, isOwner, isMember, curren
             </div>
             
             <div className="project-stats">
-                <div className="stat-item">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" 
-                              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <span className="stat-number">{project.downloads}</span>
-                    <span className="stat-label">Downloads</span>
-                </div>
-                
-                <div className="stat-item">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2" 
-                                 stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <span className="stat-number">{project.stars}</span>
-                    <span className="stat-label">Stars</span>
-                </div>
-                
                 <div className="stat-item">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2"/>
