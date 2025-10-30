@@ -7,13 +7,14 @@
 git clone https://github.com/24673898/IMY220D.git
 cd IMY220D
 ```
+**3. Open docker desktop**
 
-**2. Run with Docker**
+**4. Run with Docker**
 ```bash
 docker-compose up --build
 ```
 
-**3. Open the application**
+**5. Open the application**
 ```
 http://localhost:3000
 ```
