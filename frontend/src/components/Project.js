@@ -59,7 +59,6 @@ const Project = ({ project, onEdit, onDelete, isAdmin, isOwner, isMember, curren
                             </div>
                         )}
                     </div>
-                    
                 </div>
                 
                 <div className="project-info">
